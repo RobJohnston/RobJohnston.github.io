@@ -49,6 +49,19 @@ enableEmoji = true
         icon = 'brand-github'
         link = 'https://github.com/robjohnston'
 
+  [params.giscus]
+    enabled = true
+    repo = "RobJohnston/RobJohnston.github.io"
+    repoID = "R_kgDOQsRFPQ"
+    category = "Announcements"
+    categoryID = "DIC_kwDOQsRFPc4C0DFj"
+    mapping = "title"
+    strict = "0"
+    reactionsEnabled = "1"
+    emitMetadata = "0"
+    inputPosition = "bottom"
+    lang = "en"
+
 [menu]
 
   [[menu.main]]
