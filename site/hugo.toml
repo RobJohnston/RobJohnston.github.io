@@ -1,3 +1,75 @@
-baseURL = 'https://example.org/'
-languageCode = 'en-us'
-title = 'My New Hugo Site'
+baseURL = "https://robjohnston.github.io"
+title = "Rob Johnston"
+copyright = "Rob Johnston"
+pagination.pagerSize = 10
+languageCode = "en"
+defaultContentLanguage = "en"
+theme = "tailwind"
+enableRobotsTXT = true
+enableEmoji = true
+
+[markup]
+  _merge = "deep"
+
+[params]
+  keywords = "dotnet, csharp, fullstack, asp"
+  subtitle = "Senior Technology Architect"
+
+  contentTypeName = "posts"
+  showAuthor = true
+  showReadingTime = true
+
+  [params.author]
+  name = "Rob Johnston"
+  email = "rob@johnston.net"
+
+  [params.header]
+    logo = "fav.png"
+    title = " Rob Johnston, BSc Engineering"
+
+  [params.footer]
+    since = 2025
+    poweredby = true
+
+    [[params.social_media.items]]
+        enabled = true
+        title = 'Mastodon'
+        icon = 'mastodon'
+        link = 'https://techhub.social/@rjohnston'
+
+    [[params.social_media.items]]
+        enabled = true
+        title = 'LinkedIn'
+        icon = 'brand-linkedin'
+        link = 'https://www.linkedin.com/in/rob-johnston-ottawa'
+
+    [[params.social_media.items]]
+        enabled = true
+        title = 'Github'
+        icon = 'brand-github'
+        link = 'https://github.com/robjohnston'
+
+[menu]
+
+  [[menu.main]]
+    identifier = "post"
+    name = "Posts"
+    pageRef = "/posts"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About Me"
+    pageRef = "/about"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "contact"
+    name = "Contact"
+    pageRef = "/contact"
+    weight = 20
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+# series = "series"
