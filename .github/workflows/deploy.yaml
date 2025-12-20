@@ -4,6 +4,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+      - cron: '0 13 * * 1'  # Schedule to run at 13:00 UTC every Monday
 permissions:
   contents: read
   pages: write
