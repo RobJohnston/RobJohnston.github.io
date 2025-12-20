@@ -34,7 +34,7 @@ enableEmoji = true
     [[params.social_media.items]]
         enabled = true
         title = 'Mastodon'
-        icon = 'mastodon'
+        icon = 'brand-mastodon'
         link = 'https://techhub.social/@rjohnston'
 
     [[params.social_media.items]]
