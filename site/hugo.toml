@@ -33,9 +33,9 @@ enableEmoji = true
 
     [[params.social_media.items]]
         enabled = true
-        title = 'Mastodon'
-        icon = 'brand-mastodon'
-        link = 'https://techhub.social/@rjohnston'
+        title = 'Github'
+        icon = 'brand-github'
+        link = 'https://github.com/robjohnston'
 
     [[params.social_media.items]]
         enabled = true
@@ -45,9 +45,21 @@ enableEmoji = true
 
     [[params.social_media.items]]
         enabled = true
-        title = 'Github'
-        icon = 'brand-github'
-        link = 'https://github.com/robjohnston'
+        title = 'Stack Overflow'
+        icon = 'brand-stackoverflow'
+        link = 'https://stackoverflow.com/users/4930982/rob-johnston'
+
+    [[params.social_media.items]]
+        enabled = true
+        title = 'Mastodon'
+        icon = 'brand-mastodon'
+        link = 'https://techhub.social/@rjohnston'
+
+    [[params.social_media.items]]
+        enabled = true
+        title = 'Telegram'
+        icon = 'brand-telegram'
+        link = 'https://t.me/rob_johnston'
 
   [params.giscus]
     enabled = true
