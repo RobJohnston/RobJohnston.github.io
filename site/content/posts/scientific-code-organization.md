@@ -498,14 +498,28 @@ Please share your experiences in the comments. Let's build a community knowledge
 
 ## Further Resources
 
-- **"Good Enough Practices in Scientific Computing"** by Wilson et al. - Comprehensive guide to scientific computing practices
-- **Software Carpentry** - Workshops on version control, testing, and project organization
-- **"Ten Simple Rules" series** in PLOS Computational Biology - Including rules for taking advantage of Git and GitHub
-- **Cookie Cutter Data Science** - A standardized project structure template
-- **The Turing Way** - Handbook for reproducible, ethical, and collaborative data science
+>- **"Good Enough Practices in Scientific Computing"** by Wilson et al.[^1] - Comprehensive guide to scientific computing practices
+
+>- **Software Carpentry** - Workshops on version control, testing, and project organization[^2]
+
+>- **"Ten Simple Rules" series** in PLOS Computational Biology[^3] - Including rules for taking advantage of Git and GitHub
+
+>- **Cookie Cutter Data Science** - A standardized project structure template[^4]
+
+>- **The Turing Way** - Handbook for reproducible, ethical, and collaborative data science[^5]
 
 Remember: the goal isn't perfection, it's progress. Start organizing better today, and iterate as you learn what works for you and your team.
 
 ---
 
 *What's your approach to organizing scientific code? Share your structure, tips, or questions in the comments below!*
+
+[^1]: Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, Teal TK (2017) Good enough practices in scientific computing. *PLOS Computational Biology* 13(6): e1005510. https://doi.org/10.1371/journal.pcbi.1005510
+
+[^2]: Software Carpentry. "Lessons." https://software-carpentry.org/lessons/
+
+[^3]: Perez-Riverol Y, Gatto L, Wang R, Sachsenberg T, Uszkoreit J, Leprevost FdV, et al. (2016) Ten Simple Rules for Taking Advantage of Git and GitHub. *PLOS Computational Biology* 12(7): e1004947. https://doi.org/10.1371/journal.pcbi.1004947
+
+[^4]: DrivenData. "Cookiecutter Data Science." https://cookiecutter-data-science.drivendata.org/
+
+[^5]: The Turing Way Community. (2022). *The Turing Way: A handbook for reproducible, ethical and collaborative research*. Zenodo. https://doi.org/10.5281/zenodo.3233853
