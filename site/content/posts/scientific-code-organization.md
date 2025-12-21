@@ -78,52 +78,6 @@ This is where reusable, production-quality code lives. Think of this as the "sci
 - Testable and (ideally) tested
 - Importable from interactive environments or scripts
 
-The organization within `src/` will depend on your language:
-
-**Python example:**
-```
-src/
-├── __init__.py
-├── data_processing.py
-├── statistical_analysis.py
-├── plotting.py
-└── utils.py
-```
-
-**R example:**
-```
-R/
-├── data_processing.R
-├── statistical_analysis.R
-├── plotting.R
-└── utils.R
-```
-
-**MATLAB/Octave example:**
-```
-src/
-├── data_processing/
-├── analysis/
-└── visualization/
-```
-
-**Julia example:**
-```
-src/
-├── MyProject.jl
-├── data_processing.jl
-├── analysis.jl
-└── visualization.jl
-```
-
-**C++/Fortran example:**
-```
-src/
-├── include/
-├── lib/
-└── main/
-```
-
 **Question for the community**: How do you organize multi-language projects? Do you have separate directories for different languages, or do you mix them in `src/`?
 
 ### `notebooks/` - Exploration and Prototyping
@@ -254,32 +208,7 @@ If your project is open source, include a license. Common choices for scientific
 
 ### .gitignore
 
-Prevent clutter by ignoring generated files. Language-specific examples:
-
-**Python:**
-
-```
-
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-*.egg-info/
-```
-
-**R:**
-
-```
-.Rhistory
-.RData
-.Rproj.user/
-```
-
-**MATLAB:**
-
-```
-*.asv
-*.mex*
-```
+Prevent clutter by ignoring generated files. Language-specific examples can be found at https://github.com/github/gitignore/tree/main.
 
 **All projects:**
 
@@ -288,30 +217,6 @@ data/raw/*
 results/*
 .DS_Store (for the macOS operating system)
 ```
-
-## Interactive vs. Batch: A Universal Question
-
-One of the most common questions in scientific computing is when to use interactive environments versus batch scripts. Here's a decision framework:
-
-**Use interactive environments when:**
-
-- Exploring data for the first time
-- Creating visualizations for papers
-- Prototyping new analyses
-- Communicating results to collaborators
-- Teaching or documenting workflows
-
-**Use batch scripts when:**
-
-- Running analyses on many parameter sets
-- Processing multiple files in batch
-- Running long computations on clusters
-- Automating reproducible workflows
-- Code needs to be modular and testable
-
-**The golden rule**: Start in interactive environments for exploration, but transition mature code to scripts and modules as your project develops.
-
-**Question for the community**: Do you follow this pattern? Or do you have a different workflow?
 
 ## Organizing for Different Project Scales
 
@@ -389,12 +294,13 @@ A colleague should be able to:
 - Language-specific artifacts (compiled binaries, caches)
 - IDE-specific settings (unless shared intentionally)
 
-### Commit Messages for Science
+### Commit Messages
 
-Good commit messages in scientific projects should describe *what changed scientifically*, not just what changed in the code:
+Good commit messages should describe *what changed scientifically*, not just what changed in the code:
 
-- ❌ "Updated analysis"
-- ✅ "Added bootstrap confidence intervals to treatment effect estimates"
+> - ❌ "Updated analysis"
+
+> - ✅ "Added bootstrap confidence intervals to treatment effect estimates"
 
 **Question for the community**: Do you have commit message conventions for scientific projects?
 
@@ -441,19 +347,6 @@ Good commit messages in scientific projects should describe *what changed scient
 - Consider using containers (Docker, Singularity) for complex environments
 
 **Question for the community**: What other pitfalls do you encounter? What solutions work for you?
-
-## Field-Specific Conventions
-
-Different scientific fields have their own conventions:
-
-- **Computational biology**: Often uses workflow managers like Snakemake or Nextflow
-- **Physics simulations**: May need specialized organization for parameter sweeps and ensemble runs
-- **Machine learning**: Often separates data preprocessing, model definitions, training scripts, and evaluation
-- **Social sciences**: May emphasize literate programming with R Markdown or Quarto
-- **Climate science**: Often deals with very large datasets and may use specialized data formats
-- **Neuroscience**: May need to organize by experiment, subject, and recording session
-
-**Question for the community**: What are the conventions in your field? Are there specialized tools or structures that work particularly well?
 
 ## Making This Real: A Call for Examples
 
@@ -513,7 +406,7 @@ Remember: the goal isn't perfection, it's progress. Start organizing better toda
 
 ---
 
-*What's your approach to organizing scientific code? Share your structure, tips, or questions in the comments below!*
+> *What's your approach to organizing scientific code? Share your structure, tips, or questions in the comments below!*
 
 [^1]: Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, Teal TK (2017) Good enough practices in scientific computing. *PLOS Computational Biology* 13(6): e1005510. https://doi.org/10.1371/journal.pcbi.1005510
 
