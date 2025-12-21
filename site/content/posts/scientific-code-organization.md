@@ -1,5 +1,5 @@
 +++
-title = "Organizing Source Code for Scientific Programmers: A Practical Guide"
+title = "Organizing Source Code for Scientific Programmers: Let's Start a Conversation"
 date = "2025-12-20"
 draft = false
 sharingLinks = true
@@ -13,19 +13,21 @@ categories = [
 toc = false
 +++
 
-If you've ever opened a scientific code repository and found yourself lost in a maze of notebooks, scripts, data files, and outputs all jumbled together, you're not alone. While line-of-business developers have established conventions (like [David Fowler's .NET project structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814)), scientific computing has its own unique needs that require a different approach.
+If you've ever opened a scientific code repository and found yourself lost in a maze of analysis files, scripts, data, and outputs all jumbled together, you're not alone. While line-of-business developers have established conventions (like [David Fowler's .NET project structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814)), scientific computing has its own unique needs that require a different approach.
 
-Scientific code repositories face challenges that traditional software projects don't: managing raw and processed data, organizing analysis notebooks alongside production scripts, handling computational experiments, and ensuring reproducibility. This post provides practical guidance on organizing your scientific code repositories effectively.
+Scientific code repositories face challenges that traditional software projects don't: managing raw and processed data, organizing interactive analyses alongside automated scripts, handling computational experiments, and ensuring reproducibility across different computing environments and languages.
+
+**This post proposes a starting point for discussion.** I'd love to hear from the community: How do *you* organize your scientific codebases? What works? What doesn't? What am I missing?
 
 ## Why Organization Matters in Scientific Computing
 
 Poor organization doesn't just create inconvenience—it creates real problems. Lost data, irreproducible analyses, and hours wasted searching for files are common consequences. A well-organized repository accelerates science, facilitates collaboration, and makes your research reproducible.
 
-As researchers at UC Berkeley's D-Lab note, structuring repositories according to predictable templates makes science easier, cleaner, and more reproducible. When everyone on your team can predict where files should be, collaboration becomes intuitive rather than frustrating.
+When everyone on your team can predict where files should be, collaboration becomes intuitive rather than frustrating. But what's the right structure?
 
 ## The Fundamental Principle: Separate by Type and Purpose
 
-The key organizing principle for scientific repositories is to structure by file type and purpose. This creates consistency across projects and makes it intuitive to find what you need. Here's a recommended structure:
+The key organizing principle for scientific repositories is to structure by file type and purpose. This creates consistency across projects and makes it intuitive to find what you need. Here's a proposed structure:
 
 ```
 project-name/
@@ -43,14 +45,13 @@ project-name/
 │   └── output/
 ├── docs/
 ├── tests/
-├── environment.yml
-├── requirements.txt
+├── environment/
 ├── README.md
 ├── LICENSE
 └── .gitignore
 ```
 
-Let's break down each component and when to use it.
+Let's break down each component and when to use it. But remember: **this is a starting point for discussion, not a rigid prescription.**
 
 ## Core Directories
 
@@ -61,21 +62,24 @@ Your data directory should have two subdirectories:
 - **`data/raw/`**: Original, unmodified data files. Treat this as **immutable**. Never, ever modify files here. You can even set these files as read-only to prevent accidents.
 - **`data/processed/`**: Cleaned, transformed, or analyzed versions of your data.
 
-This separation is crucial for reproducibility. Anyone should be able to run your processing scripts on the raw data and regenerate your processed data.
+This separation is crucial for reproducibility. Anyone should be able to run your processing code on the raw data and regenerate your processed data.
 
 **Important note**: For large datasets, you may want to store only metadata or download scripts in version control rather than the actual data files. Consider using services like OSF, Zenodo, or institutional repositories for large data files.
+
+**Question for the community**: Do you organize data differently? How do you handle intermediate processing stages? Do you have a `data/interim/` directory?
 
 ### `src/` - Your Core Analysis Code
 
 This is where reusable, production-quality code lives. Think of this as the "scientific guts" of your project. Code here should be:
 
 - Organized into logical modules or packages
-- Well-documented with docstrings
+- Well-documented
 - Testable and (ideally) tested
-- Importable from notebooks or scripts
+- Importable from interactive environments or scripts
 
-A typical structure might be:
+The organization within `src/` will depend on your language:
 
+**Python example:**
 ```
 src/
 ├── __init__.py
@@ -85,43 +89,77 @@ src/
 └── utils.py
 ```
 
-Making your `src/` directory an installable package is highly recommended. This allows you to import your functions anywhere without worrying about Python paths or working directories:
-
-```python
-# After installing your package
-from myproject.analysis import run_analysis
+**R example:**
 ```
+R/
+├── data_processing.R
+├── statistical_analysis.R
+├── plotting.R
+└── utils.R
+```
+
+**MATLAB/Octave example:**
+```
+src/
+├── data_processing/
+├── analysis/
+└── visualization/
+```
+
+**Julia example:**
+```
+src/
+├── MyProject.jl
+├── data_processing.jl
+├── analysis.jl
+└── visualization.jl
+```
+
+**C++/Fortran example:**
+```
+src/
+├── include/
+├── lib/
+└── main/
+```
+
+**Question for the community**: How do you organize multi-language projects? Do you have separate directories for different languages, or do you mix them in `src/`?
 
 ### `notebooks/` - Exploration and Prototyping
 
-Jupyter notebooks are fantastic for interactive exploration, but they come with challenges: they encourage non-modular code, can become difficult to test, and tend to accumulate cruft over time.
+Interactive environments (Jupyter notebooks, R Markdown, Pluto.jl notebooks, MATLAB Live Scripts, Mathematica notebooks) are fantastic for exploration, but they come with challenges: they can encourage non-modular code, become difficult to test, and tend to accumulate cruft over time.
 
-**Best practices for notebooks:**
+**Best practices:**
 
-1. Use notebooks for exploration, visualization, and prototyping
-2. Keep notebooks focused on specific questions or analyses
-3. Name them clearly with numbers for ordering: `01-data-exploration.ipynb`, `02-initial-modeling.ipynb`
-4. Transition mature code from notebooks to the `src/` directory
+1. Use interactive environments for exploration, visualization, and prototyping
+2. Keep them focused on specific questions or analyses
+3. Name them clearly with numbers for ordering: `01-data-exploration.ipynb`, `02-initial-modeling.Rmd`, `03-sensitivity-analysis.jl`
+4. Transition mature code to the `src/` directory
 5. Import functions from `src/` rather than copying code between notebooks
 
-When a notebook starts to feel unwieldy (typically over 10-15 cells of complex logic), extract the reusable parts into modules in `src/`.
+When an interactive session starts to feel unwieldy, extract the reusable parts into modules in `src/`.
+
+**Question for the community**: Some researchers prefer to keep all work in notebooks/scripts. Others prefer to move everything to modules. What's your philosophy? Does it depend on the project stage?
 
 ### `scripts/` - Automation and Batch Processing
 
-Scripts are for automated, reproducible workflows. These are Python (or R, bash, etc.) files that:
+Scripts are for automated, reproducible workflows. These files:
 
 - Run without interaction
-- Accept command-line arguments
+- Accept command-line arguments or configuration files
 - Can be executed on computing clusters or in pipelines
 - Orchestrate complete analyses from start to finish
 
 Example use cases:
+
 - Data download and preprocessing pipelines
 - Running models with different parameters
 - Generating all figures for a paper
 - Batch processing multiple datasets
 
-A controller script (e.g., `run_all.py` or `pipeline.sh`) that executes the entire analysis workflow in order is extremely valuable for reproducibility.
+A controller script (e.g., `run_all.sh`, `Makefile`, `Snakefile`) that executes the entire analysis workflow in order is extremely valuable for reproducibility.
+
+**Question for the community**: Do you use workflow managers (Make, Snakemake, Nextflow, Drake, Luigi)? How do you organize pipeline definitions?
 
 ### `results/` - Analysis Outputs
 
@@ -136,29 +174,38 @@ results/
 
 Why separate from data? Results are *generated* by code and should be reproducible. If you lose them, you can regenerate them. Data (especially raw data) cannot be regenerated.
 
+**Question for the community**: Do you version control any results? How do you handle results that take days/weeks to generate?
+
 ### `docs/` - Documentation
 
 Include:
+
 - Project documentation
 - Analysis notes or lab notebook entries
 - Manuscript drafts
 - Supplementary materials
 - API documentation (if auto-generated)
 
+**Question for the community**: Where do you keep your manuscript? In the repo? In a separate repo? In Overleaf or Google Docs?
+
 ### `tests/` - Test Code
 
 Yes, even scientific code should have tests! At minimum, include:
+
 - Unit tests for core functions
 - Integration tests for workflows
-- Assertions within notebooks that verify expected behavior
+- Validation tests that check against known results
 
 Testing helps ensure correctness and catches bugs when you modify code.
+
+**Question for the community**: What's your testing philosophy for scientific code? Do you test everything, just critical functions, or not at all?
 
 ## Essential Files in the Root
 
 ### README.md
 
 Your README is the front door to your project. It should include:
+
 - Project overview and goals
 - Installation instructions
 - Quick start guide
@@ -170,12 +217,35 @@ Your README is the front door to your project. It should include:
 
 ### Environment Management
 
-Include files that specify your computational environment:
-- **`environment.yml`** (for conda)
-- **`requirements.txt`** (for pip)
-- **`Dockerfile`** (for containerized environments)
+Include files that specify your computational environment. The specifics depend on your language and tools:
 
-Virtual environments are essential. They ensure that your project's dependencies don't conflict with other projects and make your work reproducible. Use conda environments (recommended for scientific computing) or Python virtual environments for each project.
+**Python:**
+
+- `environment.yml` (for conda)
+- `requirements.txt` (for pip)
+- `pyproject.toml` (for modern Python packaging)
+
+**R:**
+
+- `renv.lock` (for renv)
+- `DESCRIPTION` (for R packages)
+- `install.R` (installation script)
+
+**Julia:**
+
+- `Project.toml` and `Manifest.toml`
+
+**MATLAB:**
+
+- Dependency list in README or separate documentation
+
+**Multi-language projects:**
+
+- `Dockerfile` (for containerized environments)
+- Separate environment files for each language
+- Shell script that sets up entire environment
+
+**Question for the community**: How do you handle dependencies that span multiple languages? Do you use containers? Virtual machines? Detailed documentation?
 
 ### LICENSE
 
@@ -183,43 +253,64 @@ If your project is open source, include a license. Common choices for scientific
 
 ### .gitignore
 
-Prevent clutter by ignoring:
-- `data/raw/*` (if files are large)
-- `results/*`
-- `.ipynb_checkpoints/`
-- `__pycache__/`
-- `*.pyc`
-- `.DS_Store`
-- Virtual environment directories
+Prevent clutter by ignoring generated files. Language-specific examples:
 
-## The Notebook vs. Script Decision
+**Python:**
 
-One of the most common questions in scientific computing is when to use notebooks versus scripts. Here's a decision framework:
+```
 
-**Use notebooks when:**
-- Exploring data interactively
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.egg-info/
+```
+
+**R:**
+
+```
+.Rhistory
+.RData
+.Rproj.user/
+```
+
+**MATLAB:**
+
+```
+*.asv
+*.mex*
+```
+
+**All projects:**
+
+```
+data/raw/*
+results/*
+.DS_Store (for the macOS operating system)
+```
+
+## Interactive vs. Batch: A Universal Question
+
+One of the most common questions in scientific computing is when to use interactive environments versus batch scripts. Here's a decision framework:
+
+**Use interactive environments when:**
+
+- Exploring data for the first time
 - Creating visualizations for papers
 - Prototyping new analyses
 - Communicating results to collaborators
 - Teaching or documenting workflows
 
-**Use scripts when:**
+**Use batch scripts when:**
+
 - Running analyses on many parameter sets
 - Processing multiple files in batch
 - Running long computations on clusters
 - Automating reproducible workflows
 - Code needs to be modular and testable
 
-**The golden rule**: Start in notebooks for exploration, but transition mature code to scripts and modules as your project develops. Many projects will have both—notebooks that import from well-organized modules in `src/`.
+**The golden rule**: Start in interactive environments for exploration, but transition mature code to scripts and modules as your project develops.
 
-## Advanced: Converting Notebooks to Scripts
-
-When you need to scale up from interactive work to batch processing, you have several options:
-
-1. **Manual extraction**: Copy code from notebooks into Python files, adding command-line argument parsing
-2. **Automatic conversion**: Use `jupyter nbconvert --to script notebook.ipynb`
-3. **Parameterized notebooks**: Use tools like Papermill to execute notebooks with different parameters
-4. **Hybrid approach**: Design notebooks to detect if they're running as scripts using tools like `nbscript`
+**Question for the community**: Do you follow this pattern? Or do you have a different workflow?
 
 ## Organizing for Different Project Scales
 
@@ -230,9 +321,9 @@ For small projects, a simplified structure works well:
 ```
 project/
 ├── data/
-├── notebooks/
+├── analysis/
 ├── results/
-├── environment.yml
+├── environment/
 └── README.md
 ```
 
@@ -264,21 +355,26 @@ project/
 
 The key is organizing analyses by the output (paper, report) they support while keeping shared code in a central `src/` directory.
 
+**Question for the community**: How do you organize multi-year, multi-paper projects? One repo or many? How do you handle shared code?
+
 ## Self-Contained Projects
 
 Strive for self-containedness: everything needed to reproduce your analysis should be in the project directory. This sometimes conflicts with avoiding duplication (e.g., when multiple projects share data), but for publishable research, self-containedness usually wins.
 
 A colleague should be able to:
+
 1. Clone your repository
-2. Create the environment (`conda env create -f environment.yml`)
+2. Set up the environment
 3. Run your analysis scripts
 4. Reproduce your results
+
+**Question for the community**: How do you balance self-containedness with sharing code/data between projects?
 
 ## Version Control Best Practices
 
 ### What to Track
 
-- All code (scripts, notebooks, source files)
+- All code (scripts, interactive analyses, source files)
 - Documentation
 - Environment specifications
 - Small data files (< 100MB)
@@ -289,25 +385,28 @@ A colleague should be able to:
 - Large data files (use data repositories instead)
 - Generated results and figures
 - Temporary files
-- Virtual environment directories
+- Language-specific artifacts (compiled binaries, caches)
 - IDE-specific settings (unless shared intentionally)
 
 ### Commit Messages for Science
 
 Good commit messages in scientific projects should describe *what changed scientifically*, not just what changed in the code:
 
-- ❌ "Updated analysis.py"
+- ❌ "Updated analysis"
 - ✅ "Added bootstrap confidence intervals to treatment effect estimates"
+
+**Question for the community**: Do you have commit message conventions for scientific projects?
 
 ## Common Pitfalls and Solutions
 
-### Pitfall 1: The Notebook Sprawl
+### Pitfall 1: The Analysis File Sprawl
 
-**Problem**: 50 notebooks with names like "Untitled1.ipynb", "Copy of Final_Analysis_v3.ipynb"
+**Problem**: 50 files with names like "Untitled1", "Copy of Final_Analysis_v3"
 
 **Solution**:
-- Name notebooks descriptively with numbered prefixes
-- Regularly archive or delete obsolete notebooks
+
+- Name files descriptively with numbered prefixes
+- Regularly archive or delete obsolete files
 - Transition stable code to modules
 
 ### Pitfall 2: Data Soup
@@ -315,6 +414,7 @@ Good commit messages in scientific projects should describe *what changed scient
 **Problem**: Raw data, processed data, results all mixed together
 
 **Solution**:
+
 - Strict separation of raw/processed/results
 - Document data provenance
 - Use metadata files to track processing steps
@@ -324,8 +424,9 @@ Good commit messages in scientific projects should describe *what changed scient
 **Problem**: Absolute paths that only work on one person's computer
 
 **Solution**:
+
 - Use relative paths from the project root
-- Use `pathlib` for cross-platform compatibility
+- Use path manipulation libraries (pathlib in Python, file.path in R, etc.)
 - Consider configuration files for environment-specific settings
 
 ### Pitfall 4: Missing Dependencies
@@ -333,89 +434,78 @@ Good commit messages in scientific projects should describe *what changed scient
 **Problem**: "It works on my machine" but fails everywhere else
 
 **Solution**:
-- Maintain updated `requirements.txt` or `environment.yml`
-- Document non-Python dependencies
-- Consider using containers (Docker) for complex environments
 
-## Making Your Code a Package
+- Maintain updated environment specifications
+- Document system dependencies
+- Consider using containers (Docker, Singularity) for complex environments
 
-For projects that will be reused or shared, consider making your `src/` directory an installable package. Create a minimal `setup.py`:
+**Question for the community**: What other pitfalls do you encounter? What solutions work for you?
 
-```python
-from setuptools import setup, find_packages
-
-setup(
-    name="myproject",
-    version="0.1.0",
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
-    install_requires=[
-        "numpy",
-        "pandas",
-        "matplotlib",
-    ],
-)
-```
-
-Then install in development mode:
-```bash
-pip install -e .
-```
-
-Now you can import your code from anywhere: `from myproject import analysis`
-
-## Collaborative Workflows
-
-When working in teams:
-
-1. **Establish conventions early**: Agree on directory structure before starting
-2. **Document everything**: A well-maintained README is invaluable
-3. **Use branches**: Keep experimental work in branches, merge stable code to main
-4. **Review code**: Even informal code reviews catch bugs and improve quality
-5. **Automate testing**: Run tests automatically on commit (continuous integration)
-
-## Publishing Your Code
-
-When publishing research, your code repository becomes part of your scientific output:
-
-1. **Clean up**: Remove dead code, document everything
-2. **Add a LICENSE**: Make it clear how others can use your code
-3. **Archive a release**: Use Zenodo to get a DOI for the exact version used in your paper
-4. **Link from your paper**: Include repository URL and DOI in your manuscript
-5. **Consider a CITATION file**: Tell users how to cite your code
-
-## Adapting Conventions to Your Field
+## Field-Specific Conventions
 
 Different scientific fields have their own conventions:
 
-- **Computational biology**: Often uses Snakemake or Nextflow for pipeline management
-- **Physics simulations**: May need specialized organization for parameter sweeps
+- **Computational biology**: Often uses workflow managers like Snakemake or Nextflow
+- **Physics simulations**: May need specialized organization for parameter sweeps and ensemble runs
 - **Machine learning**: Often separates data preprocessing, model definitions, training scripts, and evaluation
-- **Social sciences**: May emphasize reproducible reports using R Markdown or Quarto
+- **Social sciences**: May emphasize literate programming with R Markdown or Quarto
+- **Climate science**: Often deals with very large datasets and may use specialized data formats
+- **Neuroscience**: May need to organize by experiment, subject, and recording session
 
-The core principles remain the same: organize by purpose, maintain raw data separately, make code modular and testable, and document everything.
+**Question for the community**: What are the conventions in your field? Are there specialized tools or structures that work particularly well?
 
-## Conclusion
+## Making This Real: A Call for Examples
 
-Good code organization isn't about following rules dogmatically—it's about making your life easier and your science better. Start with these principles:
+Theory is great, but examples are better. I'd love to see:
+
+- Links to well-organized public scientific repositories
+- Templates or cookiecutter projects for different fields
+- Adaptations of this structure for specific use cases
+- Counter-arguments: When does this structure NOT work?
+
+## Conclusion: The Conversation Starts Here
+
+Good code organization isn't about following rules dogmatically—it's about making your life easier and your science better. The structure I've proposed here is a starting point, not a final answer.
+
+**Core principles that seem universal:**
 
 1. **Separate concerns**: Data, code, and results in different directories
 2. **Preserve raw data**: Never modify original data files
-3. **Make code modular**: Extract reusable functions to modules
+3. **Make code modular**: Extract reusable functionality
 4. **Document everything**: Future you will thank present you
 5. **Use version control**: Track changes and enable collaboration
 6. **Enable reproduction**: Someone else should be able to reproduce your work
 
-Remember: "Consistency and predictability are more important than hairsplitting." Pick a structure that makes sense for your project, document it in your README, and stick to it.
+But the *implementation* of these principles will vary based on:
 
-Your repository is part of your scientific legacy. Organize it like you'd want to find it if you returned to it in five years—because you probably will.
+- Your programming language(s)
+- Your field's conventions
+- Your team's preferences
+- Your project's scale and complexity
+- Your computing environment (laptop, HPC cluster, cloud)
+
+## Your Turn: Join the Discussion
+
+I'd love to hear from you:
+
+1. **What works?** How do you organize your scientific code? What's your directory structure?
+2. **What doesn't work?** What have you tried that failed? What pain points remain?
+3. **What's missing?** What essential aspects of scientific code organization did I overlook?
+4. **Language-specific tips?** What works particularly well in your language of choice?
+5. **Field-specific conventions?** What are the norms in your discipline?
+
+Please share your experiences in the comments. Let's build a community knowledge base of what actually works in practice.
 
 ## Further Resources
 
 - **"Good Enough Practices in Scientific Computing"** by Wilson et al. - Comprehensive guide to scientific computing practices
 - **Software Carpentry** - Workshops on version control, testing, and project organization
 - **"Ten Simple Rules" series** in PLOS Computational Biology - Including rules for taking advantage of Git and GitHub
-- **Cookie Cutter Data Science** - A standardized but flexible project structure for data science
+- **Cookie Cutter Data Science** - A standardized project structure template
 - **The Turing Way** - Handbook for reproducible, ethical, and collaborative data science
 
-Remember: the goal isn't perfection, it's progress. Start organizing better today, and you'll thank yourself tomorrow.
+Remember: the goal isn't perfection, it's progress. Start organizing better today, and iterate as you learn what works for you and your team.
+
+---
+
+*What's your approach to organizing scientific code? Share your structure, tips, or questions in the comments below!*
