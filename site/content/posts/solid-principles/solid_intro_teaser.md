@@ -5,7 +5,7 @@ publishDate = 2025-12-29
 draft = false
 showAuthor = true
 sharingLinks = false
-image = "/images/solid/solid-intro-teaser.webp"
+image = "/images/solid/solid-principles-hero.png"
 description = "Your 200-line research script is now 2,000 lines and breaking constantly. Learn SOLID principles through real scientific examples, not enterprise code."
 categories = [
     "SOLID Principles",
