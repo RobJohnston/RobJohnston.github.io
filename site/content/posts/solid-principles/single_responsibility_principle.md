@@ -38,7 +38,7 @@ He later clarified what he meant by 'reason to change'.  In a 2014 blog post, he
 
 > **Gather together the things that change for the same reasons. Separate those things that change for different reasons.**  [^2]
 
-[^1]: *Martin, Robert C.*, **Agile Software Development: Principles, Patterns, and Practices.** Pearson Education, 2003.
+[^1]: *Martin, Robert C.*, [Agile Software Development: Principles, Patterns, and Practices](https://amzn.to/49mEjmD) (paid link). Pearson Education, 2003.
 [^2]: *Martin, Robert C.*, "[The Single Responsibility Principle](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html)". The Clean Code Blog, 8 May 2014.
 
 More practically for scientists: Each piece of code should do one thing and do it well. When you need to modify your code, you should be able to pinpoint exactly where to make the change, and that change shouldn't have ripple effects throughout your entire codebase.
