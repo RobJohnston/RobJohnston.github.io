@@ -5,7 +5,7 @@ publishDate = "2026-01-12"
 draft = false
 showAuthor = true
 sharingLinks = true
-image = ""
+image = "/images/solid/quadratic_fit_hero.png"
 description = "Protect published results while adding features. Learn the Open/Closed Principle with real data fitting examples. No re-validation needed."
 categories = [
     "SOLID Principles",
