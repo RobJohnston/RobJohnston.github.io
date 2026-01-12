@@ -36,7 +36,7 @@ Bertrand Meyer originally stated it as:
 
 > **Software entities should be open for extension, but closed for modification.** [^1]
 
-[^1]: *Meyer, Bertrand*, **Object-Oriented Software Construction.** Prentice Hall, 1988.
+[^1]: *Meyer, Bertrand*, [Object-Oriented Software Construction](https://amzn.to/4qIfmcc) (paid link). Prentice Hall, 1988.
 
 In practical terms: You should be able to add new features (open for extension) without changing existing, tested, working code (closed for modification).
 
