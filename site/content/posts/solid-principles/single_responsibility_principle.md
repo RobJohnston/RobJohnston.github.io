@@ -13,6 +13,8 @@ categories = [
 tags = [
     "SRP"
 ]
+series = ["SOLID Principles"]
+series_order = 2
 toc = true
 +++
 

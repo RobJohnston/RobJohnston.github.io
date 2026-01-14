@@ -39,6 +39,8 @@
         {{ .Content | safeHTML }}
       </article>
 
+      {{ partial "block/series.html" . }}
+
       {{ partial "comments.html" . }}
 
     </div>

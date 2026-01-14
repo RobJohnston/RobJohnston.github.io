@@ -1,0 +1,100 @@
+{{- with .Params.series -}}
+{{- $currentPage := $ -}}
+{{- $seriesName := index . 0 -}}
+{{- $seriesPages := where (where $.Site.RegularPages "Type" "posts") ".Params.series" "intersect" (slice $seriesName) -}}
+{{- $seriesPages = $seriesPages.ByParam "series_order" -}}
+
+{{- if gt (len $seriesPages) 1 -}}
+<!-- Series Navigation Widget -->
+<div class="my-6 p-4 rounded-lg border-2 border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20">
+  <div class="flex items-center gap-2 mb-3">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-600 dark:text-emerald-400" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
+      <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
+      <path d="M3 6l0 13"></path>
+      <path d="M12 6l0 13"></path>
+      <path d="M21 6l0 13"></path>
+    </svg>
+    <h3 class="text-lg font-semibold text-emerald-800 dark:text-emerald-300">
+      Series: {{ $seriesName }}
+    </h3>
+  </div>
+
+  <div class="space-y-2">
+    {{- range $index, $page := $seriesPages -}}
+    {{- $isCurrent := eq $page.RelPermalink $currentPage.RelPermalink -}}
+    <div class="flex items-start gap-2">
+      <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full text-sm font-semibold {{- if $isCurrent }} bg-emerald-600 text-white dark:bg-emerald-500{{- else }} bg-emerald-200 text-emerald-800 dark:bg-emerald-800 dark:text-emerald-200{{- end }}">
+        {{ add $index 1 }}
+      </span>
+      <div class="flex-1 min-w-0">
+        {{- if $isCurrent -}}
+        <span class="font-semibold text-emerald-900 dark:text-emerald-100">
+          {{ $page.Title }}
+          <span class="ml-1 text-xs text-emerald-600 dark:text-emerald-400">(Current)</span>
+        </span>
+        {{- else -}}
+        <a href="{{ $page.RelPermalink }}" class="text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-100 hover:underline">
+          {{ $page.Title }}
+        </a>
+        {{- end -}}
+      </div>
+    </div>
+    {{- end -}}
+  </div>
+</div>
+
+<!-- Prev/Next Navigation -->
+{{- $currentIndex := 0 -}}
+{{- range $index, $page := $seriesPages -}}
+  {{- if eq $page.RelPermalink $currentPage.RelPermalink -}}
+    {{- $currentIndex = $index -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $prevPage := "" -}}
+{{- $nextPage := "" -}}
+{{- if gt $currentIndex 0 -}}
+  {{- $prevPage = index $seriesPages (sub $currentIndex 1) -}}
+{{- end -}}
+{{- if lt $currentIndex (sub (len $seriesPages) 1) -}}
+  {{- $nextPage = index $seriesPages (add $currentIndex 1) -}}
+{{- end -}}
+
+{{- if or $prevPage $nextPage -}}
+<div class="flex justify-between items-center my-6 gap-4">
+  <div class="flex-1">
+    {{- with $prevPage -}}
+    <a href="{{ .RelPermalink }}" class="group flex items-center gap-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 hover:border-emerald-600 dark:hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M15 6l-6 6l6 6"></path>
+      </svg>
+      <div class="flex-1 min-w-0">
+        <div class="text-xs text-gray-500 dark:text-gray-400 uppercase">Previous</div>
+        <div class="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">{{ .Title }}</div>
+      </div>
+    </a>
+    {{- end -}}
+  </div>
+
+  <div class="flex-1">
+    {{- with $nextPage -}}
+    <a href="{{ .RelPermalink }}" class="group flex items-center gap-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 hover:border-emerald-600 dark:hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-right">
+      <div class="flex-1 min-w-0">
+        <div class="text-xs text-gray-500 dark:text-gray-400 uppercase">Next</div>
+        <div class="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">{{ .Title }}</div>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M9 6l6 6l-6 6"></path>
+      </svg>
+    </a>
+    {{- end -}}
+  </div>
+</div>
+{{- end -}}
+
+{{- end -}}
+{{- end -}}

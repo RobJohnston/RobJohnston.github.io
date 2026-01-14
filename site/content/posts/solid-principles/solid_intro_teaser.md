@@ -12,6 +12,8 @@ categories = [
 ]
 tags = [
 ]
+series = ["SOLID Principles"]
+series_order = 1
 toc = true
 +++
 

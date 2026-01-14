@@ -13,6 +13,8 @@ categories = [
 tags = [
     "OCP"
 ]
+series = ["SOLID Principles"]
+series_order = 3
 toc = true
 +++
 
