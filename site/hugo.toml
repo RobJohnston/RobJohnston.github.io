@@ -4,7 +4,7 @@ copyright = "Rob Johnston"
 pagination.pagerSize = 10
 languageCode = "en"
 defaultContentLanguage = "en"
-theme = "tailwind"
+theme = "robjohnston"
 enableRobotsTXT = true
 enableEmoji = true
 
