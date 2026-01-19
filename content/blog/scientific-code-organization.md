@@ -3,15 +3,10 @@ title = "Organizing Source Code for Scientific Programmers: Let's Start a Conver
 date = "2025-12-20"
 publishDate = 2025-12-22
 draft = false
-sharingLinks = true
-image = "/images/scientific-code-organization-header.png"
 description = "How should scientists organize their code repositories? This post proposes a language-agnostic structure and asks the community to share their approaches."
-tags = [
-    "project organization"
-]
-categories = [
-]
-toc = false
+category = ""
+tags = ["project organization"]
+image = "/images/scientific-code-organization-header.png"
 aliases = ['/posts/scientific-code-organization/']
 +++
 

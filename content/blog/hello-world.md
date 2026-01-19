@@ -2,14 +2,10 @@
 title = "My First Blog Post - A Journey in Programming for Scientists and Engineers"
 date = "2025-12-02"
 draft = false
-sharingLinks = false
-image = "/images/post.jpg"
 description = "Why I'm starting a blog about programming for scientists and Engineers"
-tags = [
-]
-categories = [
-]
-toc = false
+category = ""
+tags = []
+image = "/images/post.jpg"
 aliases = ['/posts/hello-world/']
 +++
 
