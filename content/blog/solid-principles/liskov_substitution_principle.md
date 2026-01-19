@@ -3,19 +3,10 @@ title = "When Your Cheap Sensor Breaks Everything: Understanding LSP"
 date = "2026-01-18"
 publishDate = "2026-01-19"
 draft = false
-showAuthor = true
-sharingLinks = true
-image = "/images/solid/liskov_hero.png"
 description = "Your cheap sensor returns Fahrenheit instead of Celsius, breaking all your results. Learn the Liskov Substitution Principle to prevent subclass surprises."
-categories = [
-    "SOLID Principles",
-]
-tags = [
-    "LSP"
-]
-series = ["SOLID Principles"]
-series_order = 4
-toc = true
+category = "SOLID Principles"
+tags = ["LSP"]
+image = "/images/solid/liskov_hero.png"
 +++
 
 *Part 3 of the SOLID Principles for Scientific Programmers series*

@@ -1,0 +1,59 @@
+timeline:
+  - title: "Senior Technology Architect"
+    company: "Employment and Social Development Canada"
+    period: "February 2021 - October 2024"
+    description: "Pensions Automated Testing"
+
+  - title: "Senior Technology Architect"
+    company: "Employment and Social Development Canada"
+    period: "July 2019 - February 2021"
+    description: "Old Age Security Service Improvement Strategy"
+
+  - title: "Senior Technology Architect"
+    company: "Immigration, Refugees and Citizenship Canada"
+    period: "September 2014 - June 2019"
+    description: "Multiple projects"
+
+  - title: "Senior Technology Architect"
+    company: "Privy Council Office"
+    period: "January 2012 - May 2014"
+    description: "Canada's Economic Action Plan"
+
+  - title: "Senior Technology Architect"
+    company: "Canadian Forces Personnel Support Agency"
+    period: "November 2011 - December 2011"
+    description: "Insurance Needs Assessment"
+
+  - title: "Senior Technology Architect"
+    company: "Department of National Defence"
+    period: "November 2011 - December 2011"
+    description: "Canadian Army Website"
+
+education:
+  - degree: "Bachelor or Science in Engineering"
+    institution: "Queen's University at Kingston"
+    year: "1994"
+    dissertation: "Undergrad thesis:  Solidification of immiscible alloys in microgravity environments"
+
+  - degree: "Certificate of Intermediate Ability in Russian"
+    institution: "Queen's University at Kingston"
+    year: "1996"
+
+  - degree: "Certificates of Ability in Spanish"
+    institution: "University of Havana"
+    year: "2004-2006"
+
+expertise:
+  - "ASP.NET"
+  - "C#"
+  - ".NET Core"
+  - "Razor Pages"
+  - "Azure Devops Server"
+  - "MS SQL Server"
+  - "Entity Framework"
+  - "Dapper"
+  - "JavaScript"
+  - "jQuery"
+  - "Visual Studio"
+  - "VS Code"
+  - "Web Experience Toolkit (WET-BOEW)"

@@ -3,19 +3,10 @@ title = "Extending Without Breaking: Adding New Analysis Methods Safely"
 date = "2026-01-12"
 publishDate = "2026-01-12"
 draft = false
-showAuthor = true
-sharingLinks = true
-image = "/images/solid/quadratic_fit_hero.png"
 description = "Protect published results while adding features. Learn the Open/Closed Principle with real data fitting examples. No re-validation needed."
-categories = [
-    "SOLID Principles",
-]
-tags = [
-    "OCP"
-]
-series = ["SOLID Principles"]
-series_order = 3
-toc = true
+category = "SOLID Principles"
+tags = ["OCP"]
+image = "/images/solid/quadratic_fit_hero.png"
 +++
 
 *Part 2 of the SOLID Principles for Scientific Programmers series*

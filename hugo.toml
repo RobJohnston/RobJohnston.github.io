@@ -1,105 +1,78 @@
 baseURL = "https://robjohnston.github.io"
-title = "Rob Johnston"
-copyright = "Rob Johnston"
-pagination.pagerSize = 10
 languageCode = "en"
-defaultContentLanguage = "en"
-theme = "robjohnston"
-enableRobotsTXT = true
-enableEmoji = true
+title = "Rob Johnston"
+theme = "terminal-elegance"
 
+# Pagination
+[pagination]
+  pagerSize = 9
+
+# Syntax highlighting (for code blocks in blog posts)
 [markup]
-  _merge = "deep"
+  [markup.highlight]
+    style = 'dracula'
+    lineNos = true
+    lineNumbersInTable = true
+    tabWidth = 4
 
-[params]
-  keywords = "dotnet, csharp, fullstack, asp"
-  subtitle = "Senior Technology Architect"
-
-  contentTypeName = "posts"
-  showAuthor = true
-  showReadingTime = true
-
-  [params.author]
-  name = "Rob Johnston"
-  email = "rob@johnston.net"
-
-  [params.header]
-    logo = "fav.png"
-    title = " Rob Johnston, BSc Engineering"
-
-  [params.footer]
-    since = 2025
-    poweredby = true
-
-    [[params.social_media.items]]
-        enabled = true
-        title = 'Github'
-        icon = 'brand-github'
-        link = 'https://github.com/robjohnston'
-
-    [[params.social_media.items]]
-        enabled = true
-        title = 'LinkedIn'
-        icon = 'brand-linkedin'
-        link = 'https://www.linkedin.com/in/rob-johnston-ottawa'
-
-    [[params.social_media.items]]
-        enabled = true
-        title = 'Stack Overflow'
-        icon = 'brand-stackoverflow'
-        link = 'https://stackoverflow.com/users/4930982/rob-johnston'
-
-    [[params.social_media.items]]
-        enabled = true
-        title = 'Mastodon'
-        icon = 'brand-mastodon'
-        link = 'https://techhub.social/@rjohnston'
-        rel = 'me'
-
-    [[params.social_media.items]]
-        enabled = true
-        title = 'Telegram'
-        icon = 'brand-telegram'
-        link = 'https://t.me/rob_johnston'
-
-  [params.giscus]
-    enabled = true
-    repo = "RobJohnston/RobJohnston.github.io"
-    repoID = "R_kgDOQsRFPQ"
-    category = "Announcements"
-    categoryID = "DIC_kwDOQsRFPc4C0DFj"
-    mapping = "title"
-    strict = "0"
-    reactionsEnabled = "1"
-    emitMetadata = "0"
-    inputPosition = "bottom"
-    lang = "en"
-
+# Menu configuration
 [menu]
-
   [[menu.main]]
-    identifier = "post"
-    name = "Posts"
-    pageRef = "/posts"
-    weight = 10
-
+    name = "About"
+    url = "#about"
+    weight = 1
   [[menu.main]]
-    identifier = "about"
-    name = "About Me"
-    pageRef = "/about"
-    weight = 20
-
+    name = "Blog"
+    url = "/blog"
+    weight = 2
   [[menu.main]]
-    identifier = "contact"
+    name = "Experience"
+    url = "#experience"
+    weight = 3
+  [[menu.main]]
     name = "Contact"
-    pageRef = "/contact"
-    weight = 20
+    url = "#contact"
+    weight = 4
 
+# Site parameters
+[params]
+  description = "IT Contractor in Ottawa, Canada specializing in software architecture, design, and development of web-based applications."
+  author = "Your Name"
+
+  [params.hero]
+   title = "Rob Johnston"
+    subtitle = "IT Contractor in Ottawa, Canada specializing in software architecture, design, and development of web-based applications."
+    description = "A SECRET cleared, highly experienced Technology Architect with over 20 years of enterprise application development experience and deep expertise in .NET technologies, clean architecture, and scalable system design."
+    ctaText = "Explore Articles"
+    ctaLink = "/blog"
+
+  [params.contact]
+    intro = "Interested in collaborating, have questions about software engineering in science, or want to share your own experiences? Let's connect!"
+
+  [params.social]
+    github = "robjohnston"
+    linkedin = "rob-johnston-ottawa"
+    mastodon = "techhub.social/@rjohnston"
+    email = "rob@johnston.net"
+
+[permalinks]
+  blog = "/blog/:sections[1:]/:slug/"
+
+# Taxonomies
 [taxonomies]
-category = "categories"
-tag = "tags"
-series = "series"
+  tag = "tags"
+  category = "categories"
 
-[caches]
-  [caches.images]
-    dir = ':cacheDir/images'
+# Giscus comments configuration
+[params.giscus]
+  enabled = true
+  repo = "RobJohnston/RobJohnston.github.io"
+  repoID = "R_kgDOQsRFPQ"
+  category = "Announcements"
+  categoryID = "DIC_kwDOQsRFPc4C0DFj"
+  mapping = "title"
+  strict = "0"
+  reactionsEnabled = "1"
+  emitMetadata = "0"
+  inputPosition = "bottom"
+  lang = "en"

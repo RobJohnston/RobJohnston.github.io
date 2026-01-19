@@ -3,19 +3,10 @@ title = "One Class, One Job: Managing Scientific Code Complexity"
 date = "2026-01-05"
 publishDate = "2026-01-05"
 draft = false
-showAuthor = true
-sharingLinks = true
-image = "/images/solid/single-responsibility.png"
 description = "Your spectroscopy script is now 2,000 lines and breaks when you change anything. Learn the Single Responsibility Principle with real scientific code examples."
-categories = [
-    "SOLID Principles",
-]
-tags = [
-    "SRP"
-]
-series = ["SOLID Principles"]
-series_order = 2
-toc = true
+category = "SOLID Principles"
+tags = ["SRP"]
+image = "/images/solid/single-responsibility.png"
 +++
 
 *Part 1 of the SOLID Principles for Scientific Programmers series*
