@@ -19,7 +19,7 @@ theme = "terminal-elegance"
 [menu]
   [[menu.main]]
     name = "About"
-    url = "#about"
+    url = "/#about"
     weight = 1
   [[menu.main]]
     name = "Blog"
@@ -27,11 +27,11 @@ theme = "terminal-elegance"
     weight = 2
   [[menu.main]]
     name = "Experience"
-    url = "#experience"
+    url = "/#experience"
     weight = 3
   [[menu.main]]
     name = "Contact"
-    url = "#contact"
+    url = "/#contact"
     weight = 4
 
 # Site parameters
@@ -56,7 +56,7 @@ theme = "terminal-elegance"
     email = "rob@johnston.net"
 
 [permalinks]
-  blog = "/blog/:sections[1:]/:slug/"
+  blog = "/blog/:sections[1:]/::contentbasename/"
 
 # Taxonomies
 [taxonomies]

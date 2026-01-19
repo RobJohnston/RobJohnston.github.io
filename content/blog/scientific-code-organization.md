@@ -12,6 +12,7 @@ tags = [
 categories = [
 ]
 toc = false
+aliases = ['/posts/scientific-code-organization/']
 +++
 
 If you've ever opened a scientific code repository and found yourself lost in a maze of analysis files, scripts, data, and outputs all jumbled together, you're not alone. While line-of-business developers have established conventions (like [David Fowler's .NET project structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814)), scientific computing has its own unique needs that require a different approach.

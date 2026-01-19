@@ -10,6 +10,7 @@ tags = [
 categories = [
 ]
 toc = false
+aliases = ['/posts/hello-world/']
 +++
 
 ## Welcome to My New Blog

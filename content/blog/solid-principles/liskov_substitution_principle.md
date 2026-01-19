@@ -7,6 +7,7 @@ description = "Your cheap sensor returns Fahrenheit instead of Celsius, breaking
 category = "SOLID Principles"
 tags = ["LSP"]
 image = "/images/solid/liskov_hero.png"
+aliases = ['/posts/solid-principles/liskov_substitution_principle/']
 +++
 
 *Part 3 of the SOLID Principles for Scientific Programmers series*

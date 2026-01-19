@@ -7,6 +7,7 @@ description = "Protect published results while adding features. Learn the Open/C
 category = "SOLID Principles"
 tags = ["OCP"]
 image = "/images/solid/quadratic_fit_hero.png"
+aliases = ['/posts/solid-principles/open-closed_principle/']
 +++
 
 *Part 2 of the SOLID Principles for Scientific Programmers series*

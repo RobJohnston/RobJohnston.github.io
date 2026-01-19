@@ -7,6 +7,7 @@ description = "Your spectroscopy script is now 2,000 lines and breaks when you c
 category = "SOLID Principles"
 tags = ["SRP"]
 image = "/images/solid/single-responsibility.png"
+aliases = ['/posts/solid-principles/single_responsibility_principle/']
 +++
 
 *Part 1 of the SOLID Principles for Scientific Programmers series*
