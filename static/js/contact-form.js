@@ -3,8 +3,8 @@
     'use strict';
 
     // Azure Function URL - Update this with your actual Azure Function endpoint
-    const AZURE_FUNCTION_URL = 'http://localhost:7071/api/contact';
-    // const AZURE_FUNCTION_URL = 'https://YOUR-FUNCTION-APP.azurewebsites.net/api/contact';
+    //const AZURE_FUNCTION_URL = 'http://localhost:7071/api/contact';
+    const AZURE_FUNCTION_URL = 'https://robjohnston-contact-form.azurewebsites.net/api/contact';
 
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('contactForm');
