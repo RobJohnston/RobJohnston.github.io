@@ -1,0 +1,98 @@
+/* Contact Form */
+.contact-form-container {
+    max-width: 600px;
+    margin: 3rem auto 0;
+}
+
+.contact-form {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--syntax-cyan);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.875rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--syntax-cyan);
+    box-shadow: 0 0 0 2px rgba(139, 233, 253, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--bg-primary);
+    background: var(--syntax-green);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: var(--syntax-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(139, 233, 253, 0.3);
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.form-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.875rem;
+    border: 1px solid;
+    text-align: center;
+}
+
+.form-message.success {
+    color: var(--syntax-green);
+    background: rgba(80, 250, 123, 0.1);
+    border-color: var(--syntax-green);
+}
+
+.form-message.error {
+    color: var(--syntax-pink);
+    background: rgba(255, 121, 198, 0.1);
+    border-color: var(--syntax-pink);
+}
