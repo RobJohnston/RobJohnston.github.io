@@ -6,7 +6,7 @@ draft = false
 description = "Protect published results while adding features. Learn the Open/Closed Principle with real data fitting examples. No re-validation needed."
 category = "SOLID Principles"
 tags = ["OCP"]
-image = "/images/solid/quadratic_fit_hero.png"
+image = "/images/solid/open_closed_hero.png"
 aliases = ['/posts/solid-principles/open-closed_principle/']
 +++
 

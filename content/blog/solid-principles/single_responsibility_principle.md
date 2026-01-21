@@ -6,7 +6,7 @@ draft = false
 description = "Your spectroscopy script is now 2,000 lines and breaks when you change anything. Learn the Single Responsibility Principle with real scientific code examples."
 category = "SOLID Principles"
 tags = ["SRP"]
-image = "/images/solid/single-responsibility.png"
+image = "/images/solid/single_responsibility_hero.png"
 aliases = ['/posts/solid-principles/single_responsibility_principle/']
 +++
 
