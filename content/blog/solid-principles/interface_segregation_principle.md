@@ -2,7 +2,7 @@
 title = "Lean Interfaces: Why Would a pH Meter Need `set_wavelength()`?"
 date = 2026-01-21T07:42:06-05:00
 publishDate = "2026-01-26"
-draft = true
+draft = false
 description = "Why does a pH meter need set_wavelength()? Learn Interface Segregation Principle to stop forcing instruments to implement methods they don't support."
 category = "SOLID Principles"
 tags = ["ISP"]
