@@ -86,9 +86,27 @@ The [10 Digital Standards](https://www.canada.ca/en/government/system/digital-go
 - **Design Ethical Services** (#9): Consider the broader impact
 - **Collaborate Widely** (#10): Work across organizational boundaries
 
+### 5. Standards on APIs
+
+The [Standards on APIs](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/government-canada-standards-apis.html) are the technical requirements for building and consuming Government of Canada APIs. While the 10 Digital Standards provide philosophical guidance, the Standards on APIs provide concrete technical specifications.
+
+**Key requirements**:
+
+- **Architecture**: RESTful model by default, JSON message format (UTF-8 encoding), resource-oriented URLs (nouns, not verbs)
+- **Security**: TLS 1.2 or higher, JWT (JSON Web Token) for authentication, API keys in headers (never in URLs)
+- **Data Standards**: ISO 8601 datetime format in UTC (yyyy-mm-ddThh:mm:ssZ), JSON responses must be objects (not arrays), consistent casing
+- **Versioning**: Format `v<Major>.<Minor>.<Patch>`, URL reflects major version only (e.g., `/v3/`), support at least one previous major version
+- **Error Handling**: HTTP status codes for REST, abstract internal technical details (no stack traces in responses), consistent error response format
+- **Performance**: Pagination required for large result sets, restrict wildcard queries, load testing and published benchmarks
+- **Documentation**: OpenAPI/Swagger specifications for REST APIs, published to API Store for discovery, include test data and examples
+
+**Why this matters for AI assistants**: When you're building a Government of Canada application with backend APIs (ASP.NET Core, Node.js, etc.), the Standards on APIs provide the bounded vocabulary for API design. An AI assistant with Standards on APIs context knows that API endpoints should use `/api/v1/applications` (not `/api/getApplications`), that datetime fields must be ISO 8601 in UTC, and that error responses should abstract technical details.
+
+This is particularly important because many GC web applications have both a frontend (using WET-BOEW) and a backend API (providing data to the frontend or external integrations). The Standards on APIs ensure consistency across all government backend services—making it easier to integrate services, consume open data APIs, and build coherent digital ecosystems.
+
 ### The Ecosystem
 
-These four pillars—WET-BOEW (the components), the GC Design System (the design language), the Canada.ca Content Style Guide (the writing standards), and the Digital Standards (the principles)—create a comprehensive ecosystem. They weren't built with AI assistants in mind. But it turns out they provide exactly the structure AI assistants need to excel.
+These five pillars—WET-BOEW (the components), the GC Design System (the design language), the Canada.ca Content Style Guide (the writing standards), the Digital Standards (the principles), and the Standards on APIs (the technical specifications)—create a comprehensive ecosystem. They weren't built with AI assistants in mind. But it turns out they provide exactly the structure AI assistants need to excel.
 
 ### Supporting Infrastructure
 
@@ -942,6 +960,7 @@ Now let's bring this home. What would Ad Hoc's `cloud.gov-instructions` structur
 │   ├── gc-design-system.instructions.md # GC Design System utilities and templates
 │   ├── accessibility.instructions.md    # WCAG 2.1 AA compliance patterns
 │   ├── bilingual.instructions.md        # Official Languages Act compliance
+│   ├── api.instructions.md              # Standards on APIs compliance
 │   ├── security-protected-b.instructions.md  # Protected B handling
 │   ├── aws-deployment.instructions.md   # AWS deployment patterns (if using AWS)
 │   └── azure-deployment.instructions.md # Azure deployment patterns (if using Azure)
@@ -1006,7 +1025,72 @@ Every HTML page must use this structure...
 
 This instruction file gives the AI assistant concrete, copy-paste-ready examples of how to use WET-BOEW correctly. The `applyTo` frontmatter means these instructions load automatically whenever the developer is editing HTML or template files.
 
-### 3. Security Instructions for Protected B
+### 3. API Standards Instructions
+
+When building Government of Canada applications with backend APIs, the Standards on APIs provide the technical requirements for API design.
+
+**Example snippet** (from `.github/instructions/api.instructions.md`):
+
+```markdown
+---
+applyTo: "**/Controllers/**,**/Api/**,**/*Controller.cs,**/*ApiClient.cs"
+---
+
+# REST API Design Instructions
+
+Government of Canada APIs must follow REST principles, be well-documented, secure, and accessible.
+
+## Government of Canada Standards on APIs
+
+All Government of Canada APIs must comply with the **[Standards on APIs](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/government-canada-standards-apis.html)**.
+
+**Key requirements**:
+
+1. **Architecture**: RESTful model by default, JSON message format (UTF-8), resource-oriented URLs
+2. **Security**: TLS 1.2+, JWT for authentication, API keys in headers (not URLs)
+3. **Data Standards**: ISO 8601 datetime format in UTC, JSON responses as objects (not arrays)
+4. **Versioning**: Format `v<Major>.<Minor>.<Patch>`, major version in URL (e.g., `/v3/`)
+5. **Error Handling**: HTTP status codes, abstract internal details, consistent error format
+6. **Performance**: Pagination required, restrict wildcard queries, published benchmarks
+7. **Documentation**: OpenAPI specifications, published to API Store
+
+## URL Structure
+
+```csharp
+// ✅ GOOD: Plural nouns, lowercase, kebab-case
+[HttpGet("api/v1/applications")]
+[HttpGet("api/v1/applications/{id}")]
+[HttpPost("api/v1/applications")]
+
+// ❌ BAD: Verbs, mixed case
+[HttpGet("api/v1/getApplications")]
+[HttpPost("api/v1/createApplication")]
+```
+
+## Response Format
+
+```csharp
+// ✅ GOOD: ISO 8601 datetime, object response
+public class ApplicationDto
+{
+    public DateTime SubmissionDate { get; set; }  // Serializes as "2026-02-12T14:30:00Z"
+}
+
+return Ok(new { data = applications, meta = new { totalCount = 100 } });
+
+// ❌ BAD: Non-standard datetime, array response
+public string SubmissionDate { get; set; } = "12/02/2026";
+return Ok(applications);  // Raw array
+```
+
+[Additional sections on error handling, pagination, versioning, authentication...]
+```
+
+**Full file**: See [api.instructions.md](/gc-ai-instructions/.github/instructions/api.instructions.md)
+
+This instruction file ensures that when developers build backend APIs for their GC applications (ASP.NET Core controllers, Express.js routes, etc.), the AI assistant automatically generates code that complies with the Standards on APIs. The `applyTo` frontmatter means these instructions load when working with API controllers or API client code.
+
+### 4. Security Instructions for Protected B
 
 This is where Canadian-specific compliance gets encoded.
 
@@ -1040,7 +1124,7 @@ Information that could cause serious injury to individuals or organizations if c
 
 This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required.
 
-### 4. The ITSCA Compliance Agent
+### 5. The ITSCA Compliance Agent
 
 This is where automation gets powerful. Inspired by Ad Hoc's compliance documentation agent, here's a Canadian adaptation.
 

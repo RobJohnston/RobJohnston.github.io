@@ -6,6 +6,22 @@ applyTo: "**/Controllers/**,**/Api/**,**/*Controller.cs,**/*ApiClient.cs"
 
 Government of Canada APIs must follow REST principles, be well-documented, secure, and accessible.
 
+## Government of Canada Standards on APIs
+
+All Government of Canada APIs must comply with the **[Standards on APIs](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/government-canada-standards-apis.html)**.
+
+**Key requirements**:
+
+1. **Architecture**: RESTful model by default, JSON message format (UTF-8), resource-oriented URLs
+2. **Security**: TLS 1.2+, JWT for authentication, API keys in headers (not URLs), no sensitive data unencrypted
+3. **Data Standards**: ISO 8601 datetime format in UTC (yyyy-mm-ddThh:mm:ssZ), JSON responses as objects (not arrays), consistent casing
+4. **Versioning**: Format `v<Major>.<Minor>.<Patch>`, major version in URL (e.g., `/v3/`), support at least one previous major version
+5. **Error Handling**: HTTP status codes, abstract internal details (no stack traces), consistent error response format
+6. **Performance**: Pagination required for large result sets, restrict wildcard queries, published benchmarks
+7. **Documentation**: OpenAPI specifications, published to API Store, include test data and examples
+
+**This instruction file provides implementation guidance for these standards using ASP.NET Core.**
+
 ## API Design Principles
 
 1. **Resource-oriented** - URLs represent resources, not actions
