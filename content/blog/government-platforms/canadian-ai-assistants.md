@@ -1377,7 +1377,7 @@ Payoff: Weeks of time saved over the project lifecycle
 
 ### For Project Teams
 
-If you're a team lead or project manager, here's how to scale this across your team:
+If you're a team lead or senior developer, here's how to scale this across your team:
 
 #### Step 1: Create Shared Instruction Repository (2-4 hours)
 
@@ -1452,160 +1452,6 @@ Hold a monthly retrospective:
 - What security patterns are we using repeatedly?
 
 Continuously improve your instruction files based on real project experience.
-
-### For Departments and Agencies
-
-If you're at Treasury Board Secretariat, Shared Services Canada, or a department with multiple digital projects, here's how to scale this across the Government of Canada:
-
-#### Vision: Canonical GC Instruction Files
-
-Create **official, government-maintained instruction files** that all GC projects can use:
-
-**Hosted on GCcode** (Government of Canada's internal GitLab):
-```
-https://gccode.ssc-spc.gc.ca/platform/gc-ai-instructions
-```
-
-**Or on public GitHub** (for unclassified projects):
-```
-https://github.com/gc-digital/gc-ai-instructions
-```
-
-**Structure**:
-```
-gc-ai-instructions/
-├── README.md (English)
-├── LISEZMOI.md (French)
-├── wet-boew/
-│   ├── v4.0.x/
-│   │   ├── base-template.instructions.md
-│   │   ├── components/
-│   │   └── themes/
-├── gc-design-system/
-│   ├── utilities.instructions.md
-│   ├── templates.instructions.md
-│   └── components/
-├── security/
-│   ├── protected-a.instructions.md
-│   ├── protected-b.instructions.md
-│   └── protected-c.instructions.md
-├── accessibility/
-│   ├── wcag-2.1-aa.instructions.md
-│   ├── testing/
-│   └── remediation/
-├── bilingual/
-│   ├── official-languages-act.instructions.md
-│   └── translation-patterns/
-├── ssc-cloud/
-│   ├── aws-protected-b.instructions.md      # AWS deployment via SSC
-│   ├── azure-protected-b.instructions.md    # Azure deployment via SSC
-│   ├── aws-protected-c.instructions.md      # AWS for higher classification
-│   └── azure-protected-c.instructions.md    # Azure for higher classification
-├── compliance/
-│   ├── itsca.instructions.md
-│   ├── itsg-33.instructions.md
-│   └── ccs-cloud-security-profile.instructions.md
-└── agents/
-    ├── itsca-documentation.agent.md
-    ├── accessibility-audit.agent.md
-    └── bilingual-checker.agent.md
-```
-
-#### Step 1: Pilot with 2-3 Departments (3-6 months)
-
-Select 2-3 departments with active digital projects:
-- One large department (ESDC, CRA)
-- One medium department (Veterans Affairs, Fisheries)
-- One small agency (administrative tribunal)
-
-Run a pilot:
-1. Create initial instruction files based on WET-BOEW, GC Design System, Digital Standards
-2. Deploy to pilot projects
-3. Gather feedback: What works? What's missing? What needs adjustment?
-4. Iterate based on real developer usage
-
-#### Step 2: Publish on GCcode (1 month)
-
-Once instruction files are validated:
-1. Publish to GCcode (internal GitLab) for Protected B projects
-2. Publish to public GitHub for unclassified projects
-3. Create bilingual README with setup instructions
-4. Provide example projects showing usage
-
-#### Step 3: Integrate with WET-BOEW (3 months)
-
-Work with the WET-BOEW team to:
-- Add AI instruction files to WET-BOEW releases
-- Include instructions in component documentation
-- Create "AI-friendly" examples in WET-BOEW docs
-- Reference instruction repository in WET-BOEW README
-
-Result: Every project using WET-BOEW automatically gets AI-friendly instruction files.
-
-#### Step 4: SSC Publishes Cloud Provider Instructions (3-6 months)
-
-This is the unique Canadian opportunity. Work with Shared Services Canada to create canonical instruction files for each SSC-approved cloud provider:
-
-**For AWS (Protected B)** - Example instruction file (`aws-protected-b.instructions.md`):
-
-**Example snippet**:
-
-```yaml
----
-applyTo: "**/aws/**,**/infrastructure/**,**/terraform/**"
----
-
-# AWS Protected B Deployment Instructions
-
-This application deploys to AWS through SSC's Cloud Brokering Service framework agreement.
-
-## Framework Agreement
-
-Project uses AWS through SSC's Cloud Brokering Service framework agreement.
-
-## Required AWS Services
-
-- **Compute**: AWS Lambda or ECS Fargate (containerized .NET applications)
-- **Database**: RDS SQL Server (managed) with encryption at rest
-- **Storage**: S3 with server-side encryption (AES-256)
-- **Logging**: CloudWatch Logs with 90-day retention (TBS requirement)
-- **Key Management**: AWS KMS for encryption keys
-
-[Terraform Configuration, Deployment via CI/CD, GC Cloud Guardrails Compliance, Regional Requirements, Security Best Practices, Cost Optimization, Support Contacts, and Further Reading sections...]
-```
-
-**Full file**: See [aws-protected-b.instructions.md](/gc-ai-instructions/.github/instructions/aws-protected-b.instructions.md)
-
-**For Azure (Protected B)**:
-Similar instruction files for Azure App Service, Azure SQL Database, Azure Key Vault, etc., following the [CCCS Cloud Security Profile](https://www.cyber.gc.ca/en/guidance/cloud-security-guidance) requirements for Protected B workloads.
-
-**The Impact**: Instead of every department figuring out "how do we deploy to AWS following SSC requirements and CCCS Cloud Security Profile controls," there's a canonical answer. AI assistants generate infrastructure-as-code that's compliant by default with both SSC framework agreements and CCCS security controls.
-
-#### Step 5: Training and Adoption (6-12 months)
-
-Roll out across the GC:
-- Add module to Canada School of Public Service (CSPS) digital training
-- Include in onboarding for GC developers and contractors
-- Present at FWD50, GCDevEx, and other GC digital community events
-- Create video tutorials and documentation
-
-#### Step 6: Continuous Improvement
-
-Establish a maintenance team:
-- Review contributions from departments
-- Update instructions when WET-BOEW or GC Design System evolve
-- Add new patterns based on common questions
-- Monitor AI assistant effectiveness
-
-#### The Bigger Picture: Canada as a Leader
-
-If the Government of Canada does this well, we could become the **international reference** for AI-assisted government software development.
-
-Other countries would look at Canada's approach and say: "They figured out how to make AI assistants work within government constraints—accessibility, security, bilingualism, compliance. We should follow their model."
-
-Ad Hoc has shown the pattern with their cloud.gov-instructions repository. Canada has the opportunity to take that pattern and scale it to an entire country's digital government infrastructure.
-
-That's a legacy worth building.
 
 ## Caveats and Considerations
 
@@ -1690,15 +1536,7 @@ There are real constraints in government that affect AI assistant usage:
 - Use cloud-based assistants in development environment with synthetic data (never paste real PII)
 - Wait for government-approved AI tools (currently in procurement at SSC)
 
-**Procurement constraints**: Not all AI coding assistants are on approved software lists. Check with your department's IT security team before using any AI tool.
-
-**Change management**: Introducing AI assistants to government teams requires buy-in from:
-- Developers (who might be skeptical or threatened)
-- Managers (who might not understand the technology)
-- Security teams (who might see only risks)
-- Procurement (who need to evaluate licensing)
-
-Address these concerns proactively with pilot projects, training, and clear communication about benefits and limitations.
+**Tool approval**: Not all AI coding assistants are on approved software lists. Check with your department's IT security team before using any AI tool.
 
 ### Ethical Considerations
 
@@ -1740,16 +1578,14 @@ Other countries are scrambling to figure out how to make AI coding assistants wo
 
 ### The Opportunity
 
-By adding **machine-readable instruction files** (following Ad Hoc's cloud.gov-instructions pattern) to Canada's mature digital ecosystem, we could become the international leader in AI-assisted government software development.
+By adding **machine-readable instruction files** (following Ad Hoc's cloud.gov-instructions pattern) to Canada's mature digital ecosystem, developers can dramatically improve their productivity on government projects.
 
 Imagine:
-- Treasury Board Secretariat publishes canonical GC instruction files on GCcode
-- Every GC project starts with WET-BOEW instruction files automatically included
-- Contractors onboard to new projects in hours instead of weeks
-- ITSCA documentation generates automatically from code annotations
+- Onboarding to new GC projects in hours instead of weeks
+- ITSCA documentation generating automatically from code annotations
 - Accessibility compliance is the default, not a struggle
-- Junior developers get GC-standards guidance from AI assistants
-- Canada.ca services deliver faster with higher quality
+- Getting GC-standards guidance from AI assistants as you code
+- Delivering Canada.ca services faster with higher quality
 
 This isn't science fiction. Ad Hoc has shown the pattern works for US federal cloud.gov projects. The MIT-licensed repository is available today at github.com/adhocteam/cloud.gov-instructions—ready to be adapted for Canadian context.
 
@@ -1757,19 +1593,17 @@ This isn't science fiction. Ad Hoc has shown the pattern works for US federal cl
 
 **For individual developers**: Start today. Create `.github/copilot-instructions.md` in your current project. Add basic WET-BOEW patterns. Test with your AI assistant. Iterate. (Time investment: 1-2 hours. Payoff: Weeks saved over the project.)
 
-**For project teams**: Create shared instruction repositories. Build your team's GC compliance knowledge base. Train contractors on AI-assisted development. Contribute patterns back to the community. (Time investment: 2-4 hours initially. Payoff: 20-30% cost reduction across projects.)
-
-**For departments and agencies**: Run a pilot. Work with 2-3 projects to validate the approach. Publish canonical instruction files on GCcode. Integrate with WET-BOEW. Scale across the GC digital community. (Time investment: 3-6 months pilot. Payoff: Faster delivery, higher quality, reduced contractor costs government-wide.)
+**For project teams**: Create shared instruction repositories. Build your team's GC compliance knowledge base. Train team members on AI-assisted development. Contribute patterns back to the community. (Time investment: 2-4 hours initially. Payoff: 20-30% cost reduction across projects.)
 
 ### Final Thought
 
 The future of government software development isn't about AI replacing developers—it's about developers and AI working together within well-designed, standards-based platforms.
 
-Canada already has those platforms. We built them over 15 years, one component at a time, one standard at a time. Now we need to make them AI-friendly.
+Canada already has those platforms. We built them over 15 years, one component at a time, one standard at a time. Now we just need to make them AI-friendly by adding machine-readable instruction files.
 
-That's not a radical transformation. It's the natural next step.
+That's not a radical transformation. It's a natural evolution that makes your job easier.
 
-And when we do it, we won't just improve our own digital services—we'll show the world how to make AI assistants work in government. That's the kind of leadership Canada is good at: quiet, practical, and incredibly effective.
+Start with a simple `.github/copilot-instructions.md` file in your next GC project. Add a few WET-BOEW patterns. Watch how much faster you can build compliant government applications.
 
 Let's get to work.
 
@@ -1780,8 +1614,6 @@ Let's get to work.
 Have you worked on Government of Canada projects? What patterns would you add to GC instruction files? Have you tried using AI assistants for WET-BOEW or accessibility compliance?
 
 I'd love to hear your experiences. Drop a comment below or reach out—let's build this together.
-
-And if you're at TBS, SSC, or a department looking to pilot this approach, let's talk. The opportunity is too good to ignore.
 
 ---
 
