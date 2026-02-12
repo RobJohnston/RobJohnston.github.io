@@ -114,6 +114,8 @@ Beyond these four pillars, several reusable services extend the ecosystem:
 
 **GC Cloud Guardrails**: [Mandatory baseline security controls](https://canada-ca.github.io/cloud-guardrails/) for cloud deployments. Departments must implement these guardrails within 30 business days of getting cloud access. These prescriptive security requirements (available as [open-source on GitHub](https://github.com/canada-ca/cloud-guardrails)) are perfect candidates for encoding as AI instruction files.
 
+**Canadian Centre for Cyber Security (CCCS)**: The [CCCS](https://www.cyber.gc.ca/en/government-institutions) provides the security frameworks and guidance that underpin government IT security. Key resources include the [IT Security Risk Management framework (ITSG-33)](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33), the [Cloud Security Profile](https://www.cyber.gc.ca/en/guidance/cloud-security-guidance) for assessing cloud service providers, and the [Cryptographic Module Validation Program (CMVP)](https://www.cyber.gc.ca/en/cryptographic-module-validation-program) for certifying encryption products. For AI instruction files, CCCS guidance provides authoritative security patterns—instead of developers guessing at encryption requirements or cloud security controls, instruction files can encode CCCS-approved approaches (e.g., "Use CMVP-validated encryption for Protected B data" or "Follow ITSG-33 access control patterns"). The CCCS also provides [tools for security operations](https://www.cyber.gc.ca/en/tools-services) including Assemblyline (malware analysis), Clue (incident investigation), and Howler (SOC triage)—relevant for departments building security monitoring capabilities.
+
 **GC Notify**: A [free notification service](https://notification.canada.ca/) for sending emails and SMS. Built by the Canadian Digital Service, GC Notify provides departments with a standardized API for sending up to 20 million emails and 100,000 texts per year. It includes bilingual defaults and follows Federal Identity Program requirements automatically.
 
 **GCKey and GC Sign-in**: Authentication services that let citizens access government services securely. [GCKey](https://www.canada.ca/en/government/sign-in-online-account/gckey.html) is a standards-based (SAML) authentication service currently integrated with 30+ federal agencies. The newer [GC Sign-in](https://digital.canada.ca/2025/02/12/streamlining-government-services-introducing-gc-sign-in/) (piloting in 2025) modernizes this with passwordless authentication, passkeys, and self-serve integration tools—addressing the current complexity of 270+ online services with 60+ different sign-in methods.
@@ -1122,7 +1124,7 @@ Information that could cause serious injury to individuals or organizations if c
 
 **Full file**: See [security-protected-b.instructions.md](/gc-ai-instructions/.github/instructions/security-protected-b.instructions.md)
 
-This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required.
+This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required. The patterns follow [Canadian Centre for Cyber Security (CCCS) guidance](https://www.cyber.gc.ca/en/guidance) on cryptography (CMVP-validated encryption modules), access controls (ITSG-33 controls), and secure cloud deployments (Cloud Security Profile requirements for Protected B data).
 
 ### 5. The ITSCA Compliance Agent
 
@@ -1604,9 +1606,9 @@ Project uses AWS through SSC's Cloud Brokering Service framework agreement.
 **Full file**: See [aws-protected-b.instructions.md](/gc-ai-instructions/.github/instructions/aws-protected-b.instructions.md)
 
 **For Azure (Protected B)**:
-Similar instruction files for Azure App Service, Azure SQL Database, Azure Key Vault, etc.
+Similar instruction files for Azure App Service, Azure SQL Database, Azure Key Vault, etc., following the [CCCS Cloud Security Profile](https://www.cyber.gc.ca/en/guidance/cloud-security-guidance) requirements for Protected B workloads.
 
-**The Impact**: Instead of every department figuring out "how do we deploy to AWS following SSC requirements," there's a canonical answer. AI assistants generate infrastructure-as-code that's compliant by default.
+**The Impact**: Instead of every department figuring out "how do we deploy to AWS following SSC requirements and CCCS Cloud Security Profile controls," there's a canonical answer. AI assistants generate infrastructure-as-code that's compliant by default with both SSC framework agreements and CCCS security controls.
 
 #### Step 5: Training and Adoption (6-12 months)
 

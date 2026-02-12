@@ -10,6 +10,23 @@ This application deploys to AWS through SSC's Cloud Brokering Service framework 
 
 Project uses AWS through SSC's Cloud Brokering Service framework agreement.
 
+## Security Compliance
+
+All AWS deployments for Protected B data must follow:
+
+1. **SSC Cloud Brokering Service** requirements and framework agreements
+2. **CCCS Cloud Security Profile** - [Canadian Centre for Cyber Security guidance](https://www.cyber.gc.ca/en/guidance/cloud-security-guidance) for assessing and authorizing cloud services for Protected B workloads
+3. **GC Cloud Guardrails** - [Mandatory baseline security controls](https://github.com/canada-ca/cloud-guardrails) that must be implemented within 30 days
+4. **ITSG-33** - [IT Security Risk Management framework](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33) controls for access control, encryption, logging, and monitoring
+
+**Key CCCS requirements for Protected B**:
+- Data encryption at rest and in transit (TLS 1.2+)
+- CMVP-validated cryptographic modules where required
+- Multi-factor authentication for administrative access
+- Network segmentation and security groups
+- Logging and monitoring with 2-year retention
+- Canadian data residency (Canada region only)
+
 ## Required AWS Services
 
 - **Compute**: AWS Lambda or ECS Fargate (containerized .NET applications)

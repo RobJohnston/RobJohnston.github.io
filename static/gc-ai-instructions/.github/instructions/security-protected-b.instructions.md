@@ -14,6 +14,22 @@ Information that could cause serious injury to individuals or organizations if c
 - Financial information
 - Personal contact information combined with identifiers
 
+## Security Compliance Requirements
+
+Protected B applications must follow:
+
+1. **TBS Security Policy** - Treasury Board Secretariat security classification and controls
+2. **CCCS ITSG-33** - [IT Security Risk Management framework](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33) from the Canadian Centre for Cyber Security
+3. **CCCS CMVP** - [Cryptographic Module Validation Program](https://www.cyber.gc.ca/en/cryptographic-module-validation-program) for encryption at rest
+4. **GC Cloud Guardrails** - If deployed to cloud, follow [mandatory baseline security controls](https://github.com/canada-ca/cloud-guardrails)
+5. **CCCS Cloud Security Profile** - If using cloud services, follow [cloud security guidance](https://www.cyber.gc.ca/en/guidance/cloud-security-guidance)
+
+**Key controls from CCCS ITSG-33**:
+- **AC (Access Control)**: Role-based access, multi-factor authentication, session management
+- **AU (Audit and Accountability)**: Comprehensive logging without PII, 2-year retention
+- **SC (System and Communications Protection)**: TLS 1.2+, data encryption at rest (CMVP-validated modules)
+- **IA (Identification and Authentication)**: Strong authentication, password complexity, account lockout
+
 ## Logging Requirements
 
 **CRITICAL**: Never log Protected B information. Use structured logging with PII redaction:
