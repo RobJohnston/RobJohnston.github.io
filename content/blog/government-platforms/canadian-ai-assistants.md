@@ -991,6 +991,8 @@ Add security control references in XML documentation comments...
 
 This agent dramatically reduces the SA&A documentation burden for government projects. Instead of manually writing security control implementation descriptions, developers annotate their code and the AI assistant generates the documentation automatically, supporting the Authority to Operate (ATO) process.
 
+**Important caveat**: The documentation format shown here is inspired by US federal security assessment practices (NIST SP 800-53). While ITSG-33 controls are based on NIST SP 800-53, the specific documentation format and deliverables required for Canadian SA&A may vary by department. Consult your department's SA&A team to understand the required documentation format, templates, and submission requirements. The agent provides a starting point that should be adapted to your department's specific process.
+
 ## Real-World Benefits for Government Contractors
 
 Let's get practical. What does all this actually mean for someone bidding on or delivering a Government of Canada project?

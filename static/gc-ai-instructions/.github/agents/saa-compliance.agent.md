@@ -3,6 +3,8 @@
 ## Purpose
 Generate Security Assessment and Authorization (SA&A) documentation by scanning the codebase for security control implementation references. Supports the Authority to Operate (ATO) process required for Government of Canada IT systems.
 
+**IMPORTANT DISCLAIMER**: This agent's documentation format is inspired by US federal security assessment practices (NIST SP 800-53). While ITSG-33 security controls are based on NIST SP 800-53, the specific documentation format and deliverables required for Canadian SA&A may differ by department. **Consult your department's SA&A team** to determine the actual documentation format, templates, and submission requirements. This agent provides a starting point that should be adapted to your department's specific SA&A process.
+
 ## Supported Frameworks
 - **ITSG-33**: IT Security Risk Management framework controls (primary framework for SA&A)
 - **TBS Security Policy**: Treasury Board of Canada Secretariat security requirements
@@ -58,7 +60,7 @@ public async Task<User> AuthenticateUser(string username, string password)
 
 ### 3. Generated Documentation
 
-The agent produces:
+The agent produces the following documentation formats (adapt to your department's SA&A requirements):
 
 #### Control Implementation Matrix
 
@@ -198,16 +200,29 @@ Example:
 
 ## Limitations
 
-- Agent cannot verify control effectiveness (only identifies implementations)
-- Human review required for accuracy and completeness
-- Some controls (physical security, organizational policies) cannot be detected in code
-- Generated documentation is a starting point, not a complete SA&A package
+- **Documentation format may not match department requirements**: This agent generates documentation based on US federal practices. Your department may require different formats, templates, or deliverables. Always verify with your SA&A team.
+- **Agent cannot verify control effectiveness**: Only identifies implementations, does not assess whether controls are operating effectively
+- **Human review required**: Generated documentation must be reviewed for accuracy and completeness by qualified security personnel
+- **Some controls cannot be detected in code**: Physical security, organizational policies, and administrative controls require manual documentation
+- **Starting point, not complete package**: Generated documentation is a foundation that must be supplemented with architecture diagrams, threat models, and other SA&A deliverables
 
 ## Next Steps
 
 After generating compliance documentation:
-1. Review generated control mappings for accuracy
-2. Add manual sections for controls not detectable in code (physical security, organizational policies)
-3. Include architecture diagrams showing security boundaries
-4. Submit to departmental SA&A team for formal review
-5. Update control annotations when code changes to keep documentation current
+1. **Consult your department's SA&A team** to understand required documentation format and templates
+2. **Adapt the generated documentation** to match your department's specific SA&A requirements
+3. **Review generated control mappings** for accuracy and completeness
+4. **Add manual sections** for controls not detectable in code (physical security, organizational policies, administrative controls)
+5. **Include additional deliverables** such as architecture diagrams, threat models, privacy impact assessments, and Statement of Sensitivity
+6. **Submit to departmental SA&A team** for formal review and feedback
+7. **Update control annotations** when code changes to keep documentation current
+
+## Department-Specific Customization
+
+Different Government of Canada departments may have different SA&A processes and documentation requirements. Before using this agent:
+
+- **Identify your department's SA&A team** (may be called IT Security, Cyber Security, or Information Security)
+- **Request SA&A documentation templates** specific to your department
+- **Ask about required deliverables** (e.g., Statement of Sensitivity format, security control matrices, assessment reports)
+- **Understand the submission process** (format, timing, review cycles)
+- **Customize the agent output** to match your department's templates and requirements
