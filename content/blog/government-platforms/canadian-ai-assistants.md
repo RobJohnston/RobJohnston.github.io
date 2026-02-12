@@ -537,64 +537,79 @@ An AI assistant aware of this standard won't casually suggest storing sensitive 
 
 Ask it to build a form that collects personal information, and it might generate:
 
-```python
-import logging
-from flask import Flask, request, jsonify
+```csharp
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-# Configure structured logging (no PII in logs per Standard #5)
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+namespace GC.BenefitsPortal.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ApplicationController : ControllerBase
+    {
+        private readonly ILogger<ApplicationController> _logger;
+        private readonly IApplicationService _applicationService;
 
-app = Flask(__name__)
+        public ApplicationController(
+            ILogger<ApplicationController> logger,
+            IApplicationService applicationService)
+        {
+            _logger = logger;
+            _applicationService = applicationService;
+        }
 
-@app.route('/submit-application', methods=['POST'])
-def submit_application():
-    """
-    Process application submission with Protected B data.
+        /// <summary>
+        /// Process application submission with Protected B data.
+        ///
+        /// GC Compliance:
+        ///     - Standard #5: Address security and privacy risks
+        ///     - Protected B classification handling
+        ///     - No PII in application logs
+        /// </summary>
+        [HttpPost("submit")]
+        public async Task<IActionResult> SubmitApplication(
+            [FromBody] ApplicationSubmissionDto request)
+        {
+            // Log the event WITHOUT PII
+            _logger.LogInformation(
+                "Application submitted: {ApplicationId}, Service: {ServiceType}, Method: {Method}",
+                request.ApplicationId,
+                request.ServiceType,
+                "web_form");
 
-    GC Compliance:
-        - Standard #5: Address security and privacy risks
-        - Protected B classification handling
-        - No PII in application logs
-    """
+            try
+            {
+                // Process the application (PII handled in secure processing, not logged)
+                var result = await _applicationService.ProcessApplication(
+                    request.SocialInsuranceNumber,
+                    request.FullName,
+                    request);
 
-    # Get form data
-    data = request.get_json()
-    sin = data.get('social_insurance_number')
-    name = data.get('full_name')
+                // Return confirmation (no PII in response for browser console exposure)
+                return Ok(new
+                {
+                    Status = "success",
+                    ConfirmationNumber = result.ConfirmationNumber,
+                    NextStepsUrl = "/application/next-steps"
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log error WITHOUT exposing PII
+                _logger.LogError(ex,
+                    "Application processing failed: {ApplicationId}, ErrorType: {ErrorType}",
+                    request.ApplicationId,
+                    ex.GetType().Name);
 
-    # Log the event WITHOUT PII
-    logger.info('application_submitted', extra={
-        'application_id': data.get('application_id'),
-        'service_type': data.get('service_type'),
-        'submission_method': 'web_form'
-    })
-
-    # Process the application (PII handled in secure processing, not logged)
-    try:
-        result = process_application(sin, name, data)
-
-        # Return confirmation (no PII in response for browser console exposure)
-        return jsonify({
-            'status': 'success',
-            'confirmation_number': result.confirmation_number,
-            'next_steps_url': '/application/next-steps'
-        })
-
-    except Exception as e:
-        # Log error WITHOUT exposing PII
-        logger.error('application_processing_failed', extra={
-            'application_id': data.get('application_id'),
-            'error_type': type(e).__name__
-        })
-
-        return jsonify({
-            'status': 'error',
-            'message': 'We could not process your application. Please try again or contact support.'
-        }), 500
+                return StatusCode(500, new
+                {
+                    Status = "error",
+                    Message = "We could not process your application. Please try again or contact support."
+                });
+            }
+        }
+    }
+}
 ```
 
 The guardrail is explicit: Don't log PII, handle Protected B data appropriately, provide safe error messages. The AI assistant encodes this into the generated code.
@@ -791,7 +806,7 @@ applications:
   memory: 256M
   instances: 2
   buildpacks:
-    - https://github.com/cloudfoundry/python-buildpack
+    - https://github.com/cloudfoundry/dotnet-core-buildpack
   env:
     ENV_VAR: value
   services:
@@ -869,30 +884,32 @@ Generate System Security Plan (SSP) documentation by scanning the codebase for N
 4. Identifies compliance gaps (required controls without implementations)
 
 ## Example Code Pattern
-```python
-def authenticate_user(username: str, password: str):
-    """
-    Authenticate user against identity provider.
-
-    NIST 800-53 Controls:
-        - IA-2: Identification and Authentication (Organizational Users)
-        - IA-5: Authenticator Management
-
-    Implementation:
-        - Uses bcrypt for password hashing (IA-5(1))
-        - Enforces minimum password complexity (IA-5(1)(a))
-        - Implements account lockout after 5 failures (AC-7)
-    """
-    # Implementation...
+```csharp
+/// <summary>
+/// Authenticate user against identity provider.
+///
+/// NIST 800-53 Controls:
+///     - IA-2: Identification and Authentication (Organizational Users)
+///     - IA-5: Authenticator Management
+///
+/// Implementation:
+///     - Uses BCrypt.NET for password hashing (IA-5(1))
+///     - Enforces minimum password complexity (IA-5(1)(a))
+///     - Implements account lockout after 5 failures (AC-7)
+/// </summary>
+public async Task<User> AuthenticateUser(string username, string password)
+{
+    // Implementation...
+}
 ```
 
 ## Agent Output
 ```markdown
 | Control ID | Control Name | Implementation | Evidence |
 |------------|--------------|----------------|----------|
-| IA-2 | Identification and Authentication | User authentication via identity provider | `src/auth/user.py:45-67` |
-| IA-5 | Authenticator Management | bcrypt password hashing, complexity rules | `src/auth/user.py:45-67` |
-| AC-7 | Unsuccessful Logon Attempts | Account lockout after 5 failures | `src/auth/user.py:85-92` |
+| IA-2 | Identification and Authentication | User authentication via identity provider | `src/Auth/UserService.cs:45-67` |
+| IA-5 | Authenticator Management | BCrypt.NET password hashing, complexity rules | `src/Auth/UserService.cs:45-67` |
+| AC-7 | Unsuccessful Logon Attempts | Account lockout after 5 failures | `src/Auth/UserService.cs:85-92` |
 
 ### Compliance Gap Analysis
 - AU-2 (Audit Events): No implementation found
@@ -952,7 +969,7 @@ This application is deployed to GC Cloud Account (Cloud Foundry) and serves Cana
 
 ## Project Stack
 - Frontend: WET-BOEW 4.0.x, GC Design System CSS utilities, vanilla JavaScript
-- Backend: Python 3.11 with Flask
+- Backend: ASP.NET Core 8.0 with C#
 - Database: PostgreSQL (cloud.gc.ca managed service)
 - Session storage: Redis (cloud.gc.ca managed service)
 - Logging: Structured JSON to stdout (captured by cloud.gc.ca logging service)
@@ -960,7 +977,7 @@ This application is deployed to GC Cloud Account (Cloud Foundry) and serves Cana
 ## Important Paths
 - `static/wet-boew/`: WET-BOEW library files (managed via npm)
 - `templates/`: Jinja2 templates with WET-BOEW structure
-- `src/`: Python application code
+- `src/`: C# application code
 - `tests/`: Automated tests (unit, integration, accessibility via axe-core)
 - `docs/itsca/`: ITSCA documentation (SSP, SAR, etc.)
 
@@ -1324,7 +1341,7 @@ This is where Canadian-specific compliance gets encoded:
 
 ```markdown
 ---
-applyTo: "src/**/*.py,src/**/*.js"
+applyTo: "src/**/*.cs,src/**/*.js"
 ---
 
 # Protected B Data Handling Instructions
@@ -1343,79 +1360,109 @@ Information that could cause serious injury to individuals or organizations if c
 
 **CRITICAL**: Never log Protected B information. Use structured logging with PII redaction:
 
-```python
-import logging
-import json
+```csharp
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
-# Configure structured JSON logging
-logging.basicConfig(
-    format='%(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+/// <summary>
+/// Log an event with structured data (no PII).
+///
+/// GC Security:
+///     - TBS IT Security Framework: AU-2 (Audit Events)
+///     - Protected B: No PII in logs
+/// </summary>
+public class AuditLogger
+{
+    private readonly ILogger<AuditLogger> _logger;
 
-def log_event(event_type: str, **kwargs):
-    """
-    Log an event with structured data (no PII).
-
-    GC Security:
-        - TBS IT Security Framework: AU-2 (Audit Events)
-        - Protected B: No PII in logs
-    """
-    log_entry = {
-        'timestamp': datetime.utcnow().isoformat(),
-        'event_type': event_type,
-        **kwargs
+    public AuditLogger(ILogger<AuditLogger> logger)
+    {
+        _logger = logger;
     }
-    logger.info(json.dumps(log_entry))
 
-# ✅ GOOD: Log events without PII
-log_event('user_login_success',
-    user_id='user-123',  # Use internal ID, not SIN or email
-    session_id='sess-abc',
-    ip_address_hash=hash_ip(request.remote_addr)  # Hash, don't log raw IP
-)
+    public void LogEvent(string eventType, Dictionary<string, object> data)
+    {
+        var logEntry = new
+        {
+            Timestamp = DateTime.UtcNow,
+            EventType = eventType,
+            Data = data
+        };
 
-# ❌ BAD: Do not log PII
-logger.info(f"User {email} with SIN {sin} logged in")  # NEVER DO THIS
+        _logger.LogInformation("{@LogEntry}", logEntry);
+    }
+}
+
+// ✅ GOOD: Log events without PII
+auditLogger.LogEvent("user_login_success", new Dictionary<string, object>
+{
+    { "user_id", "user-123" },      // Use internal ID, not SIN or email
+    { "session_id", "sess-abc" },
+    { "ip_address_hash", HashIp(httpContext.Connection.RemoteIpAddress) }  // Hash, don't log raw IP
+});
+
+// ❌ BAD: Do not log PII
+_logger.LogInformation($"User {email} with SIN {sin} logged in");  // NEVER DO THIS
 ```
 
 ## Data Storage
 
 Protected B data must be encrypted at rest:
 
-```python
-from cryptography.fernet import Fernet
-import os
+```csharp
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.DataProtection;
 
-# Load encryption key from environment (NOT in code)
-ENCRYPTION_KEY = os.environ.get('DATA_ENCRYPTION_KEY')
-cipher = Fernet(ENCRYPTION_KEY)
+/// <summary>
+/// Store Protected B data with encryption.
+///
+/// GC Security:
+///     - TBS IT Security Framework: SC-28 (Protection of Information at Rest)
+///     - Protected B: Encryption required
+/// </summary>
+public class SensitiveDataService
+{
+    private readonly IDataProtector _protector;
+    private readonly ApplicationDbContext _context;
 
-def store_sensitive_data(sin: str, user_id: str):
-    """
-    Store Protected B data with encryption.
+    public SensitiveDataService(
+        IDataProtectionProvider provider,
+        ApplicationDbContext context)
+    {
+        // Load encryption key from Key Management Service (NOT in code)
+        _protector = provider.CreateProtector("SensitiveData");
+        _context = context;
+    }
 
-    GC Security:
-        - TBS IT Security Framework: SC-28 (Protection of Information at Rest)
-        - Protected B: Encryption required
-    """
-    encrypted_sin = cipher.encrypt(sin.encode())
+    public async Task StoreSensitiveData(string sin, string userId)
+    {
+        // Encrypt the SIN
+        var encryptedSin = _protector.Protect(sin);
 
-    # Store encrypted value in database
-    db.execute(
-        'INSERT INTO user_sensitive (user_id, encrypted_sin) VALUES (?, ?)',
-        (user_id, encrypted_sin)
-    )
+        // Store encrypted value in database
+        var sensitiveData = new UserSensitive
+        {
+            UserId = userId,
+            EncryptedSin = encryptedSin
+        };
 
-def retrieve_sensitive_data(user_id: str) -> str:
-    """Decrypt and retrieve Protected B data."""
-    result = db.execute(
-        'SELECT encrypted_sin FROM user_sensitive WHERE user_id = ?',
-        (user_id,)
-    ).fetchone()
+        _context.UserSensitive.Add(sensitiveData);
+        await _context.SaveChangesAsync();
+    }
 
-    return cipher.decrypt(result['encrypted_sin']).decode()
+    public async Task<string> RetrieveSensitiveData(string userId)
+    {
+        // Retrieve encrypted data
+        var result = await _context.UserSensitive
+            .FirstOrDefaultAsync(u => u.UserId == userId);
+
+        if (result == null)
+            return null;
+
+        // Decrypt and return
+        return _protector.Unprotect(result.EncryptedSin);
+    }
+}
 ```
 
 **Important**:
@@ -1427,155 +1474,209 @@ def retrieve_sensitive_data(user_id: str) -> str:
 
 Protected B applications require secure session handling:
 
-```python
-from flask import Flask, session
-import os
+```csharp
+// In Startup.cs or Program.cs
 
-app = Flask(__name__)
+/// <summary>
+/// Configure session for Protected B applications.
+///
+/// GC Security:
+///     - TBS IT Security Framework: SC-10 (Network Disconnect)
+///     - Protected B: 15-minute inactivity timeout required
+/// </summary>
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddSession(options =>
+    {
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // HTTPS only
+        options.Cookie.HttpOnly = true;  // No JavaScript access
+        options.Cookie.SameSite = SameSiteMode.Strict;  // CSRF protection
+        options.IdleTimeout = TimeSpan.FromMinutes(15);  // 15 minutes (TBS requirement)
+        options.Cookie.IsEssential = true;
+    });
 
-# Session configuration for Protected B
-app.config['SESSION_COOKIE_SECURE'] = True  # HTTPS only
-app.config['SESSION_COOKIE_HTTPONLY'] = True  # No JavaScript access
-app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'  # CSRF protection
-app.config['PERMANENT_SESSION_LIFETIME'] = 900  # 15 minutes (TBS requirement)
-app.config['SECRET_KEY'] = os.environ.get('SESSION_SECRET_KEY')
+    services.AddDistributedMemoryCache();
+}
 
-@app.before_request
-def check_session_timeout():
-    """
-    Enforce session timeout for Protected B applications.
-
-    GC Security:
-        - TBS IT Security Framework: SC-10 (Network Disconnect)
-        - Protected B: 15-minute inactivity timeout required
-    """
-    session.permanent = True
-    session.modified = True  # Reset timeout on each request
+public void Configure(IApplicationBuilder app)
+{
+    app.UseSession();  // Session middleware automatically resets timeout on each request
+}
 ```
 
 ## Access Control
 
 Implement role-based access control (RBAC):
 
-```python
-from functools import wraps
-from flask import abort, session
+```csharp
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
-def require_role(role: str):
-    """
-    Decorator to enforce role-based access control.
+/// <summary>
+/// Attribute to enforce role-based access control.
+///
+/// GC Security:
+///     - TBS IT Security Framework: AC-3 (Access Enforcement)
+///     - Protected B: Least privilege principle
+/// </summary>
+public class RequireRoleAttribute : ActionFilterAttribute
+{
+    private readonly string _requiredRole;
+    private readonly ILogger<RequireRoleAttribute> _logger;
 
-    GC Security:
-        - TBS IT Security Framework: AC-3 (Access Enforcement)
-        - Protected B: Least privilege principle
-    """
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            user_role = session.get('user_role')
+    public RequireRoleAttribute(string requiredRole)
+    {
+        _requiredRole = requiredRole;
+    }
 
-            if user_role != role:
-                log_event('unauthorized_access_attempt',
-                    user_id=session.get('user_id'),
-                    required_role=role,
-                    user_role=user_role
-                )
-                abort(403)  # Forbidden
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var httpContext = context.HttpContext;
+        var userRole = httpContext.Session.GetString("user_role");
+        var userId = httpContext.Session.GetString("user_id");
 
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
+        if (userRole != _requiredRole)
+        {
+            // Log unauthorized access attempt
+            var logger = httpContext.RequestServices
+                .GetService<ILogger<RequireRoleAttribute>>();
 
-@app.route('/admin/users')
-@require_role('admin')
-def admin_users():
-    """Admin-only endpoint."""
-    # Only users with 'admin' role can access
-    return render_template('admin_users.html')
+            logger.LogWarning(
+                "Unauthorized access attempt: UserId={UserId}, RequiredRole={RequiredRole}, UserRole={UserRole}",
+                userId, _requiredRole, userRole);
+
+            context.Result = new ForbidResult();  // 403 Forbidden
+        }
+
+        base.OnActionExecuting(context);
+    }
+}
+
+// Usage
+[HttpGet("admin/users")]
+[RequireRole("admin")]
+public IActionResult AdminUsers()
+{
+    // Only users with 'admin' role can access
+    return View("AdminUsers");
+}
 ```
 
 ## Input Validation
 
 Always validate and sanitize user input to prevent injection attacks:
 
-```python
-import re
-from werkzeug.utils import escape
+```csharp
+using System.Text.RegularExpressions;
+using System.Web;
 
-def validate_sin(sin: str) -> bool:
-    """
-    Validate Canadian Social Insurance Number format.
+/// <summary>
+/// Validate Canadian Social Insurance Number format.
+///
+/// GC Security:
+///     - TBS IT Security Framework: SI-10 (Information Input Validation)
+///     - Protected B: Prevent injection attacks
+/// </summary>
+public bool ValidateSin(string sin)
+{
+    // Remove any whitespace or dashes
+    var sinCleaned = Regex.Replace(sin, @"[\s-]", "");
 
-    GC Security:
-        - TBS IT Security Framework: SI-10 (Information Input Validation)
-        - Protected B: Prevent injection attacks
-    """
-    # Remove any whitespace or dashes
-    sin_cleaned = re.sub(r'[\s-]', '', sin)
+    // Must be exactly 9 digits
+    if (!Regex.IsMatch(sinCleaned, @"^\d{9}$"))
+        return false;
 
-    # Must be exactly 9 digits
-    if not re.match(r'^\d{9}$', sin_cleaned):
-        return False
+    // Validate using Luhn algorithm (SIN checksum)
+    return ValidateLuhn(sinCleaned);
+}
 
-    # Validate using Luhn algorithm (SIN checksum)
-    return validate_luhn(sin_cleaned)
-
-def sanitize_user_input(user_input: str) -> str:
-    """
-    Sanitize user input for display (prevent XSS).
-
-    GC Security:
-        - TBS IT Security Framework: SI-10 (Information Input Validation)
-        - OWASP Top 10: XSS Prevention
-    """
-    return escape(user_input)
+/// <summary>
+/// Sanitize user input for display (prevent XSS).
+///
+/// GC Security:
+///     - TBS IT Security Framework: SI-10 (Information Input Validation)
+///     - OWASP Top 10: XSS Prevention
+/// </summary>
+public string SanitizeUserInput(string userInput)
+{
+    return HttpUtility.HtmlEncode(userInput);
+}
 ```
 
 ## Database Queries (SQL Injection Prevention)
 
-Always use parameterized queries:
+Always use Entity Framework or parameterized queries:
 
-```python
-# ✅ GOOD: Parameterized query (prevents SQL injection)
-def get_user_by_email(email: str):
-    """
-    GC Security:
-        - TBS IT Security Framework: SI-10 (Information Input Validation)
-        - OWASP Top 10: SQL Injection Prevention
-    """
-    return db.execute(
-        'SELECT * FROM users WHERE email = ?',
-        (email,)
-    ).fetchone()
+```csharp
+// ✅ GOOD: Entity Framework (prevents SQL injection)
+/// <summary>
+/// GC Security:
+///     - TBS IT Security Framework: SI-10 (Information Input Validation)
+///     - OWASP Top 10: SQL Injection Prevention
+/// </summary>
+public async Task<User> GetUserByEmail(string email)
+{
+    return await _context.Users
+        .FirstOrDefaultAsync(u => u.Email == email);
+}
 
-# ❌ BAD: String interpolation (vulnerable to SQL injection)
-def get_user_by_email_bad(email: str):
-    return db.execute(
-        f'SELECT * FROM users WHERE email = "{email}"'  # NEVER DO THIS
-    ).fetchone()
+// ✅ GOOD: Parameterized raw SQL if EF not sufficient
+public async Task<User> GetUserByEmailRaw(string email)
+{
+    return await _context.Users
+        .FromSqlInterpolated($"SELECT * FROM Users WHERE Email = {email}")
+        .FirstOrDefaultAsync();
+}
+
+// ❌ BAD: String concatenation (vulnerable to SQL injection)
+public async Task<User> GetUserByEmailBad(string email)
+{
+    var sql = $"SELECT * FROM Users WHERE Email = '{email}'";  // NEVER DO THIS
+    return await _context.Users.FromSqlRaw(sql).FirstOrDefaultAsync();
+}
 ```
 
 ## Security Headers
 
 All responses must include security headers:
 
-```python
-@app.after_request
-def set_security_headers(response):
-    """
-    Set security headers for Protected B compliance.
+```csharp
+/// <summary>
+/// Middleware to set security headers for Protected B compliance.
+///
+/// GC Security:
+///     - TBS IT Security Framework: SC-8 (Transmission Confidentiality)
+///     - Protected B: HTTPS enforcement and XSS protection
+/// </summary>
+public class SecurityHeadersMiddleware
+{
+    private readonly RequestDelegate _next;
 
-    GC Security:
-        - TBS IT Security Framework: SC-8 (Transmission Confidentiality)
-        - Protected B: HTTPS enforcement and XSS protection
-    """
-    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'DENY'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
-    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' www.canada.ca"
+    public SecurityHeadersMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
 
-    return response
+    public async Task InvokeAsync(HttpContext context)
+    {
+        context.Response.Headers.Add("Strict-Transport-Security",
+            "max-age=31536000; includeSubDomains");
+        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+        context.Response.Headers.Add("X-Frame-Options", "DENY");
+        context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+        context.Response.Headers.Add("Content-Security-Policy",
+            "default-src 'self'; script-src 'self' www.canada.ca");
+
+        await _next(context);
+    }
+}
+
+// In Startup.cs or Program.cs
+public void Configure(IApplicationBuilder app)
+{
+    app.UseMiddleware<SecurityHeadersMiddleware>();
+    // ... other middleware
+}
 ```
 
 ## Incident Response
@@ -1677,14 +1778,14 @@ The agent produces:
 ```markdown
 | Control ID | Control Name | Implementation Status | Evidence | Notes |
 |------------|--------------|----------------------|----------|-------|
-| AC-2 | Account Management | Implemented | `src/auth/user.py:45` | Central IAM integration |
-| AC-3 | Access Enforcement | Implemented | `src/auth/decorators.py:12` | RBAC via session roles |
-| IA-2 | Identification and Authentication | Implemented | `src/auth/user.py:45` | Username/password + MFA |
-| IA-5 | Authenticator Management | Implemented | `src/auth/user.py:58` | bcrypt hashing (factor 12) |
-| AU-2 | Audit Events | Implemented | `src/logging/audit.py:23` | Structured JSON logs |
-| AU-3 | Content of Audit Records | Implemented | `src/logging/audit.py:23` | Timestamp, user ID, event type |
-| SC-28 | Protection of Information at Rest | Implemented | `src/data/encryption.py:34` | Fernet encryption for PII |
-| SC-8 | Transmission Confidentiality | Implemented | `src/app.py:89` | HTTPS enforced, HSTS header |
+| AC-2 | Account Management | Implemented | `src/Auth/UserService.cs:45` | Central IAM integration |
+| AC-3 | Access Enforcement | Implemented | `src/Auth/AuthorizationAttributes.cs:12` | RBAC via session roles |
+| IA-2 | Identification and Authentication | Implemented | `src/Auth/UserService.cs:45` | Username/password + MFA |
+| IA-5 | Authenticator Management | Implemented | `src/Auth/UserService.cs:58` | bcrypt hashing (factor 12) |
+| AU-2 | Audit Events | Implemented | `src/Logging/AuditLogger.cs:23` | Structured JSON logs |
+| AU-3 | Content of Audit Records | Implemented | `src/Logging/AuditLogger.cs:23` | Timestamp, user ID, event type |
+| SC-28 | Protection of Information at Rest | Implemented | `src/Services/EncryptionService.cs:34` | Fernet encryption for PII |
+| SC-8 | Transmission Confidentiality | Implemented | `src/Startup.cs:89` | HTTPS enforced, HSTS header |
 ```
 
 #### Compliance Gap Analysis
@@ -1727,24 +1828,24 @@ The agent generates pre-filled sections for the Statement of Sensitivity (SoS) d
 **AC-2: Account Management**
 The system implements centralized account management through integration with Government of Canada Identity Management services. User accounts are provisioned and de-provisioned through the central IAM portal. All account creation, modification, and deletion events are logged to the audit system.
 
-*Evidence*: `src/auth/user.py:45-67`, `src/auth/iam_integration.py:12-89`
+*Evidence*: `src/Auth/UserService.cs:45-67`, `src/Auth/IamIntegration.cs:12-89`
 
 **AC-3: Access Enforcement**
 Role-based access control (RBAC) is enforced throughout the application. Users are assigned roles (e.g., 'citizen', 'case_worker', 'admin') and access to resources is controlled via decorators that verify role membership. Unauthorized access attempts are logged and result in HTTP 403 Forbidden responses.
 
-*Evidence*: `src/auth/decorators.py:12-34`, `src/auth/rbac.py:45-123`
+*Evidence*: `src/Auth/AuthorizationAttributes.cs:12-34`, `src/Auth/RbacService.cs:45-123`
 
 ### 3.4.2 Identification and Authentication (IA)
 
 **IA-2: Identification and Authentication**
 Users authenticate via username and password. Privileged accounts (admin, case_worker) require multi-factor authentication (MFA) via SMS or authenticator app. Session tokens are generated upon successful authentication and stored in Redis with 15-minute expiration.
 
-*Evidence*: `src/auth/user.py:45-67`, `src/auth/mfa.py:23-89`
+*Evidence*: `src/Auth/UserService.cs:45-67`, `src/Auth/MfaService.cs:23-89`
 
 **IA-5: Authenticator Management**
 Passwords are hashed using bcrypt with cost factor 12. Minimum password requirements: 12 characters, mixed case, numbers, and special characters. Passwords are validated against a list of common passwords (NIST bad password list). Users are required to change passwords every 90 days.
 
-*Evidence*: `src/auth/password.py:34-78`, `config/password-policy.yml`
+*Evidence*: `src/Auth/PasswordService.cs:34-78`, `config/password-policy.yml`
 
 [... additional controls ...]
 ```
@@ -1933,13 +2034,13 @@ This is a Protected B web application for [Department Name], deployed to GC Clou
 
 ## Key Technologies
 - Frontend: WET-BOEW, vanilla JavaScript
-- Backend: [Your stack: Python/Flask, Node.js, etc.]
+- Backend: [Your stack: ASP.NET Core, Node.js, etc.]
 - Database: [PostgreSQL, etc.]
 - Deployment: GC Cloud Account (Cloud Foundry)
 
 ## Important Notes
 - All user-facing text must be bilingual
-- No PII in application logs (see src/logging/audit.py for patterns)
+- No PII in application logs (see src/Logging/AuditLogger.cs for patterns)
 - 15-minute session timeout for Protected B compliance
 - ITSCA certification required before production deployment
 
@@ -1965,7 +2066,7 @@ Create `.github/instructions/` directory with key instruction files. Start with 
 - Copy the logging patterns (no PII in logs)
 - Include your session configuration
 - Add your specific encryption patterns if applicable
-- Add `applyTo: "src/**/*.py,src/**/*.js"` frontmatter
+- Add `applyTo: "src/**/*.cs,src/**/*.js"` frontmatter
 
 **Accessibility checklist** (`accessibility.instructions.md`):
 - List your most common WCAG 2.1 AA patterns
@@ -1977,7 +2078,7 @@ Create `.github/instructions/` directory with key instruction files. Start with 
 - **This is the key one!** Dig up those buried SQL standards and encode them as instruction files
 - Include database naming conventions, query patterns, ORM usage rules
 - Make them findable and enforceable
-- Add `applyTo: "**/*.sql,**/models.py,**/repositories/**"` frontmatter
+- Add `applyTo: "**/*.sql,**/Models/**,**/Repositories/**"` frontmatter
 
 **Example**: Converting buried SQL standards into an instruction file:
 
