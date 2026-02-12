@@ -102,7 +102,9 @@ Beyond these four pillars, several reusable services extend the ecosystem:
 
 **GC Forms**: A [platform for building accessible, bilingual forms](https://articles.alpha.canada.ca/forms-formulaires/) without custom development. Managed by the Canadian Digital Service, it standardizes the form-building process across departments.
 
-Each of these services provides **bounded vocabulary** in its domain—instead of building custom authentication, notification, or form systems, developers use standardized services with clear APIs that AI assistants can learn and generate integration code for.
+**Translation Bureau and TERMIUM Plus®**: The [Translation Bureau](https://www.canada.ca/en/translation-bureau.html) provides linguistic services across 101 languages and operates [TERMIUM Plus®](https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-eng.html?lang=eng), one of the world's largest terminology databases with millions of terms in English, French, Spanish, and Portuguese. TERMIUM Plus is particularly valuable for AI assistants—it provides **official government terminology** as a bounded vocabulary for bilingual translation. Instead of AI assistants guessing at French translations or using inconsistent terminology, they can reference the authoritative database that standardizes terms across the federal public service. The Translation Bureau also developed [GCtranslate](https://www.canada.ca/en/public-services-procurement/news/2025/09/gctranslate-using-artificial-intelligence-to-build-a-more-agile-modern-and-bilingual-public-service.html), an AI-powered translation service for government content up to Protected B—demonstrating the government is already successfully using AI for bilingual content creation.
+
+Each of these services provides **bounded vocabulary** in its domain—instead of building custom authentication, notification, translation, or form systems, developers use standardized services with clear APIs and terminologies that AI assistants can learn and generate integration code for.
 
 ## How WET-BOEW Provides "Bounded Vocabulary"
 
@@ -418,6 +420,41 @@ With the Content Style Guide encoded as instructions, an AI assistant can:
 - Generate bilingual content structures (English content with French equivalents marked)
 - Suggest appropriate headings and content organization
 - Flag jargon or overly complex sentences
+- **Use official government terminology from TERMIUM Plus®** for consistent bilingual translations
+
+### TERMIUM Plus®: Official Terminology for AI Assistants
+
+The Translation Bureau's [TERMIUM Plus®](https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-eng.html?lang=eng) provides another layer of bounded vocabulary—official government terminology across millions of terms.
+
+**Without TERMIUM Plus** context, an AI assistant might translate "Employment Insurance" inconsistently:
+- "Assurance d'emploi" (literal translation, but incorrect)
+- "Assurance contre le chômage" (old term, no longer used)
+- "Assurance-emploi" (correct official term)
+
+**With TERMIUM Plus** context, the AI assistant knows the official term is "**assurance-emploi**" and uses it consistently.
+
+**Example**: Translating a technical government term like "Protected B" classification:
+
+```
+User: "How do I say 'Protected B information' in French?"
+
+AI Assistant (with TERMIUM Plus):
+The official Government of Canada term is:
+- English: "Protected B"
+- French: "Protégé B"
+
+Note: According to TERMIUM Plus, security classifications (Unclassified,
+Protected A/B/C, Classified, Secret, Top Secret) are not translated in
+official GC usage—they remain in their original language to avoid confusion.
+```
+
+This prevents inconsistencies where some developers write "Protégé B", others write "Protégée B", and others leave it untranslated—TERMIUM Plus provides the authoritative answer.
+
+AI assistants with TERMIUM Plus access could:
+- Suggest official French equivalents when generating bilingual forms
+- Flag incorrect terminology usage in code comments or UI text
+- Ensure consistency with government standards across translations
+- Generate bilingual error messages using approved terminology
 
 **Example prompt to AI assistant**:
 > "Write a service page for renewing a passport. Include eligibility, required documents, processing times, and how to apply."
@@ -2174,6 +2211,7 @@ Plus supporting infrastructure:
 ✅ **GC Notify**: Standardized notification service with bilingual defaults
 ✅ **GCKey and GC Sign-in**: Authentication services reducing complexity from 60+ sign-in methods to unified patterns
 ✅ **GC Forms**: Accessible, bilingual form-building platform
+✅ **TERMIUM Plus®**: Official government terminology database for consistent bilingual translations
 
 Other countries are scrambling to figure out how to make AI coding assistants work in government. Canada already has the pieces—we just need to make them machine-readable.
 
