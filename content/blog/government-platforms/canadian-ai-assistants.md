@@ -10,7 +10,7 @@ image = "/images/canadian-government-platforms.jpg"
 
 Picture this: You just won a contract to build a web application for the Government of Canada. Exciting, right? Then reality hits.
 
-You need WCAG 2.1 AA accessibility compliance—not as an afterthought, but baked into every component. The entire application must work flawlessly in both English and French. You'll need to navigate the Standard on Web Accessibility, understand Protected B data classification, and ensure your code can pass IT Security Certification & Accreditation (ITSCA) review. Oh, and your fixed-price contract means every hour spent figuring out "how things are done around here" cuts directly into your margins.
+You need WCAG 2.1 AA accessibility compliance—not as an afterthought, but baked into every component. The entire application must work flawlessly in both English and French. You'll need to navigate the Standard on Web Accessibility, understand Protected B data classification, and ensure your code can pass Security Assessment and Authorization (SA&A) review. Oh, and your fixed-price contract means every hour spent figuring out "how things are done around here" cuts directly into your margins.
 
 You open the Web Experience Toolkit (WET-BOEW) documentation, the GC Design System guide, the Canada.ca Content Style Guide, and the Digital Standards page. It's overwhelming. Where do you even start?
 
@@ -722,7 +722,7 @@ SQL isn't the only example. Common buried standards include:
 - "Contact John to approve production deployment" (John left in 2022)
 
 **Security review requirements**:
-- Submit form to ITSCA team (which form? where?)
+- Submit form to SA&A team (which form? where?)
 - Include security controls matrix (which template? 2020 version or 2023?)
 - Threat model required (what format?)
 
@@ -831,7 +831,7 @@ Now let's bring this home. What would Ad Hoc's `cloud.gov-instructions` structur
 │   ├── aws-deployment.instructions.md   # AWS deployment patterns (if using AWS)
 │   └── azure-deployment.instructions.md # Azure deployment patterns (if using Azure)
 ├── agents/
-│   └── itsca-compliance.agent.md        # ITSCA documentation generation
+│   └── saa-compliance.agent.md          # SA&A documentation generation
 └── skills/
     └── wet-boew-troubleshoot.md         # Common WET-BOEW debugging workflows
 ```
@@ -961,22 +961,22 @@ Information that could cause serious injury to individuals or organizations if c
 
 This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required. The patterns follow [Canadian Centre for Cyber Security (CCCS) guidance](https://www.cyber.gc.ca/en/guidance) on cryptography (CMVP-validated encryption modules), access controls (ITSG-33 controls), and secure cloud deployments (Cloud Security Profile requirements for Protected B data).
 
-### 5. The ITSCA Compliance Agent
+### 5. The SA&A Compliance Agent
 
 This is where automation gets powerful. Inspired by Ad Hoc's compliance documentation agent, here's a Canadian adaptation.
 
-**Example snippet** (from `.github/agents/itsca-compliance.agent.md`):
+**Example snippet** (from `.github/agents/saa-compliance.agent.md`):
 
 ```markdown
-# ITSCA Compliance Documentation Agent
+# SA&A Compliance Documentation Agent
 
 ## Purpose
-Generate IT Security Certification & Accreditation (ITSCA) documentation by scanning the codebase for control implementation references.
+Generate Security Assessment and Authorization (SA&A) documentation by scanning the codebase for security control implementation references.
 
 ## Supported Frameworks
-- **TBS IT Security Framework**: Treasury Board of Canada Secretariat security controls
-- **CCS Cloud Security Profile**: Canadian Centre for Cyber Security cloud-specific controls
-- **ITSG-33**: IT Security Risk Management framework controls
+- **ITSG-33**: IT Security Risk Management framework controls (primary framework for SA&A)
+- **TBS Security Policy**: Treasury Board of Canada Secretariat security requirements
+- **CCCS Cloud Security Profile**: Canadian Centre for Cyber Security cloud-specific controls
 
 ## How It Works
 
@@ -987,9 +987,9 @@ Add security control references in XML documentation comments...
 [Code annotation examples, run commands, generated documentation including Control Implementation Matrix, Compliance Gap Analysis, Statement of Sensitivity sections, Usage Patterns, Control Reference Format, Benefits, Limitations, and Next Steps...]
 ```
 
-**Full file**: See [itsca-compliance.agent.md](/gc-ai-instructions/.github/agents/itsca-compliance.agent.md)
+**Full file**: See [saa-compliance.agent.md](/gc-ai-instructions/.github/agents/saa-compliance.agent.md)
 
-This agent dramatically reduces the documentation burden for government projects. Instead of manually writing security control implementation descriptions, developers annotate their code and the AI assistant generates the documentation automatically.
+This agent dramatically reduces the SA&A documentation burden for government projects. Instead of manually writing security control implementation descriptions, developers annotate their code and the AI assistant generates the documentation automatically, supporting the Authority to Operate (ATO) process.
 
 ## Real-World Benefits for Government Contractors
 
@@ -997,7 +997,7 @@ Let's get practical. What does all this actually mean for someone bidding on or 
 
 ### Benefit #1: Faster Onboarding
 
-**The old way**: New contractor joins the project. Spends the first week reading WET-BOEW documentation, GC Design System guides, ITSCA requirements, Protected B handling procedures, and accessibility standards. Still doesn't really understand "how things are done around here."
+**The old way**: New contractor joins the project. Spends the first week reading WET-BOEW documentation, GC Design System guides, ITSG-33 and SA&A requirements, Protected B handling procedures, and accessibility standards. Still doesn't really understand "how things are done around here."
 
 **With AI-friendly instructions**: New contractor clones the repository, and their AI assistant already knows the project context. They ask: "Create a new page for the eligibility checker" and the AI generates a WET-BOEW template with proper bilingual structure, correct accessibility attributes, and GC Design System CSS utilities—no manual reading required. They're productive on day one.
 
@@ -1033,15 +1033,15 @@ Let's get practical. What does all this actually mean for someone bidding on or 
 
 **Time saved**: 1.5 hours/day of senior developer time. Over a 120-day project, that's 180 hours = 22.5 days. At $1,200/day, that's $27,000 saved (plus improved senior developer utilization).
 
-### Benefit #5: Reduced ITSCA Documentation Burden
+### Benefit #5: Reduced SA&A Documentation Burden
 
-**The old way**: ITSCA documentation is due. Team spends 2 weeks creating the Statement of Sensitivity, mapping code to TBS IT Security Framework controls, generating evidence, writing control implementation descriptions. Much of this is tedious copying from code comments into Word documents.
+**The old way**: SA&A documentation is due for Authority to Operate (ATO). Team spends 2 weeks creating security control documentation, mapping code to ITSG-33 controls, generating evidence, writing control implementation descriptions. Much of this is tedious copying from code comments into Word documents.
 
-**With the ITSCA compliance agent**: Run `@itsca-compliance scan`. Agent generates 70% of the control implementation matrix automatically by reading code annotations. Team spends 3 days reviewing and adding manual sections (physical security, organizational policies, etc.) instead of 2 weeks creating from scratch.
+**With the SA&A compliance agent**: Run `@saa-compliance scan`. Agent generates 70% of the control implementation matrix automatically by reading code annotations. Team spends 3 days reviewing and adding manual sections (physical security, organizational policies, etc.) instead of 2 weeks creating from scratch.
 
 **Time saved**: 7 days of team effort. On a 3-person team at $800/day, that's $16,800 saved.
 
-**Better outcome**: Documentation stays in sync with code because it's generated from code, not manually written. ITSCA reviews go faster because evidence trails are clear.
+**Better outcome**: Documentation stays in sync with code because it's generated from code, not manually written. SA&A reviews go faster because evidence trails are clear, accelerating the path to Authority to Operate (ATO).
 
 ### Benefit #6: Consistent Code Quality
 
@@ -1063,7 +1063,7 @@ Let's add it up for a typical 6-month Government of Canada web application proje
 | Automatic compliance | 40-60 days | $32,000-$48,000 |
 | Faster iteration | 10 days | $7,500 |
 | Knowledge distribution | 22.5 days | $27,000 (senior dev time) |
-| Reduced ITSCA burden | 7 days | $16,800 |
+| Reduced SA&A burden | 7 days | $16,800 |
 | Consistent code quality | 19 days | $15,200 |
 | **Total** | **113-144 days** | **$110,500-$134,500** |
 
@@ -1109,7 +1109,7 @@ This is a Protected B web application for [Department Name], deployed via SSC Cl
 - All user-facing text must be bilingual
 - No PII in application logs (see src/Logging/AuditLogger.cs for patterns)
 - 15-minute session timeout for Protected B compliance
-- ITSCA certification required before production deployment
+- SA&A process required for Authority to Operate (ATO) before production deployment
 
 ## Before Committing
 - Run accessibility tests: npm run test:a11y
@@ -1270,7 +1270,7 @@ gc-instructions/
 │   ├── aws-protected-b.instructions.md     # AWS deployment for Protected B (if team uses AWS)
 │   └── azure-protected-b.instructions.md   # Azure deployment for Protected B (if team uses Azure)
 └── agents/
-    └── itsca-compliance.agent.md
+    └── saa-compliance.agent.md
 ```
 
 This becomes your team's shared knowledge base. The `cloud/` directory contains provider-specific instructions based on which SSC-brokered service your team uses.
@@ -1291,7 +1291,7 @@ When new contractors join:
 1. Show them the instruction files: "This is how we encode GC compliance patterns"
 2. Demonstrate AI assistant usage: "Watch how it generates WET-BOEW components automatically"
 3. Explain the safety guardrails: "Always confirm destructive operations"
-4. Review the ITSCA documentation workflow: "Annotate your code with control references"
+4. Review the SA&A documentation workflow: "Annotate your code with ITSG-33 control references"
 
 New contractors are productive immediately because the AI assistant guides them.
 
@@ -1446,7 +1446,7 @@ By adding **machine-readable instruction files** (following Ad Hoc's cloud.gov-i
 
 Imagine:
 - Onboarding to new GC projects in hours instead of weeks
-- ITSCA documentation generating automatically from code annotations
+- SA&A documentation generating automatically from code annotations, accelerating Authority to Operate (ATO)
 - Accessibility compliance is the default, not a struggle
 - Getting GC-standards guidance from AI assistants as you code
 - Delivering Canada.ca services faster with higher quality

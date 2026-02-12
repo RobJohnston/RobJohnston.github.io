@@ -1,12 +1,12 @@
-# ITSCA Compliance Documentation Agent
+# SA&A Compliance Documentation Agent
 
 ## Purpose
-Generate IT Security Certification & Accreditation (ITSCA) documentation by scanning the codebase for control implementation references.
+Generate Security Assessment and Authorization (SA&A) documentation by scanning the codebase for security control implementation references. Supports the Authority to Operate (ATO) process required for Government of Canada IT systems.
 
 ## Supported Frameworks
-- **TBS IT Security Framework**: Treasury Board of Canada Secretariat security controls
-- **CCS Cloud Security Profile**: Canadian Centre for Cyber Security cloud-specific controls
-- **ITSG-33**: IT Security Risk Management framework controls
+- **ITSG-33**: IT Security Risk Management framework controls (primary framework for SA&A)
+- **TBS Security Policy**: Treasury Board of Canada Secretariat security requirements
+- **CCCS Cloud Security Profile**: Canadian Centre for Cyber Security cloud-specific controls
 
 ## How It Works
 
@@ -18,7 +18,7 @@ Add security control references in XML documentation comments:
 /// <summary>
 /// Authenticate user against GC Identity Management service.
 ///
-/// GC Security Controls:
+/// ITSG-33 Security Controls:
 ///     - AC-2: Account Management
 ///         Implementation: Users managed via central IAM service
 ///     - AC-3: Access Enforcement
@@ -53,7 +53,7 @@ public async Task<User> AuthenticateUser(string username, string password)
 
 ```bash
 # Scan codebase for control implementations
-@itsca-compliance scan --classification=ProtectedB --output=docs/itsca/
+@saa-compliance scan --classification=ProtectedB --output=docs/saa/
 ```
 
 ### 3. Generated Documentation
@@ -71,7 +71,7 @@ The agent produces:
 | IA-5 | Authenticator Management | Implemented | `src/Auth/UserService.cs:58` | bcrypt hashing (factor 12) |
 | AU-2 | Audit Events | Implemented | `src/Logging/AuditLogger.cs:23` | Structured JSON logs |
 | AU-3 | Content of Audit Records | Implemented | `src/Logging/AuditLogger.cs:23` | Timestamp, user ID, event type |
-| SC-28 | Protection of Information at Rest | Implemented | `src/Services/EncryptionService.cs:34` | Fernet encryption for PII |
+| SC-28 | Protection of Information at Rest | Implemented | `src/Services/EncryptionService.cs:34` | AES-256 encryption for PII |
 | SC-8 | Transmission Confidentiality | Implemented | `src/Startup.cs:89` | HTTPS enforced, HSTS header |
 ```
 
@@ -88,7 +88,7 @@ The agent produces:
 
 - **CM-2**: Baseline Configuration
   - Status: Not implemented
-  - Required for: ITSCA certification
+  - Required for: SA&A Authority to Operate (ATO)
   - Recommendation: Document infrastructure-as-code baseline in `docs/baseline-config.md`
 
 ### Medium Priority
@@ -103,9 +103,9 @@ The agent produces:
   - Recommendation: Document network boundaries in security architecture diagram
 ```
 
-#### Statement of Sensitivity Sections
+#### Security Control Implementation Sections
 
-The agent generates pre-filled sections for the Statement of Sensitivity (SoS) document:
+The agent generates pre-filled sections for SA&A documentation:
 
 ```markdown
 ## 3.4 Security Controls Implementation
@@ -141,22 +141,22 @@ Passwords are hashed using bcrypt with cost factor 12. Minimum password requirem
 
 **Generate initial documentation**:
 ```bash
-@itsca-compliance scan --output=docs/itsca/controls.md
+@saa-compliance scan --output=docs/saa/controls.md
 ```
 
 **Update documentation after code changes**:
 ```bash
-@itsca-compliance update --compare-with=docs/itsca/controls.md
+@saa-compliance update --compare-with=docs/saa/controls.md
 ```
 
-**Generate gap analysis for ITSCA review**:
+**Generate gap analysis for SA&A review**:
 ```bash
-@itsca-compliance gaps --required-controls=docs/itsca/required-controls.yml
+@saa-compliance gaps --required-controls=docs/saa/required-controls.yml
 ```
 
-**Export to ITSCA template format**:
+**Export for SA&A submission**:
 ```bash
-@itsca-compliance export --format=sos --output=docs/itsca/statement-of-sensitivity.docx
+@saa-compliance export --format=docx --output=docs/saa/security-controls.docx
 ```
 
 ## Control Reference Format
@@ -167,7 +167,7 @@ Use this format in XML documentation comments for the agent to parse:
 /// <summary>
 /// [Method description]
 ///
-/// GC Security Controls:
+/// ITSG-33 Security Controls:
 ///     - {CONTROL_ID}: {Control Name}
 ///         Implementation: {Brief description of how this code implements the control}
 ///     - {CONTROL_ID}: {Control Name}
@@ -180,7 +180,7 @@ Example:
 /// <summary>
 /// Log authentication event with audit trail.
 ///
-/// GC Security Controls:
+/// ITSG-33 Security Controls:
 ///     - AU-2: Audit Events
 ///         Implementation: Logs all authentication attempts with timestamp, username, and result
 ///     - AU-3: Content of Audit Records
@@ -191,10 +191,10 @@ Example:
 ## Benefits
 
 1. **Living documentation**: Security documentation stays in sync with code
-2. **Faster ITSCA reviews**: Auditors get clear evidence trails
-3. **Compliance visibility**: Developers see which controls are covered
-4. **Gap identification**: Automated detection of missing controls
-5. **Reduced documentation burden**: Generate 70% of ITSCA docs automatically
+2. **Faster SA&A reviews**: Auditors get clear evidence trails, accelerating Authority to Operate (ATO)
+3. **Compliance visibility**: Developers see which ITSG-33 controls are covered
+4. **Gap identification**: Automated detection of missing controls before SA&A submission
+5. **Reduced documentation burden**: Generate 70% of SA&A docs automatically
 
 ## Limitations
 
@@ -207,7 +207,7 @@ Example:
 
 After generating compliance documentation:
 1. Review generated control mappings for accuracy
-2. Add manual sections for controls not detectable in code
+2. Add manual sections for controls not detectable in code (physical security, organizational policies)
 3. Include architecture diagrams showing security boundaries
-4. Submit to ITSCA team for formal review
-5. Update control annotations when code changes
+4. Submit to departmental SA&A team for formal review
+5. Update control annotations when code changes to keep documentation current
