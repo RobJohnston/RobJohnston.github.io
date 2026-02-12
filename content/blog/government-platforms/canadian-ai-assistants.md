@@ -10,7 +10,7 @@ image = "/images/canadian-government-platforms.jpg"
 
 Picture this: You just won a contract to build a web application for the Government of Canada. Exciting, right? Then reality hits.
 
-You need WCAG 2.1 AA accessibility compliance—not as an afterthought, but baked into every component. The entire application must work flawlessly in both English and French. You'll need to navigate the Standard on Web Accessibility, understand Protected B data classification, and ensure your code can pass Security Assessment and Authorization (SA&A) review. Oh, and your fixed-price contract means every hour spent figuring out "how things are done around here" cuts directly into your margins.
+You need WCAG 2.1 AA accessibility compliance—not as an afterthought, but baked into every component. The entire application must work flawlessly in both English and French. You'll need to navigate the Standard on Web Accessibility, understand Protected B data classification, and ensure your code can pass security review and Threat and Risk Assessment (TRA). Oh, and your fixed-price contract means every hour spent figuring out "how things are done around here" cuts directly into your margins.
 
 You open the Web Experience Toolkit (WET-BOEW) documentation, the GC Design System guide, the Canada.ca Content Style Guide, and the Digital Standards page. It's overwhelming. Where do you even start?
 
@@ -722,8 +722,8 @@ SQL isn't the only example. Common buried standards include:
 - "Contact John to approve production deployment" (John left in 2022)
 
 **Security review requirements**:
-- Submit form to SA&A team (which form? where?)
-- Include security controls matrix (which template? 2020 version or 2023?)
+- Submit threat and risk assessment (TRA) to security team (which form? where?)
+- Include security controls documentation (which template? 2020 version or 2023?)
 - Threat model required (what format?)
 
 ### Why This Matters for AI Assistants
@@ -831,7 +831,7 @@ Now let's bring this home. What would Ad Hoc's `cloud.gov-instructions` structur
 │   ├── aws-deployment.instructions.md   # AWS deployment patterns (if using AWS)
 │   └── azure-deployment.instructions.md # Azure deployment patterns (if using Azure)
 ├── agents/
-│   └── saa-compliance.agent.md          # SA&A documentation generation
+│   └── security-controls.agent.md       # Security controls documentation generation
 └── skills/
     └── wet-boew-troubleshoot.md         # Common WET-BOEW debugging workflows
 ```
@@ -961,37 +961,35 @@ Information that could cause serious injury to individuals or organizations if c
 
 This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required. The patterns follow [Canadian Centre for Cyber Security (CCCS) guidance](https://www.cyber.gc.ca/en/guidance) on cryptography (CMVP-validated encryption modules), access controls (ITSG-33 controls), and secure cloud deployments (Cloud Security Profile requirements for Protected B data).
 
-### 5. The SA&A Compliance Agent
+### 5. The Security Controls Documentation Agent
 
-This is where automation gets powerful. Inspired by Ad Hoc's compliance documentation agent, here's a Canadian adaptation.
+This is where automation gets powerful. Inspired by Ad Hoc's compliance documentation agent, here's a Canadian adaptation focused on practical security documentation.
 
-**Example snippet** (from `.github/agents/saa-compliance.agent.md`):
+**Example snippet** (from `.github/agents/security-controls.agent.md`):
 
 ```markdown
-# SA&A Compliance Documentation Agent
+# Security Controls Documentation Agent
 
 ## Purpose
-Generate Security Assessment and Authorization (SA&A) documentation by scanning the codebase for security control implementation references.
+Generate security controls documentation by scanning the codebase for security implementation patterns. Supports Threat and Risk Assessments (TRA), security architecture reviews, and ITSG-33 compliance documentation.
 
 ## Supported Frameworks
-- **ITSG-33**: IT Security Risk Management framework controls (primary framework for SA&A)
+- **ITSG-33**: IT Security Risk Management framework controls
 - **TBS Security Policy**: Treasury Board of Canada Secretariat security requirements
 - **CCCS Cloud Security Profile**: Canadian Centre for Cyber Security cloud-specific controls
 
 ## How It Works
 
-### 1. Annotate Code with Control References
+### 1. Annotate Code with Security Implementation Notes
 
 Add security control references in XML documentation comments...
 
-[Code annotation examples, run commands, generated documentation including Control Implementation Matrix, Compliance Gap Analysis, Statement of Sensitivity sections, Usage Patterns, Control Reference Format, Benefits, Limitations, and Next Steps...]
+[Code annotation examples, run commands, generated documentation including Security Controls Inventory, Security Implementation Summary, Threat Coverage Analysis sections, Usage Patterns, Control Reference Format, Benefits, Limitations, and Next Steps...]
 ```
 
-**Full file**: See [saa-compliance.agent.md](/gc-ai-instructions/.github/agents/saa-compliance.agent.md)
+**Full file**: See [security-controls.agent.md](/gc-ai-instructions/.github/agents/security-controls.agent.md)
 
-This agent dramatically reduces the SA&A documentation burden for government projects. Instead of manually writing security control implementation descriptions, developers annotate their code and the AI assistant generates the documentation automatically, supporting the Authority to Operate (ATO) process.
-
-**Important caveat**: The documentation format shown here is inspired by US federal security assessment practices (NIST SP 800-53). While ITSG-33 controls are based on NIST SP 800-53, the specific documentation format and deliverables required for Canadian SA&A may vary by department. Consult your department's SA&A team to understand the required documentation format, templates, and submission requirements. The agent provides a starting point that should be adapted to your department's specific process.
+This agent reduces the security documentation burden for government projects. Instead of manually writing security implementation descriptions, developers annotate their code and the AI assistant generates documentation automatically. This documentation supports Threat and Risk Assessments (TRA), security reviews, and any formal security assessment processes your department uses.
 
 ## Real-World Benefits for Government Contractors
 
@@ -999,7 +997,7 @@ Let's get practical. What does all this actually mean for someone bidding on or 
 
 ### Benefit #1: Faster Onboarding
 
-**The old way**: New contractor joins the project. Spends the first week reading WET-BOEW documentation, GC Design System guides, ITSG-33 and SA&A requirements, Protected B handling procedures, and accessibility standards. Still doesn't really understand "how things are done around here."
+**The old way**: New contractor joins the project. Spends the first week reading WET-BOEW documentation, GC Design System guides, ITSG-33 controls, security assessment requirements, Protected B handling procedures, and accessibility standards. Still doesn't really understand "how things are done around here."
 
 **With AI-friendly instructions**: New contractor clones the repository, and their AI assistant already knows the project context. They ask: "Create a new page for the eligibility checker" and the AI generates a WET-BOEW template with proper bilingual structure, correct accessibility attributes, and GC Design System CSS utilities—no manual reading required. They're productive on day one.
 
@@ -1035,15 +1033,15 @@ Let's get practical. What does all this actually mean for someone bidding on or 
 
 **Time saved**: 1.5 hours/day of senior developer time. Over a 120-day project, that's 180 hours = 22.5 days. At $1,200/day, that's $27,000 saved (plus improved senior developer utilization).
 
-### Benefit #5: Reduced SA&A Documentation Burden
+### Benefit #5: Reduced Security Documentation Burden
 
-**The old way**: SA&A documentation is due for Authority to Operate (ATO). Team spends 2 weeks creating security control documentation, mapping code to ITSG-33 controls, generating evidence, writing control implementation descriptions. Much of this is tedious copying from code comments into Word documents.
+**The old way**: Security review is coming up. Team spends 2 weeks creating security documentation, mapping code to ITSG-33 controls, generating evidence, writing implementation descriptions for the TRA. Much of this is tedious copying from code comments into Word documents.
 
-**With the SA&A compliance agent**: Run `@saa-compliance scan`. Agent generates 70% of the control implementation matrix automatically by reading code annotations. Team spends 3 days reviewing and adding manual sections (physical security, organizational policies, etc.) instead of 2 weeks creating from scratch.
+**With the security controls agent**: Run `@security-controls scan`. Agent generates 70% of the security documentation automatically by reading code annotations. Team spends 3 days reviewing and adding manual sections (physical security, organizational policies, etc.) instead of 2 weeks creating from scratch.
 
 **Time saved**: 7 days of team effort. On a 3-person team at $800/day, that's $16,800 saved.
 
-**Better outcome**: Documentation stays in sync with code because it's generated from code, not manually written. SA&A reviews go faster because evidence trails are clear, accelerating the path to Authority to Operate (ATO).
+**Better outcome**: Documentation stays in sync with code because it's generated from code, not manually written. Security reviews go faster because evidence trails are clear, and you have documentation ready for TRA or whatever security assessment process your department uses.
 
 ### Benefit #6: Consistent Code Quality
 
@@ -1065,7 +1063,7 @@ Let's add it up for a typical 6-month Government of Canada web application proje
 | Automatic compliance | 40-60 days | $32,000-$48,000 |
 | Faster iteration | 10 days | $7,500 |
 | Knowledge distribution | 22.5 days | $27,000 (senior dev time) |
-| Reduced SA&A burden | 7 days | $16,800 |
+| Reduced security documentation | 7 days | $16,800 |
 | Consistent code quality | 19 days | $15,200 |
 | **Total** | **113-144 days** | **$110,500-$134,500** |
 
@@ -1111,7 +1109,7 @@ This is a Protected B web application for [Department Name], deployed via SSC Cl
 - All user-facing text must be bilingual
 - No PII in application logs (see src/Logging/AuditLogger.cs for patterns)
 - 15-minute session timeout for Protected B compliance
-- SA&A process required for Authority to Operate (ATO) before production deployment
+- Security review and TRA required before production deployment
 
 ## Before Committing
 - Run accessibility tests: npm run test:a11y
@@ -1272,7 +1270,7 @@ gc-instructions/
 │   ├── aws-protected-b.instructions.md     # AWS deployment for Protected B (if team uses AWS)
 │   └── azure-protected-b.instructions.md   # Azure deployment for Protected B (if team uses Azure)
 └── agents/
-    └── saa-compliance.agent.md
+    └── security-controls.agent.md
 ```
 
 This becomes your team's shared knowledge base. The `cloud/` directory contains provider-specific instructions based on which SSC-brokered service your team uses.
@@ -1293,7 +1291,7 @@ When new contractors join:
 1. Show them the instruction files: "This is how we encode GC compliance patterns"
 2. Demonstrate AI assistant usage: "Watch how it generates WET-BOEW components automatically"
 3. Explain the safety guardrails: "Always confirm destructive operations"
-4. Review the SA&A documentation workflow: "Annotate your code with ITSG-33 control references"
+4. Review the security documentation workflow: "Annotate your code with ITSG-33 control references for security reviews"
 
 New contractors are productive immediately because the AI assistant guides them.
 
@@ -1448,7 +1446,7 @@ By adding **machine-readable instruction files** (following Ad Hoc's cloud.gov-i
 
 Imagine:
 - Onboarding to new GC projects in hours instead of weeks
-- SA&A documentation generating automatically from code annotations, accelerating Authority to Operate (ATO)
+- Security documentation generating automatically from code annotations, supporting TRA and security reviews
 - Accessibility compliance is the default, not a struggle
 - Getting GC-standards guidance from AI assistants as you code
 - Delivering Canada.ca services faster with higher quality
