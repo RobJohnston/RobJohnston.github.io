@@ -923,7 +923,6 @@ public async Task<User> AuthenticateUser(string username, string password)
 - AU-2 (Audit Events): No implementation found
 - AU-3 (Content of Audit Records): No implementation found
 ```
-```
 
 This is powerful: **Developers write code with compliance references in comments, and the AI assistant generates the security documentation automatically.**
 
@@ -988,7 +987,7 @@ This application is deployed via SSC Cloud Brokering Service and serves Canadian
 
 ## Important Paths
 - `static/wet-boew/`: WET-BOEW library files (managed via npm)
-- `templates/`: Jinja2 templates with WET-BOEW structure
+- `Views/`: Razor views (.cshtml) with WET-BOEW structure
 - `src/`: C# application code
 - `tests/`: Automated tests (unit, integration, accessibility via axe-core)
 - `docs/itsca/`: ITSCA documentation (SSP, SAR, etc.)
@@ -1008,7 +1007,7 @@ This file tells the AI assistant how to use WET-BOEW components correctly:
 
 ```markdown
 ---
-applyTo: "**/*.html,**/*.jinja2,**/templates/**"
+applyTo: "**/*.html,**/*.cshtml,**/Views/**"
 ---
 
 # WET-BOEW Component Instructions
@@ -1743,35 +1742,41 @@ Generate IT Security Certification & Accreditation (ITSCA) documentation by scan
 
 ### 1. Annotate Code with Control References
 
-Add security control references in docstrings:
+Add security control references in XML documentation comments:
 
-```python
-def authenticate_user(username: str, password: str):
-    """
-    Authenticate user against GC Identity Management service.
+```csharp
+/// <summary>
+/// Authenticate user against GC Identity Management service.
+///
+/// GC Security Controls:
+///     - AC-2: Account Management
+///         Implementation: Users managed via central IAM service
+///     - AC-3: Access Enforcement
+///         Implementation: Role-based access control (RBAC) via session roles
+///     - IA-2: Identification and Authentication
+///         Implementation: Username/password with MFA for privileged accounts
+///     - IA-5: Authenticator Management
+///         Implementation: BCrypt.NET password hashing (cost factor 12)
+///     - AU-2: Audit Events
+///         Implementation: All authentication attempts logged
+/// </summary>
+public async Task<User> AuthenticateUser(string username, string password)
+{
+    _logger.LogInformation("authentication_attempt", username);
 
-    GC Security Controls:
-        - AC-2: Account Management
-            Implementation: Users managed via central IAM service
-        - AC-3: Access Enforcement
-            Implementation: Role-based access control (RBAC) via session roles
-        - IA-2: Identification and Authentication
-            Implementation: Username/password with MFA for privileged accounts
-        - IA-5: Authenticator Management
-            Implementation: bcrypt password hashing (cost factor 12)
-        - AU-2: Audit Events
-            Implementation: All authentication attempts logged
-    """
-    logger.info('authentication_attempt', username=username)
-
-    # Hash password and compare
-    user = db.get_user(username)
-    if user and bcrypt.checkpw(password.encode(), user.password_hash):
-        logger.info('authentication_success', user_id=user.id)
-        return user
-    else:
-        logger.warning('authentication_failure', username=username)
-        return None
+    // Hash password and compare
+    var user = await _userRepository.GetByUsername(username);
+    if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+    {
+        _logger.LogInformation("authentication_success", user.Id);
+        return user;
+    }
+    else
+    {
+        _logger.LogWarning("authentication_failure", username);
+        return null;
+    }
+}
 ```
 
 ### 2. Run the Compliance Documentation Agent
@@ -1886,27 +1891,31 @@ Passwords are hashed using bcrypt with cost factor 12. Minimum password requirem
 
 ## Control Reference Format
 
-Use this format in docstrings for the agent to parse:
+Use this format in XML documentation comments for the agent to parse:
 
-```python
-"""
-GC Security Controls:
-    - {CONTROL_ID}: {Control Name}
-        Implementation: {Brief description of how this code implements the control}
-    - {CONTROL_ID}: {Control Name}
-        Implementation: {Brief description}
-"""
+```csharp
+/// <summary>
+/// [Method description]
+///
+/// GC Security Controls:
+///     - {CONTROL_ID}: {Control Name}
+///         Implementation: {Brief description of how this code implements the control}
+///     - {CONTROL_ID}: {Control Name}
+///         Implementation: {Brief description}
+/// </summary>
 ```
 
 Example:
-```python
-"""
-GC Security Controls:
-    - AU-2: Audit Events
-        Implementation: Logs all authentication attempts with timestamp, username, and result
-    - AU-3: Content of Audit Records
-        Implementation: Structured JSON logs include timestamp, event_type, user_id, session_id
-"""
+```csharp
+/// <summary>
+/// Log authentication event with audit trail.
+///
+/// GC Security Controls:
+///     - AU-2: Audit Events
+///         Implementation: Logs all authentication attempts with timestamp, username, and result
+///     - AU-3: Content of Audit Records
+///         Implementation: Structured JSON logs include timestamp, event_type, user_id, session_id
+/// </summary>
 ```
 
 ## Benefits
@@ -2072,7 +2081,7 @@ Create `.github/instructions/` directory with key instruction files. Start with 
 - Copy the WET-BOEW template structure from earlier in this post
 - Add the 3-5 components you use most (forms, alerts, tables, tabs)
 - Include bilingual patterns for your specific content
-- Add `applyTo: "**/*.html,**/*.jinja2"` frontmatter
+- Add `applyTo: "**/*.html,**/*.cshtml"` frontmatter
 
 **Security for Protected B** (`security-protected-b.instructions.md`):
 - Copy the logging patterns (no PII in logs)
@@ -2513,25 +2522,27 @@ Result: Every project using WET-BOEW automatically gets AI-friendly instruction 
 
 This is the unique Canadian opportunity. Work with Shared Services Canada to create canonical instruction files for each SSC-approved cloud provider:
 
-**For AWS (Protected B)**:
-```markdown
+**For AWS (Protected B)** - Example instruction file (`aws-protected-b.instructions.md`):
+
+**File header**:
+```yaml
 ---
 applyTo: "**/aws/**,**/infrastructure/**,**/terraform/**"
 ---
+```
 
-# AWS Deployment for Protected B via SSC
+**File content** would include:
 
-## Framework Agreement
-This project uses AWS through SSC's Cloud Brokering Service framework agreement.
+**Framework Agreement**: Project uses AWS through SSC's Cloud Brokering Service framework agreement.
 
-## Required AWS Services
-- **Compute**: AWS Lambda or ECS Fargate (containerized .NET applications)
-- **Database**: RDS SQL Server (managed) with encryption at rest
-- **Storage**: S3 with server-side encryption (AES-256)
-- **Logging**: CloudWatch Logs with 90-day retention (TBS requirement)
-- **Key Management**: AWS KMS for encryption keys
+**Required AWS Services**:
+- Compute: AWS Lambda or ECS Fargate (containerized .NET applications)
+- Database: RDS SQL Server (managed) with encryption at rest
+- Storage: S3 with server-side encryption (AES-256)
+- Logging: CloudWatch Logs with 90-day retention (TBS requirement)
+- Key Management: AWS KMS for encryption keys
 
-## Terraform Configuration Example
+**Terraform Configuration Example**:
 ```hcl
 # Protected B configuration following SSC guidelines
 resource "aws_s3_bucket" "app_data" {
@@ -2559,7 +2570,7 @@ resource "aws_s3_bucket" "app_data" {
 }
 ```
 
-## Deployment via CI/CD
+**Deployment via CI/CD**:
 ```yaml
 # GitHub Actions example
 name: Deploy to AWS (SSC)
@@ -2576,13 +2587,11 @@ jobs:
           aws-region: ca-central-1  # Canadian region required
 ```
 
-## GC Cloud Guardrails Compliance
-All deployments must comply with [GC Cloud Guardrails](https://canada-ca.github.io/cloud-guardrails/):
+**GC Cloud Guardrails Compliance**: All deployments must comply with [GC Cloud Guardrails](https://canada-ca.github.io/cloud-guardrails/):
 - Multi-factor authentication enabled for console access
 - CloudTrail logging enabled for all API calls
 - VPC security groups restrict inbound/outbound traffic
 - Automated backup enabled for RDS databases
-```
 
 **For Azure (Protected B)**:
 Similar instruction files for Azure App Service, Azure SQL Database, Azure Key Vault, etc.
