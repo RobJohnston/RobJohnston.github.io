@@ -40,7 +40,7 @@ Here's the insight that changed my perspective: **Canada has been building this 
 
 ## Canada's Digital Government Ecosystem
 
-The Government of Canada's digital infrastructure rests on four foundational pillars:
+The Government of Canada's digital infrastructure rests on five foundational pillars:
 
 ### 1. Web Experience Toolkit (WET-BOEW)
 
@@ -110,7 +110,7 @@ These five pillars—WET-BOEW (the components), the GC Design System (the design
 
 ### Supporting Infrastructure
 
-Beyond these four pillars, several reusable services extend the ecosystem:
+Beyond these five pillars, several reusable services extend the ecosystem:
 
 **GC Cloud Guardrails**: [Mandatory baseline security controls](https://canada-ca.github.io/cloud-guardrails/) for cloud deployments. Departments must implement these guardrails within 30 business days of getting cloud access. These prescriptive security requirements (available as [open-source on GitHub](https://github.com/canada-ca/cloud-guardrails)) are perfect candidates for encoding as AI instruction files.
 
@@ -1056,36 +1056,7 @@ All Government of Canada APIs must comply with the **[Standards on APIs](https:/
 6. **Performance**: Pagination required, restrict wildcard queries, published benchmarks
 7. **Documentation**: OpenAPI specifications, published to API Store
 
-## URL Structure
-
-```csharp
-// ✅ GOOD: Plural nouns, lowercase, kebab-case
-[HttpGet("api/v1/applications")]
-[HttpGet("api/v1/applications/{id}")]
-[HttpPost("api/v1/applications")]
-
-// ❌ BAD: Verbs, mixed case
-[HttpGet("api/v1/getApplications")]
-[HttpPost("api/v1/createApplication")]
-```
-
-## Response Format
-
-```csharp
-// ✅ GOOD: ISO 8601 datetime, object response
-public class ApplicationDto
-{
-    public DateTime SubmissionDate { get; set; }  // Serializes as "2026-02-12T14:30:00Z"
-}
-
-return Ok(new { data = applications, meta = new { totalCount = 100 } });
-
-// ❌ BAD: Non-standard datetime, array response
-public string SubmissionDate { get; set; } = "12/02/2026";
-return Ok(applications);  // Raw array
-```
-
-[Additional sections on error handling, pagination, versioning, authentication...]
+[URL Structure, Response Format, Error Handling, Pagination, Versioning, Authentication sections...]
 ```
 
 **Full file**: See [api.instructions.md](/gc-ai-instructions/.github/instructions/api.instructions.md)
