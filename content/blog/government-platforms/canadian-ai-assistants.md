@@ -30,7 +30,7 @@ Think about it: When you ask an AI assistant to "build a contact form," it could
 
 Ad Hoc describes this as a three-layer abstraction:
 
-1. **Cloud infrastructure layer**: The foundational compute, storage, and networking (in Canada's case, GC Cloud Account based on Cloud Foundry)
+1. **Cloud infrastructure layer**: The foundational compute, storage, and networking (in the US, cloud.gov provides a unified Cloud Foundry platform; in Canada, [Shared Services Canada brokers access](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) to commercial cloud providers like AWS, Azure, and Google Cloud)
 2. **Deployment and operations layer**: How applications get deployed, monitored, and maintained
 3. **Platform knowledge layer**: The institutional knowledge about how to build things the "right way"—encoded as AI instruction files
 
@@ -101,6 +101,8 @@ Beyond these four pillars, several reusable services extend the ecosystem:
 **GCKey and GC Sign-in**: Authentication services that let citizens access government services securely. [GCKey](https://www.canada.ca/en/government/sign-in-online-account/gckey.html) is a standards-based (SAML) authentication service currently integrated with 30+ federal agencies. The newer [GC Sign-in](https://digital.canada.ca/2025/02/12/streamlining-government-services-introducing-gc-sign-in/) (piloting in 2025) modernizes this with passwordless authentication, passkeys, and self-serve integration tools—addressing the current complexity of 270+ online services with 60+ different sign-in methods.
 
 **GC Forms**: A [platform for building accessible, bilingual forms](https://articles.alpha.canada.ca/forms-formulaires/) without custom development. Managed by the Canadian Digital Service, it standardizes the form-building process across departments.
+
+**SSC Cloud Brokering Service**: [Shared Services Canada's Cloud Brokering Service](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) (launched 2017) acts as an intermediary between federal departments and commercial cloud providers. Rather than running a single government platform, SSC maintains framework agreements with 8 cloud providers (AWS, Azure, Google Cloud, etc.) and provides standardized procurement, security profiles, and deployment patterns. This is particularly relevant for AI instruction files—instead of each department creating their own cloud deployment patterns, SSC-published instruction files could provide canonical examples for each approved provider (e.g., "Deploy ASP.NET Core to AWS with Protected B controls following SSC framework agreement"). [AWS is approved for Protected B data](https://aws.amazon.com/blogs/publicsector/aws-now-able-to-host-protected-b-data-for-the-government-of-canada/), and [Microsoft 365 E5 is being standardized](https://www.canada.ca/en/shared-services/corporate/about-us/publications/2025-26/2025-26-departmental-plan.html) across the Government of Canada—both creating opportunities for standardized AI instruction files.
 
 **Translation Bureau and TERMIUM Plus®**: The [Translation Bureau](https://www.canada.ca/en/translation-bureau.html) provides linguistic services across 101 languages and operates [TERMIUM Plus®](https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-eng.html?lang=eng), one of the world's largest terminology databases with millions of terms in English, French, Spanish, and Portuguese. TERMIUM Plus is particularly valuable for AI assistants—it provides **official government terminology** as a bounded vocabulary for bilingual translation. Instead of AI assistants guessing at French translations or using inconsistent terminology, they can reference the authoritative database that standardizes terms across the federal public service. The Translation Bureau also developed [GCtranslate](https://www.canada.ca/en/public-services-procurement/news/2025/09/gctranslate-using-artificial-intelligence-to-build-a-more-agile-modern-and-bilingual-public-service.html), an AI-powered translation service for government content up to Protected B—demonstrating the government is already successfully using AI for bilingual content creation.
 
@@ -772,20 +774,26 @@ An AI assistant can technically read the WET-BOEW documentation on GitHub or the
 
 This is where Ad Hoc's work becomes crucial for Canada. They built an open-source template (MIT licensed, available at [github.com/adhocteam/cloud.gov-instructions](https://github.com/adhocteam/cloud.gov-instructions)) that shows exactly how to encode platform knowledge for AI assistants.
 
-The breakthrough is their file structure:
+**The US vs Canadian Cloud Model:**
+- **US (cloud.gov)**: Single Cloud Foundry platform-as-a-service run by government
+- **Canada (SSC)**: Brokering service providing access to multiple commercial cloud providers (AWS, Azure, Google Cloud)
+
+This difference actually makes instruction files **more valuable** for Canada - without a single platform, departments need clear patterns for each SSC-approved provider.
+
+The breakthrough is Ad Hoc's file structure (shown here for cloud.gov, adaptable for Canadian providers):
 
 ```
 .github/
 ├── copilot-instructions.md          # Repository-level context
 ├── instructions/
-│   ├── deployment.instructions.md   # Cloud.gov deployment patterns
+│   ├── deployment.instructions.md   # Deployment patterns (cloud.gov uses Cloud Foundry)
 │   ├── security.instructions.md     # FedRAMP compliance guidance
 │   ├── services.instructions.md     # Database and service bindings
 │   └── logging.instructions.md      # Structured logging requirements
 ├── agents/
 │   └── compliance-docs.agent.md     # Automated documentation generation
 └── skills/
-    └── cf-troubleshoot.md           # Cloud Foundry debugging workflows
+    └── troubleshoot.md              # Platform-specific debugging workflows
 ```
 
 The innovation isn't just organizing files—it's the **YAML frontmatter** that tells AI assistants when to automatically apply instructions:
@@ -865,7 +873,7 @@ These commands are read-only or low-risk and don't require confirmation:
 
 This tells the AI assistant: "Some commands are dangerous. Even if the user says 'delete the staging database,' check with them first because data loss is permanent."
 
-This pattern is directly applicable to Canadian government development. Imagine the equivalent for GC Cloud Account operations or Protected B data handling.
+This pattern is directly applicable to Canadian government development. Imagine the equivalent for AWS/Azure operations following SSC framework agreements, or Protected B data handling patterns.
 
 ### Automated Compliance Documentation
 
@@ -929,18 +937,22 @@ Now let's bring this home. What would Ad Hoc's `cloud.gov-instructions` structur
 
 ```
 .github/
-├── copilot-instructions.md              # GC Cloud Account context
+├── copilot-instructions.md              # Project context (SSC provider, classification)
 ├── instructions/
 │   ├── wet-boew.instructions.md         # WET-BOEW component patterns
 │   ├── gc-design-system.instructions.md # GC Design System utilities and templates
 │   ├── accessibility.instructions.md    # WCAG 2.1 AA compliance patterns
 │   ├── bilingual.instructions.md        # Official Languages Act compliance
-│   └── security-protected-b.instructions.md  # Protected B handling
+│   ├── security-protected-b.instructions.md  # Protected B handling
+│   ├── aws-deployment.instructions.md   # AWS deployment patterns (if using AWS)
+│   └── azure-deployment.instructions.md # Azure deployment patterns (if using Azure)
 ├── agents/
 │   └── itsca-compliance.agent.md        # ITSCA documentation generation
 └── skills/
     └── wet-boew-troubleshoot.md         # Common WET-BOEW debugging workflows
 ```
+
+**Note**: The cloud provider instruction files (AWS, Azure) would be specific to which SSC-brokered service your department uses. SSC could publish canonical versions for each approved provider.
 
 Let's walk through what each of these files would contain, with concrete examples.
 
@@ -951,11 +963,11 @@ This file provides the high-level context for the entire project:
 ```markdown
 # Government of Canada Web Application
 
-This application is deployed to GC Cloud Account (Cloud Foundry) and serves Canadian citizens via the Canada.ca domain.
+This application is deployed via SSC Cloud Brokering Service and serves Canadian citizens via the Canada.ca domain.
 
 ## Classification
 - **Security**: Protected B
-- **Deployment environment**: GC Cloud Account (cloud.gc.ca)
+- **Deployment environment**: AWS GovCloud (SSC-brokered)
 - **Accessibility standard**: WCAG 2.1 AA (mandatory)
 - **Language requirements**: Bilingual (English/French) per Official Languages Act
 - **Framework**: WET-BOEW 4.0.x with Canada.ca theme
@@ -970,9 +982,9 @@ This application is deployed to GC Cloud Account (Cloud Foundry) and serves Cana
 ## Project Stack
 - Frontend: WET-BOEW 4.0.x, GC Design System CSS utilities, vanilla JavaScript
 - Backend: ASP.NET Core 8.0 with C#
-- Database: MS SQL Server (cloud.gc.ca managed service or on-premises)
-- Session storage: Redis (cloud.gc.ca managed service)
-- Logging: Structured JSON to stdout (captured by cloud.gc.ca logging service)
+- Database: Azure SQL Database (SSC-brokered) or on-premises MS SQL Server
+- Session storage: Azure Cache for Redis (SSC-brokered)
+- Logging: Structured JSON to stdout (captured by AWS CloudWatch or Azure Monitor)
 
 ## Important Paths
 - `static/wet-boew/`: WET-BOEW library files (managed via npm)
@@ -1466,7 +1478,7 @@ public class SensitiveDataService
 ```
 
 **Important**:
-- Encryption keys must be managed via cloud.gc.ca Key Management Service (KMS)
+- Encryption keys must be managed via cloud provider KMS (AWS KMS, Azure Key Vault, etc.)
 - Never hard-code encryption keys in source code
 - Rotate encryption keys according to TBS IT Security Framework schedule
 
@@ -1812,7 +1824,7 @@ The agent produces:
 
 - **SC-7**: Boundary Protection
   - Status: Partially implemented
-  - Evidence: cloud.gc.ca security groups configured, but not documented
+  - Evidence: AWS Security Groups / Azure Network Security Groups configured, but not documented
   - Recommendation: Document network boundaries in security architecture diagram
 ```
 
@@ -2023,7 +2035,7 @@ Create `.github/copilot-instructions.md` in your project repository:
 ```markdown
 # [Your Project Name] - Government of Canada
 
-This is a Protected B web application for [Department Name], deployed to GC Cloud Account.
+This is a Protected B web application for [Department Name], deployed via SSC Cloud Brokering Service to AWS.
 
 ## Framework & Standards
 - WET-BOEW 4.0.x with Canada.ca theme
@@ -2036,7 +2048,7 @@ This is a Protected B web application for [Department Name], deployed to GC Clou
 - Frontend: WET-BOEW, vanilla JavaScript
 - Backend: [Your stack: ASP.NET Core, Node.js, etc.]
 - Database: [MS SQL Server, Oracle, etc.]
-- Deployment: GC Cloud Account (Cloud Foundry)
+- Deployment: AWS (SSC-brokered) or Azure Government
 
 ## Important Notes
 - All user-facing text must be bilingual
@@ -2109,11 +2121,20 @@ Entity Framework Core supports both platforms via provider packages:
 }
 ```
 
-**For cloud deployments** (cloud.gc.ca managed SQL Server):
+**For cloud deployments** (Azure SQL Database via SSC):
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=tcp:gc-sql-cloud.database.windows.net,1433;Database=BenefitsDB;User ID=appuser;Password={password};Encrypt=true;Connection Timeout=30;"
+    "DefaultConnection": "Server=tcp:dept-benefits-prod.database.windows.net,1433;Database=BenefitsDB;User ID=appuser;Password={password};Encrypt=true;TrustServerCertificate=false;Connection Timeout=30;"
+  }
+}
+```
+
+**For AWS RDS SQL Server** (via SSC):
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=dept-benefits-prod.abc123.ca-central-1.rds.amazonaws.com,1433;Database=BenefitsDB;User ID=appuser;Password={password};Encrypt=true;"
   }
 }
 ```
@@ -2277,23 +2298,27 @@ Create `.github/AGENTS.md`:
 
 ## Always Confirm Before Running
 
-- `cf delete` - Deletes applications or services (data loss)
-- `cf delete-service` - Deletes database (permanent data loss)
+- `aws s3 rm --recursive` - Deletes S3 bucket contents (data loss)
+- `az group delete` - Deletes entire Azure resource group (data loss)
+- `dotnet ef database drop` - Drops database (permanent data loss)
 - `git push --force` - Overwrites remote history
 - `rm -rf` - Recursive file deletion
 
 ## Confirm in Production
 
-- `cf push` - Deploys application to cloud.gc.ca
+- `dotnet publish` - Builds for production deployment
+- `az webapp deploy` - Deploys application to Azure App Service
+- `aws lambda update-function-code` - Updates AWS Lambda function
 - `git push origin main` - Pushes to main branch (triggers CI/CD)
-- Database migrations - May affect production data
+- `dotnet ef database update` - Runs database migrations (may affect production data)
 
 ## Safe to Run
 
-- `cf logs` - View logs
-- `cf apps` - List applications
+- `az webapp log tail` - View logs (Azure)
+- `aws cloudwatch tail` - View logs (AWS)
 - `git status` - Show repository status
-- `npm test` - Run tests
+- `dotnet test` - Run tests
+- `az resource list` - List Azure resources
 ```
 
 #### Step 4: Test with Your AI Assistant
@@ -2344,11 +2369,14 @@ gc-instructions/
 ├── gc-design-system/
 │   ├── utilities.instructions.md
 │   └── page-templates.instructions.md
+├── cloud/
+│   ├── aws-protected-b.instructions.md     # AWS deployment for Protected B (if team uses AWS)
+│   └── azure-protected-b.instructions.md   # Azure deployment for Protected B (if team uses Azure)
 └── agents/
     └── itsca-compliance.agent.md
 ```
 
-This becomes your team's shared knowledge base.
+This becomes your team's shared knowledge base. The `cloud/` directory contains provider-specific instructions based on which SSC-brokered service your team uses.
 
 #### Step 2: Adopt in New Projects (30 minutes per project)
 
@@ -2435,9 +2463,11 @@ gc-ai-instructions/
 ├── bilingual/
 │   ├── official-languages-act.instructions.md
 │   └── translation-patterns/
-├── cloud-deployment/
-│   ├── gc-cloud-account.instructions.md
-│   └── azure-government.instructions.md
+├── ssc-cloud/
+│   ├── aws-protected-b.instructions.md      # AWS deployment via SSC
+│   ├── azure-protected-b.instructions.md    # Azure deployment via SSC
+│   ├── aws-protected-c.instructions.md      # AWS for higher classification
+│   └── azure-protected-c.instructions.md    # Azure for higher classification
 ├── compliance/
 │   ├── itsca.instructions.md
 │   ├── itsg-33.instructions.md
@@ -2479,7 +2509,87 @@ Work with the WET-BOEW team to:
 
 Result: Every project using WET-BOEW automatically gets AI-friendly instruction files.
 
-#### Step 4: Training and Adoption (6-12 months)
+#### Step 4: SSC Publishes Cloud Provider Instructions (3-6 months)
+
+This is the unique Canadian opportunity. Work with Shared Services Canada to create canonical instruction files for each SSC-approved cloud provider:
+
+**For AWS (Protected B)**:
+```markdown
+---
+applyTo: "**/aws/**,**/infrastructure/**,**/terraform/**"
+---
+
+# AWS Deployment for Protected B via SSC
+
+## Framework Agreement
+This project uses AWS through SSC's Cloud Brokering Service framework agreement.
+
+## Required AWS Services
+- **Compute**: AWS Lambda or ECS Fargate (containerized .NET applications)
+- **Database**: RDS SQL Server (managed) with encryption at rest
+- **Storage**: S3 with server-side encryption (AES-256)
+- **Logging**: CloudWatch Logs with 90-day retention (TBS requirement)
+- **Key Management**: AWS KMS for encryption keys
+
+## Terraform Configuration Example
+```hcl
+# Protected B configuration following SSC guidelines
+resource "aws_s3_bucket" "app_data" {
+  bucket = "dept-benefits-prod-data"
+
+  # SSC requirement: encryption at rest
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  # SSC requirement: versioning enabled
+  versioning {
+    enabled = true
+  }
+
+  # SSC requirement: logging enabled
+  logging {
+    target_bucket = aws_s3_bucket.logs.id
+    target_prefix = "app-data/"
+  }
+}
+```
+
+## Deployment via CI/CD
+```yaml
+# GitHub Actions example
+name: Deploy to AWS (SSC)
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ca-central-1  # Canadian region required
+```
+
+## GC Cloud Guardrails Compliance
+All deployments must comply with [GC Cloud Guardrails](https://canada-ca.github.io/cloud-guardrails/):
+- Multi-factor authentication enabled for console access
+- CloudTrail logging enabled for all API calls
+- VPC security groups restrict inbound/outbound traffic
+- Automated backup enabled for RDS databases
+```
+
+**For Azure (Protected B)**:
+Similar instruction files for Azure App Service, Azure SQL Database, Azure Key Vault, etc.
+
+**The Impact**: Instead of every department figuring out "how do we deploy to AWS following SSC requirements," there's a canonical answer. AI assistants generate infrastructure-as-code that's compliant by default.
+
+#### Step 5: Training and Adoption (6-12 months)
 
 Roll out across the GC:
 - Add module to Canada School of Public Service (CSPS) digital training
@@ -2487,7 +2597,7 @@ Roll out across the GC:
 - Present at FWD50, GCDevEx, and other GC digital community events
 - Create video tutorials and documentation
 
-#### Step 5: Continuous Improvement
+#### Step 6: Continuous Improvement
 
 Establish a maintenance team:
 - Review contributions from departments
@@ -2628,6 +2738,7 @@ For over 15 years, the Government of Canada has been building the infrastructure
 
 Plus supporting infrastructure:
 ✅ **GC Cloud Guardrails**: Mandatory security baselines for cloud deployments
+✅ **SSC Cloud Brokering Service**: Framework agreements with AWS, Azure, Google Cloud providing standardized procurement and deployment patterns
 ✅ **GC Notify**: Standardized notification service with bilingual defaults
 ✅ **GCKey and GC Sign-in**: Authentication services reducing complexity from 60+ sign-in methods to unified patterns
 ✅ **GC Forms**: Accessible, bilingual form-building platform
