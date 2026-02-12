@@ -620,6 +620,131 @@ An AI assistant with Standard #9 context will question data collection requireme
 
 This is the AI assistant acting as a guardrail—not just implementing what you asked, but questioning whether it aligns with ethical service design.
 
+## The Problem: Buried Departmental Standards
+
+We've talked about the official, published standards—WET-BOEW, GC Design System, Content Style Guide, Digital Standards. These are well-documented, publicly available, and (relatively) easy to find.
+
+But every government developer knows there's another layer: **departmental and project-level standards that live in the shadows.**
+
+### The SQL Standards Document Nobody Can Find
+
+You start a new contract at a department. On day three, someone mentions in passing: "Oh, we have SQL coding standards. The DBAs wrote them a few years ago."
+
+Where are they? Nobody's quite sure. You check:
+- The project SharePoint (maybe in the "Archive" folder? Or was it "Documentation"?)
+- The department wiki (if you can remember the URL)
+- That network drive everyone shares (somewhere in `P:\IT\Database\Standards\Old\Maybe?`)
+- Someone's OneDrive they shared once
+
+You finally find a Word document: `SQL_Coding_Standards_v2_FINAL_revised_2019.docx`
+
+You open it. It says:
+- All table names must use `tbl_` prefix
+- All stored procedures must use `usp_` prefix
+- All column names must be PascalCase
+- No use of SELECT * in production code
+- All queries must be parameterized (no dynamic SQL)
+
+**Questions immediately arise:**
+
+1. **Is this still enforced?** The document is from 2019. Do new projects follow this?
+2. **What about Entity Framework?** The standards assume raw SQL, but your project uses EF. Does that count? Can you use LINQ queries or are you supposed to write stored procedures?
+3. **Do the prefixes still apply?** Modern database design typically avoids Hungarian notation prefixes. Is `tbl_` still required or is this outdated?
+4. **Who enforces this?** Is there a code review checklist? Will the DBAs reject your pull request if you don't follow this?
+5. **What's the penalty for non-compliance?** Is this a hard requirement or a "nice to have" guideline?
+
+You ask the tech lead. They shrug: "I think we used to follow that, but the last project didn't. Just be consistent, I guess?"
+
+### Other Buried Standards
+
+SQL isn't the only example. Common buried standards include:
+
+**Git branching strategy**:
+- Some Word doc that says "use GitFlow" but half the team uses trunk-based development
+- Nobody knows if feature branches should be `feature/TICKET-123` or `feature/ticket-123` or `TICKET-123-feature`
+- Unclear if you should delete branches after merging
+
+**Code review checklist**:
+- Exists somewhere, but nobody references it during reviews
+- Inconsistently applied (some reviewers are strict, others rubber-stamp)
+- Outdated rules (still mentions Internet Explorer 9 compatibility)
+
+**API naming conventions**:
+- RESTful endpoints should be `/api/v1/resources` but some APIs use `/services/resource`
+- Query parameters: camelCase or snake_case? (Both exist in production)
+- Date formats: ISO 8601 or `YYYY-MM-DD` or Unix timestamps? (All three in use)
+
+**Database naming conventions**:
+- Schema names: `dbo`, department code (`ESDC_`), or application name (`benefits_`)?
+- Foreign key naming: `FK_Table1_Table2` or `fk_table1_table2_id` or `table2_id`?
+- Index naming conventions exist but nobody follows them
+
+**Deployment procedures**:
+- A 47-step checklist in a spreadsheet
+- Steps reference tools that were replaced two years ago
+- "Contact John to approve production deployment" (John left in 2022)
+
+**Security review requirements**:
+- Submit form to ITSCA team (which form? where?)
+- Include security controls matrix (which template? 2020 version or 2023?)
+- Threat model required (what format?)
+
+### Why This Matters for AI Assistants
+
+Here's the problem: **AI assistants can't help with standards they can't find.**
+
+An AI assistant can read WET-BOEW documentation on GitHub because it's public, current, and clearly the authoritative source. But it can't:
+- Find your department's SQL standards in SharePoint
+- Know whether that 2019 document is still enforced
+- Understand which coding patterns are actually used vs. officially documented
+- Tell you if Entity Framework is allowed or banned
+
+So you get inconsistent help:
+- AI generates SQL with no `tbl_` prefix (because modern best practices avoid it)
+- You get feedback in code review: "Needs tbl_ prefix per departmental standards"
+- You update the code manually
+- AI doesn't learn because the standard isn't in its context
+
+**Every developer goes through this same cycle.** New contractors waste hours finding, reading, and clarifying buried standards. The AI assistant that could help accelerate their work doesn't know these standards exist.
+
+### The Bigger Problem: Tribal Knowledge
+
+Worse than buried standards is **tribal knowledge**—the unwritten rules that exist only in people's heads:
+
+- "We don't actually use stored procedures anymore, even though the standard says to"
+- "Ignore the tbl_ prefix rule, nobody's enforced that since 2020"
+- "Always have Marie review database changes because she's the only one who understands the replication setup"
+- "You can't deploy on Fridays" (learned from a production incident three years ago)
+- "Use the staging environment, not the test environment—test hasn't worked since the migration"
+
+An AI assistant has zero access to tribal knowledge. It will confidently suggest things that violate unwritten rules. You'll learn through trial and error and code review feedback—the same painful way everyone before you learned.
+
+### The Cost
+
+This isn't just frustrating—it's expensive:
+
+**Onboarding time**: New contractors spend their first week figuring out "how things are done here." At $800/day, that's $4,000 per developer in wasted time.
+
+**Inconsistent codebases**: Without clear, enforced standards, every developer follows their own patterns. Code reviews become arguments about style instead of substance.
+
+**Repeated questions**: Tech leads spend hours answering the same questions: "What's the branching strategy?" "Do we use the tbl_ prefix?" "Is Entity Framework allowed?"
+
+**AI assistants can't help**: The tools that could accelerate development are blind to your actual standards, so they generate code that doesn't match your patterns.
+
+**Knowledge loss**: When the senior DBA who wrote the SQL standards retires, nobody knows if those standards were cargo cult or carefully reasoned requirements.
+
+### What We Need
+
+Departmental and project-level standards need to be:
+
+1. **Findable**: Not buried in SharePoint—in the repository with the code
+2. **Current**: Version-controlled, updated when practices change
+3. **Clear**: Explicit about what's mandatory vs. guideline
+4. **Enforced**: Automated checks where possible, clear code review criteria
+5. **Machine-readable**: Structured so AI assistants can apply them automatically
+
+This is exactly what the next section addresses.
+
 ## The Missing Piece: Machine-Readable Instructions
 
 Here's where we get practical. Canada has all the pieces—WET-BOEW provides bounded vocabulary, the GC Design System provides predictable patterns, and the Digital Standards provide guardrails. But there's a problem:
@@ -1847,6 +1972,173 @@ Create `.github/instructions/` directory with key instruction files. Start with 
 - Include keyboard navigation requirements
 - Add color contrast standards
 - Add `applyTo: "**/*.html,**/*.css"` frontmatter
+
+**Departmental coding standards** (`database.instructions.md`):
+- **This is the key one!** Dig up those buried SQL standards and encode them as instruction files
+- Include database naming conventions, query patterns, ORM usage rules
+- Make them findable and enforceable
+- Add `applyTo: "**/*.sql,**/models.py,**/repositories/**"` frontmatter
+
+**Example**: Converting buried SQL standards into an instruction file:
+
+```markdown
+---
+applyTo: "**/*.sql,**/models/**,**/repositories/**,**/migrations/**"
+---
+
+# Department Database Standards
+
+These standards were established by the DBA team and are enforced in code reviews.
+
+## Entity Framework (EF) Core Usage
+
+**Status**: APPROVED for new development (as of 2023)
+- Use EF Core for data access (replaces raw SQL/stored procedures)
+- Code-first migrations required for schema changes
+- LINQ queries preferred over raw SQL
+
+**When raw SQL is needed**:
+- Complex reporting queries with performance requirements
+- Bulk operations (use `ExecuteSqlRaw` with parameterization)
+- Legacy stored procedure calls (during migration period)
+
+## Naming Conventions
+
+**Table names**:
+- ~~Do NOT use `tbl_` prefix (deprecated as of 2023)~~
+- Use PascalCase singular nouns: `Application`, `User`, `Benefit`
+- Join tables: `EntityOneEntityTwo` (e.g., `UserRole`)
+
+**Column names**:
+- PascalCase: `FirstName`, `SubmissionDate`, `IsActive`
+- Primary keys: `Id` (not `TableNameId`)
+- Foreign keys: `EntityNameId` (e.g., `UserId`, `ApplicationId`)
+- Avoid abbreviations unless industry-standard (e.g., `SIN` is OK, `FstNm` is not)
+
+**EF Entity classes**:
+```csharp
+public class Application
+{
+    public int Id { get; set; }  // Primary key
+    public string ConfirmationNumber { get; set; }
+    public DateTime SubmissionDate { get; set; }
+
+    // Foreign key
+    public int UserId { get; set; }
+    public User User { get; set; }  // Navigation property
+}
+```
+
+## Query Requirements
+
+**Always use parameterization** (prevents SQL injection):
+
+```csharp
+// ✅ GOOD: Parameterized query
+var results = context.Applications
+    .Where(a => a.UserId == userId)
+    .ToList();
+
+// ✅ GOOD: Parameterized raw SQL if needed
+var results = context.Applications
+    .FromSqlRaw("SELECT * FROM Applications WHERE UserId = {0}", userId)
+    .ToList();
+
+// ❌ BAD: String concatenation (SQL injection risk)
+var sql = $"SELECT * FROM Applications WHERE UserId = {userId}";  // NEVER
+```
+
+**No SELECT \* in production**:
+- Explicitly specify columns in raw SQL
+- EF LINQ queries are OK (they generate explicit column lists)
+
+## Migrations
+
+**All schema changes via EF migrations**:
+
+```bash
+# Create migration
+dotnet ef migrations add AddBenefitCalculationTable
+
+# Review generated migration before applying
+# Check: Migrations/YYYYMMDDHHMMSS_AddBenefitCalculationTable.cs
+
+# Apply to database
+dotnet ef database update
+```
+
+**Migration rules**:
+- One logical change per migration
+- Include both Up() and Down() methods
+- Test rollback before committing
+- Never modify existing migrations (create new ones)
+
+## Performance Guidelines
+
+**Eager loading** for related data:
+
+```csharp
+// ✅ GOOD: Eager load (one query)
+var applications = context.Applications
+    .Include(a => a.User)
+    .Include(a => a.Benefits)
+    .Where(a => a.Status == "Pending")
+    .ToList();
+
+// ❌ BAD: N+1 query problem
+var applications = context.Applications
+    .Where(a => a.Status == "Pending")
+    .ToList();
+// Each iteration below causes a separate query
+foreach (var app in applications)
+{
+    var user = app.User;  // Lazy load - separate query per iteration
+}
+```
+
+**Indexes**: Add for foreign keys and frequently queried columns:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Application>()
+        .HasIndex(a => a.ConfirmationNumber)
+        .IsUnique();
+
+    modelBuilder.Entity<Application>()
+        .HasIndex(a => a.SubmissionDate);
+}
+```
+
+## Code Review Checklist
+
+Before submitting PRs with database changes:
+- [ ] EF migrations included for schema changes
+- [ ] All queries use parameterization (no string concatenation)
+- [ ] Navigation properties defined for foreign keys
+- [ ] Indexes added for new foreign keys
+- [ ] Migration tested with both upgrade and rollback
+- [ ] No raw SQL unless performance-justified (document reason)
+
+## Questions?
+
+Contact: database-team@department.gc.ca
+Last updated: 2024-12-15 (reviewed quarterly)
+```
+
+**Why this works**:
+- ✅ **Findable**: In the repository, not buried in SharePoint
+- ✅ **Current**: Shows deprecated rules (~~tbl_ prefix~~), approved tools (EF Core OK as of 2023)
+- ✅ **Clear**: Explicit about what's mandatory (parameterization) vs. guideline (naming)
+- ✅ **Enforced**: Code review checklist included
+- ✅ **Machine-readable**: AI assistant automatically applies these patterns when you work with database code
+
+Now when AI assistants generate database code, they'll:
+- Use EF Core (approved tool)
+- Follow department naming conventions
+- Use parameterized queries
+- Include proper navigation properties
+- Generate code that passes review the first time
 
 #### Step 3: Add Safety Guardrails (15 minutes)
 
