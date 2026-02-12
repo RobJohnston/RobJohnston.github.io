@@ -800,153 +800,17 @@ This is where Ad Hoc's work becomes crucial for Canada. They built an open-sourc
 
 This difference actually makes instruction files **more valuable** for Canada - without a single platform, departments need clear patterns for each SSC-approved provider.
 
-The breakthrough is Ad Hoc's file structure (shown here for cloud.gov, adaptable for Canadian providers):
+**Key innovations from Ad Hoc's approach:**
 
-```
-.github/
-├── copilot-instructions.md          # Repository-level context
-├── instructions/
-│   ├── deployment.instructions.md   # Deployment patterns (cloud.gov uses Cloud Foundry)
-│   ├── security.instructions.md     # FedRAMP compliance guidance
-│   ├── services.instructions.md     # Database and service bindings
-│   └── logging.instructions.md      # Structured logging requirements
-├── agents/
-│   └── compliance-docs.agent.md     # Automated documentation generation
-└── skills/
-    └── troubleshoot.md              # Platform-specific debugging workflows
-```
+1. **Structured instruction files**: Organize platform knowledge into domain-specific instruction files (deployment, security, logging, etc.) that live in `.github/instructions/`
 
-The innovation isn't just organizing files—it's the **YAML frontmatter** that tells AI assistants when to automatically apply instructions:
+2. **Context-aware loading**: Use YAML frontmatter (`applyTo: "**/*.yml"`) to automatically load relevant instructions when developers work with specific file types
 
-```markdown
----
-applyTo: "**/manifest*.yml"
----
+3. **Safety guardrails**: Explicitly categorize operations as "always confirm," "confirm in production," or "safe to run" so AI assistants know when to ask before executing destructive commands
 
-# Cloud.gov Deployment Instructions
+4. **Automated compliance documentation**: Scan code annotations (like `/// NIST 800-53: IA-2`) to generate security documentation automatically, reducing manual compliance burden
 
-When working with Cloud Foundry manifest files for cloud.gov:
-
-## Basic Manifest Structure
-```yaml
-applications:
-- name: my-app
-  memory: 256M
-  instances: 2
-  buildpacks:
-    - https://github.com/cloudfoundry/dotnet-core-buildpack
-  env:
-    ENV_VAR: value
-  services:
-    - my-database
-```
-
-## Important Patterns
-- Always specify explicit `memory` limits (FedRAMP requirement)
-- Use at least 2 instances for production apps (high availability)
-- Pin buildpack versions for reproducible deployments
-...
-```
-
-The `applyTo: "**/manifest*.yml"` line means: "Whenever the developer is working with a file matching this glob pattern, automatically load these instructions into my context."
-
-An AI assistant sees you editing `manifest.yml` and immediately knows: "This is a cloud.gov deployment file. I should apply the FedRAMP memory limit requirements, suggest at least 2 instances for HA, and remind about pinning buildpack versions."
-
-### The Safety Guardrails Pattern
-
-One of the most valuable pieces of Ad Hoc's repository is their safety guardrails in `AGENTS.md`:
-
-```markdown
-# Safety Guardrails for Cloud.gov Operations
-
-## Always Confirm Before Running
-
-These commands are destructive and require explicit user confirmation:
-
-- `cf delete <app-name>` - Permanently deletes an application
-- `cf delete-service <service-name>` - Permanently deletes a service and its data
-- `cf delete-space <space-name>` - Deletes an entire space and all its resources
-
-**Never run these commands without asking the user first**, even if they seem to be requested in the conversation.
-
-## Confirm in Production
-
-These commands modify running applications and should be confirmed when targeting production spaces:
-
-- `cf push` - Deploys or updates an application
-- `cf restart <app-name>` - Restarts a running application (brief downtime)
-- `cf scale <app-name>` - Changes instance count or memory (potential impact on load)
-- `cf bind-service <app> <service>` - Modifies application service bindings (requires restart)
-
-**Check the targeted space** before running. If targeting a production space, confirm with the user.
-
-## Safe to Run
-
-These commands are read-only or low-risk and don't require confirmation:
-
-- `cf logs <app-name>` - View application logs
-- `cf apps` - List applications in current space
-- `cf services` - List services in current space
-- `cf env <app-name>` - Show environment variables (but redact secrets in output)
-- `cf ssh <app-name>` - SSH into application container (read-only operations)
-```
-
-This tells the AI assistant: "Some commands are dangerous. Even if the user says 'delete the staging database,' check with them first because data loss is permanent."
-
-This pattern is directly applicable to Canadian government development. Imagine the equivalent for AWS/Azure operations following SSC framework agreements, or Protected B data handling patterns.
-
-### Automated Compliance Documentation
-
-Perhaps the most innovative piece of Ad Hoc's repository is the compliance documentation agent. Here's the concept:
-
-```markdown
-# Compliance Documentation Agent
-
-## Purpose
-Generate System Security Plan (SSP) documentation by scanning the codebase for NIST SP 800-53 control implementations.
-
-## How It Works
-1. Scans code comments and docstrings for NIST control references
-2. Extracts implementation evidence (file paths, line numbers, code snippets)
-3. Generates Control Implementation Summary tables
-4. Identifies compliance gaps (required controls without implementations)
-
-## Example Code Pattern
-```csharp
-/// <summary>
-/// Authenticate user against identity provider.
-///
-/// NIST 800-53 Controls:
-///     - IA-2: Identification and Authentication (Organizational Users)
-///     - IA-5: Authenticator Management
-///
-/// Implementation:
-///     - Uses BCrypt.NET for password hashing (IA-5(1))
-///     - Enforces minimum password complexity (IA-5(1)(a))
-///     - Implements account lockout after 5 failures (AC-7)
-/// </summary>
-public async Task<User> AuthenticateUser(string username, string password)
-{
-    // Implementation...
-}
-```
-
-## Agent Output
-```markdown
-| Control ID | Control Name | Implementation | Evidence |
-|------------|--------------|----------------|----------|
-| IA-2 | Identification and Authentication | User authentication via identity provider | `src/Auth/UserService.cs:45-67` |
-| IA-5 | Authenticator Management | BCrypt.NET password hashing, complexity rules | `src/Auth/UserService.cs:45-67` |
-| AC-7 | Unsuccessful Logon Attempts | Account lockout after 5 failures | `src/Auth/UserService.cs:85-92` |
-
-### Compliance Gap Analysis
-- AU-2 (Audit Events): No implementation found
-- AU-3 (Content of Audit Records): No implementation found
-```
-
-This is powerful: **Developers write code with compliance references in comments, and the AI assistant generates the security documentation automatically.**
-
-For US federal systems, developers reference NIST SP 800-53 controls. For Canadian government systems, the equivalent would be IT Security Risk Management (ITRM) controls, TBS IT Security Framework, or Cloud Security Profile controls from the Canadian Centre for Cyber Security (CCS).
+For Canadian government development, these patterns are directly applicable—replace cloud.gov-specific patterns with SSC-brokered cloud providers (AWS, Azure), swap NIST SP 800-53 controls for TBS IT Security Framework controls, and encode WET-BOEW/GC Design System patterns instead of cloud.gov conventions. The structure and approach remain the same.
 
 ## The Canadian Adaptation
 
