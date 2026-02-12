@@ -970,7 +970,7 @@ This application is deployed to GC Cloud Account (Cloud Foundry) and serves Cana
 ## Project Stack
 - Frontend: WET-BOEW 4.0.x, GC Design System CSS utilities, vanilla JavaScript
 - Backend: ASP.NET Core 8.0 with C#
-- Database: PostgreSQL (cloud.gc.ca managed service)
+- Database: MS SQL Server (cloud.gc.ca managed service or on-premises)
 - Session storage: Redis (cloud.gc.ca managed service)
 - Logging: Structured JSON to stdout (captured by cloud.gc.ca logging service)
 
@@ -2035,7 +2035,7 @@ This is a Protected B web application for [Department Name], deployed to GC Clou
 ## Key Technologies
 - Frontend: WET-BOEW, vanilla JavaScript
 - Backend: [Your stack: ASP.NET Core, Node.js, etc.]
-- Database: [PostgreSQL, etc.]
+- Database: [MS SQL Server, Oracle, etc.]
 - Deployment: GC Cloud Account (Cloud Foundry)
 
 ## Important Notes
@@ -2090,6 +2090,33 @@ applyTo: "**/*.sql,**/models/**,**/repositories/**,**/migrations/**"
 # Department Database Standards
 
 These standards were established by the DBA team and are enforced in code reviews.
+
+## Database Platform
+
+**Primary database**: MS SQL Server 2019 (on-premises) / Azure SQL Database (cloud)
+**Legacy systems**: Oracle 12c (being migrated to SQL Server)
+
+Entity Framework Core supports both platforms via provider packages:
+- SQL Server: `Microsoft.EntityFrameworkCore.SqlServer`
+- Oracle: `Oracle.EntityFrameworkCore`
+
+**Connection configuration** (in `appsettings.json`):
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=gc-sql-prod-01.dept.gc.ca;Database=BenefitsDB;Integrated Security=true;TrustServerCertificate=false;Encrypt=true;"
+  }
+}
+```
+
+**For cloud deployments** (cloud.gc.ca managed SQL Server):
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=tcp:gc-sql-cloud.database.windows.net,1433;Database=BenefitsDB;User ID=appuser;Password={password};Encrypt=true;Connection Timeout=30;"
+  }
+}
+```
 
 ## Entity Framework (EF) Core Usage
 
