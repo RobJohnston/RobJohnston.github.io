@@ -23,6 +23,13 @@
         </div>
         {{ end }}
 
+        {{ if .Params.toc }}
+        <aside class="table-of-contents">
+            <h2>Table of Contents</h2>
+            {{ .TableOfContents }}
+        </aside>
+        {{ end }}
+
         <div class="post-content">
             {{ .Content }}
         </div>
