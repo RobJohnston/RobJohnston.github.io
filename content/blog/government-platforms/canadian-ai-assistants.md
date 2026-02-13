@@ -545,7 +545,7 @@ The solution is to encode platform knowledge as structured instruction files tha
 
 **Key patterns for effective instruction files:**
 
-1. **Structured instruction files**: Organize platform knowledge into domain-specific instruction files (WET-BOEW, accessibility, bilingual, security, etc.) that live in `.github/instructions/`
+1. **Structured instruction files**: Organize platform knowledge into domain-specific instruction files (WET-BOEW, accessibility, bilingual, security, etc.) in a shared team repository
 2. **Context-aware loading**: Use YAML frontmatter (`applyTo: "**/*.html"`) to automatically load relevant instructions when developers work with specific file types
 3. **Safety guardrails**: Explicitly categorize operations as "always confirm," "confirm in production," or "safe to run"
 4. **Automated compliance documentation**: Scan code annotations (like `/// ITSG-33: AC-2`) to generate security documentation automatically
@@ -556,31 +556,83 @@ For Canadian government development, adapt these patterns by encoding WET-BOEW c
 
 Now let's bring this home. What would this instruction file structure look like adapted for Canadian government development?
 
-### Proposed File Structure
+The key is creating a **shared team-level instruction repository** that encodes Government of Canada standards, patterns, and compliance requirements. This repository becomes your team's knowledge base for building compliant government applications.
+
+### Shared Instruction Repository Structure
 
 ```
-.github/
-├── copilot-instructions.md              # Project context
-├── instructions/
-│   ├── wet-boew.instructions.md         # WET-BOEW component patterns
-│   ├── gc-design-system.instructions.md # GC Design System utilities and templates
-│   ├── accessibility.instructions.md    # WCAG 2.1 AA compliance patterns
-│   ├── bilingual.instructions.md        # Official Languages Act compliance
-│   ├── api.instructions.md              # Standards on APIs compliance
-│   └── security-protected-b.instructions.md  # Protected B handling
-├── agents/
-│   └── security-controls.agent.md       # Security controls documentation generation
-└── skills/
-    └── wet-boew-troubleshoot.md         # Common WET-BOEW debugging workflows
+gc-instructions/
+├── README.md                             # How to use this repository
+├── copilot-instructions.md              # Generic GC project template
+├── AGENTS.md                             # Safety guardrails for AI assistants
+└── instructions/
+    ├── wet-boew/
+    │   ├── base-template.instructions.md
+    │   ├── forms.instructions.md
+    │   ├── alerts.instructions.md
+    │   ├── tables.instructions.md
+    │   └── bilingual.instructions.md
+    ├── security/
+    │   ├── protected-b.instructions.md
+    │   ├── logging.instructions.md
+    │   └── session-management.instructions.md
+    ├── accessibility/
+    │   ├── wcag-checklist.instructions.md
+    │   └── testing.instructions.md
+    ├── gc-design-system/
+    │   ├── utilities.instructions.md
+    │   └── page-templates.instructions.md
+    ├── api/
+    │   └── standards.instructions.md
+    └── agents/
+        └── security-controls.agent.md
 ```
+
+**Note on repository structure**: This example shows a standalone repository named `gc-instructions/`. The directory name and location can be adapted for your environment—Azure DevOps users might place this in a shared team repository, GitHub users might use `.github/instructions/`, GitLab users might use a different convention. The important part is the organized structure by domain (WET-BOEW, security, accessibility, etc.), not where it lives.
+
+This becomes your team's shared knowledge base that multiple projects reference. Individual projects can then add their own project-specific `copilot-instructions.md` file that references this shared repository for local context.
 
 Let's walk through what each of these files would contain, with concrete examples.
 
-### 1. Repository-Level Context: copilot-instructions.md
+### 1. Safety Guardrails: AGENTS.md
 
-This file provides the high-level context for the entire project.
+This file defines safety guardrails for AI assistants—operations that should always require confirmation, operations that need confirmation in production environments, and operations that are safe to run automatically.
 
-**Example snippet** (from `.github/copilot-instructions.md`):
+**Example snippet** (from `AGENTS.md`):
+
+```markdown
+# Safety Guardrails for AI Assistants
+
+## Always Confirm Before Running
+
+These operations can cause data loss or system damage:
+- `dotnet ef database drop` - Drops database (permanent data loss)
+- `git push --force` - Overwrites remote history
+- `rm -rf` - Recursive file deletion
+- `az group delete` - Deletes entire Azure resource group
+
+## Confirm in Production Environments
+
+These operations are safe in development but require approval in production:
+- `dotnet ef database update` - Runs database migrations
+- `git push origin main` - Pushes to main branch (may trigger CI/CD)
+- `az webapp deploy` - Deploys application to Azure App Service
+
+## Safe to Run Automatically
+
+These read-only or development operations are safe:
+- `git status` - Show repository status
+- `dotnet test` - Run tests
+- `az webapp log tail` - View application logs
+```
+
+This prevents AI assistants from running destructive operations without explicit user approval, while allowing safe operations to proceed automatically.
+
+### 2. Generic Project Template: copilot-instructions.md
+
+This file provides a template for project-specific context. Individual projects copy and customize this template to describe their specific application.
+
+**Example snippet** (from `copilot-instructions.md`):
 
 ```markdown
 # Government of Canada Web Application
@@ -600,11 +652,11 @@ This application serves Canadian citizens via the Canada.ca domain.
 
 This gives the AI assistant the fundamental context: what kind of project this is, what standards apply, and what constraints must be respected.
 
-### 2. WET-BOEW Instructions
+### 3. WET-BOEW Instructions
 
-This file tells the AI assistant how to use WET-BOEW components correctly.
+These files tell the AI assistant how to use WET-BOEW components correctly.
 
-**Example snippet** (from `.github/instructions/wet-boew.instructions.md`):
+**Example snippet** (from `instructions/wet-boew/forms.instructions.md`):
 
 ```markdown
 ---
@@ -624,13 +676,13 @@ Every HTML page must use this structure...
 
 **Full file**: See [wet-boew.instructions.md](/gc-ai-instructions/.github/instructions/wet-boew.instructions.md)
 
-This instruction file gives the AI assistant concrete, copy-paste-ready examples of how to use WET-BOEW correctly. The `applyTo` frontmatter means these instructions load automatically whenever the developer is editing HTML or template files.
+These instruction files give the AI assistant concrete, copy-paste-ready examples of how to use WET-BOEW correctly. The `applyTo` frontmatter means these instructions load automatically whenever the developer is editing HTML or template files.
 
-### 3. API Standards Instructions
+### 4. API Standards Instructions
 
 When building Government of Canada applications with backend APIs, the Standards on APIs provide the technical requirements for API design.
 
-**Example snippet** (from `.github/instructions/api.instructions.md`):
+**Example snippet** (from `instructions/api/standards.instructions.md`):
 
 ```markdown
 ---
@@ -662,11 +714,11 @@ All Government of Canada APIs must comply with the **[Standards on APIs](https:/
 
 This instruction file ensures that when developers build backend APIs for their GC applications (ASP.NET Core controllers, Express.js routes, etc.), the AI assistant automatically generates code that complies with the Standards on APIs. The `applyTo` frontmatter means these instructions load when working with API controllers or API client code.
 
-### 4. Security Instructions for Protected B
+### 5. Security Instructions for Protected B
 
 This is where Canadian-specific compliance gets encoded.
 
-**Example snippet** (from `.github/instructions/security-protected-b.instructions.md`):
+**Example snippet** (from `instructions/security/protected-b.instructions.md`):
 
 ```markdown
 ---
@@ -696,11 +748,11 @@ Information that could cause serious injury to individuals or organizations if c
 
 This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required. The patterns follow [Canadian Centre for Cyber Security (CCCS) guidance](https://www.cyber.gc.ca/en/guidance) on cryptography (CMVP-validated encryption modules) and access controls (ITSG-33 security controls).
 
-### 5. The Security Controls Documentation Agent
+### 6. The Security Controls Documentation Agent
 
 This is where automation gets powerful. Here's a Canadian-focused approach to automated security documentation:
 
-**Example snippet** (from `.github/agents/security-controls.agent.md`):
+**Example snippet** (from `instructions/agents/security-controls.agent.md`):
 
 ```markdown
 # Security Controls Documentation Agent
@@ -811,249 +863,9 @@ But the benefits aren't just financial:
 - **Happier clients**: Faster delivery, fewer rework cycles, better documentation
 - **Happier developers**: Less time reading docs, more time building features, clearer guidance on "the right way"
 
-## Practical Steps: What You Can Do Today
-
-This all sounds great in theory. But how do you actually start using these patterns on your next Government of Canada project?
-
-### For Individual Developers/Contractors
-
-If you're a developer or contractor working on a GC project, here's how to get started:
-
-#### Step 1: Create Repository Instructions (10 minutes)
-
-Create `.github/copilot-instructions.md` in your project repository:
-
-```markdown
-# [Your Project Name] - Government of Canada
-
-This is a Protected B web application for [Department Name].
-
-## Framework & Standards
-- WET-BOEW 4.0.x with Canada.ca theme
-- WCAG 2.1 AA accessibility compliance (mandatory)
-- Bilingual (English/French) per Official Languages Act
-- GC Design System CSS utilities
-- Protected B data classification
-
-## Key Technologies
-- Frontend: WET-BOEW, vanilla JavaScript
-- Backend: [Your stack: ASP.NET Core, Node.js, etc.]
-- Database: [MS SQL Server, Oracle, etc.]
-
-## Important Notes
-- All user-facing text must be bilingual
-- No PII in application logs (see src/Logging/AuditLogger.cs for patterns)
-- 15-minute session timeout for Protected B compliance
-- Security review checkpoints throughout development
-
-## Before Committing
-- Run accessibility tests: npm run test:a11y
-- Verify bilingual content (EN + FR)
-- Check for PII in logs: npm run test:pii-detection
-```
-
-This gives your AI assistant immediate project context.
-
-#### Step 2: Create Domain Instruction Files (30-60 minutes)
-
-Create `.github/instructions/` directory with key instruction files. Start with the most impactful ones:
-
-**WET-BOEW basics** (`wet-boew.instructions.md`):
-- Copy the WET-BOEW template structure from earlier in this post
-- Add the 3-5 components you use most (forms, alerts, tables, tabs)
-- Include bilingual patterns for your specific content
-- Add `applyTo: "**/*.html,**/*.cshtml"` frontmatter
-
-**Security for Protected B** (`security-protected-b.instructions.md`):
-- Copy the logging patterns (no PII in logs)
-- Include your session configuration
-- Add your specific encryption patterns if applicable
-- Add `applyTo: "src/**/*.cs,src/**/*.js"` frontmatter
-
-**Accessibility checklist** (`accessibility.instructions.md`):
-- List your most common WCAG 2.1 AA patterns
-- Include keyboard navigation requirements
-- Add color contrast standards
-- Add `applyTo: "**/*.html,**/*.css"` frontmatter
-
-**Departmental coding standards** (`database.instructions.md`):
-- **This is the key one!** Dig up those buried SQL standards and encode them as instruction files
-- Include database naming conventions, query patterns, ORM usage rules
-- Make them findable and enforceable
-- Add `applyTo: "**/*.sql,**/Models/**,**/Repositories/**"` frontmatter
-
-**Example snippet** (from `.github/instructions/database.instructions.md`):
-
-```markdown
----
-applyTo: "**/*.sql,**/models/**,**/repositories/**,**/migrations/**"
----
-
-# Department Database Standards
-
-These standards were established by the DBA team and are enforced in code reviews.
-
-## Database Platform
-
-**Primary database**: MS SQL Server 2019 (on-premises) / Azure SQL Database (cloud)
-**Legacy systems**: Oracle 12c (being migrated to SQL Server)
-
-Entity Framework Core supports both platforms via provider packages:
-- SQL Server: `Microsoft.EntityFrameworkCore.SqlServer`
-- Oracle: `Oracle.EntityFrameworkCore`
-
-[Connection configuration, EF Core Usage, Naming Conventions, Query Requirements, Migrations, Performance Guidelines, and Code Review Checklist sections...]
-```
-
-**Full file**: See [database.instructions.md](/gc-ai-instructions/.github/instructions/database.instructions.md)
-
-**Why this works**:
-- ✅ **Findable**: In the repository, not buried in SharePoint
-- ✅ **Current**: Shows deprecated rules (~~tbl_ prefix~~), approved tools (EF Core OK as of 2023)
-- ✅ **Clear**: Explicit about what's mandatory (parameterization) vs. guideline (naming)
-- ✅ **Enforced**: Code review checklist included
-- ✅ **Machine-readable**: AI assistant automatically applies these patterns when you work with database code
-
-Now when AI assistants generate database code, they'll:
-- Use EF Core (approved tool)
-- Follow department naming conventions
-- Use parameterized queries
-- Include proper navigation properties
-- Generate code that passes review the first time
-
-#### Step 3: Add Safety Guardrails (15 minutes)
-
-Create `.github/AGENTS.md`:
-
-```markdown
-# Safety Guardrails
-
-## Always Confirm Before Running
-
-- `aws s3 rm --recursive` - Deletes S3 bucket contents (data loss)
-- `az group delete` - Deletes entire Azure resource group (data loss)
-- `dotnet ef database drop` - Drops database (permanent data loss)
-- `git push --force` - Overwrites remote history
-- `rm -rf` - Recursive file deletion
-
-## Confirm in Production
-
-- `dotnet publish` - Builds for production deployment
-- `az webapp deploy` - Deploys application to Azure App Service
-- `aws lambda update-function-code` - Updates AWS Lambda function
-- `git push origin main` - Pushes to main branch (triggers CI/CD)
-- `dotnet ef database update` - Runs database migrations (may affect production data)
-
-## Safe to Run
-
-- `az webapp log tail` - View logs (Azure)
-- `aws cloudwatch tail` - View logs (AWS)
-- `git status` - Show repository status
-- `dotnet test` - Run tests
-- `az resource list` - List Azure resources
-```
-
-#### Step 4: Test with Your AI Assistant
-
-Now ask your AI assistant to generate code:
-
-- "Create a contact form page using WET-BOEW"
-- "Add logging for user registration without including PII"
-- "Generate an accessible data table showing application status"
-
-Watch how the AI assistant incorporates the patterns from your instruction files.
-
-#### Step 5: Iterate and Improve
-
-As you work, add more patterns to your instruction files:
-- Component patterns you use frequently
-- Bilingual text examples for your domain
-- Security patterns specific to your application
-- Troubleshooting steps for common issues
-
-Total time investment: **1-2 hours**
-Payoff: Weeks of time saved over the project lifecycle
-
-### For Project Teams
-
-If you're a team lead or senior developer, here's how to scale this across your team:
-
-#### Step 1: Create Shared Instruction Repository (2-4 hours)
-
-Create a team-level instruction repository that all projects can use:
-
-```
-gc-instructions/
-├── README.md
-├── wet-boew/
-│   ├── base-template.instructions.md
-│   ├── forms.instructions.md
-│   ├── alerts.instructions.md
-│   ├── tables.instructions.md
-│   └── bilingual.instructions.md
-├── security/
-│   ├── protected-b.instructions.md
-│   ├── logging.instructions.md
-│   └── session-management.instructions.md
-├── accessibility/
-│   ├── wcag-checklist.instructions.md
-│   └── testing.instructions.md
-├── gc-design-system/
-│   ├── utilities.instructions.md
-│   └── page-templates.instructions.md
-├── api/
-│   └── standards.instructions.md
-└── agents/
-    └── security-controls.agent.md
-```
-
-This becomes your team's shared knowledge base for building compliant government applications.
-
-#### Step 2: Adopt in New Projects (30 minutes per project)
-
-For each new GC project:
-
-1. Fork or copy the `gc-instructions` repository
-2. Customize for project-specific context (department, classification level, tech stack)
-3. Add project-specific patterns as they emerge
-4. Contribute general patterns back to the shared repository
-
-#### Step 3: Training and Onboarding (1 hour per developer)
-
-When new contractors join:
-
-1. Show them the instruction files: "This is how we encode GC compliance patterns"
-2. Demonstrate AI assistant usage: "Watch how it generates WET-BOEW components automatically"
-3. Explain the safety guardrails: "Always confirm destructive operations"
-4. Review the security documentation workflow: "Annotate your code with ITSG-33 control references for security reviews"
-
-New contractors are productive immediately because the AI assistant guides them.
-
-#### Step 4: Code Review Standards
-
-Update your code review checklist:
-
-- ✅ Uses WET-BOEW components (not custom implementations)
-- ✅ Includes bilingual content (EN + FR)
-- ✅ No PII in logs
-- ✅ Security control annotations in code
-- ✅ Follows GC Design System patterns
-
-The AI-generated code should already meet most criteria, making reviews faster.
-
-#### Step 5: Iterate as a Team
-
-Hold a monthly retrospective:
-- What patterns did we learn this month?
-- What should we add to instruction files?
-- What WCAG issues came up in accessibility reviews?
-- What security patterns are we using repeatedly?
-
-Continuously improve your instruction files based on real project experience.
-
 ## Caveats and Considerations
 
-Before you rush off to implement all of this, let's address some important caveats.
+While the potential benefits of AI-assisted development for government projects are significant, there are important considerations to keep in mind.
 
 ### AI Assistants Are Tools, Not Replacements
 
@@ -1214,21 +1026,25 @@ This isn't science fiction. This pattern is already being used successfully and 
 
 ### The Path Forward
 
-**For individual developers**: Start today. Create `.github/copilot-instructions.md` in your current project. Add basic WET-BOEW patterns. Test with your AI assistant. Iterate. (Time investment: 1-2 hours. Payoff: Weeks saved over the project.)
+The opportunity is clear: Canada's digital government infrastructure—built over 15+ years—provides exactly the structured context that makes AI assistants effective. By encoding this knowledge as machine-readable instruction files, we can transform how government applications are built.
 
-**For project teams**: Create shared instruction repositories. Build your team's GC compliance knowledge base. Train team members on AI-assisted development. Contribute patterns back to the community. (Time investment: 2-4 hours initially. Payoff: 20-30% cost reduction across projects.)
+**What this could enable:**
+- **Faster onboarding**: New developers productive from day one with GC-compliant code patterns
+- **Built-in compliance**: Accessibility, security, and bilingual requirements encoded from the start
+- **Knowledge preservation**: Institutional knowledge captured in version-controlled files, not buried in SharePoint
+- **Consistent quality**: Standard patterns applied automatically across teams and projects
+
+**Key components of this approach:**
+- **Shared instruction repositories**: Team-level knowledge bases encoding WET-BOEW patterns, accessibility requirements, security controls, and bilingual conventions
+- **Safety guardrails**: Clear rules about what AI assistants can do automatically versus what requires human approval
+- **Security documentation**: Automated generation of compliance documentation from code annotations
+- **Platform knowledge**: Government standards (design.canada.ca, digital.canada.ca, TERMIUM Plus, CCCS) encoded as reusable patterns
 
 ### Final Thought
 
 The future of government software development isn't about AI replacing developers—it's about developers and AI working together within well-designed, standards-based platforms.
 
-Canada already has those platforms. We built them over 15 years, one component at a time, one standard at a time. Now we just need to make them AI-friendly by adding machine-readable instruction files.
-
-That's not a radical transformation. It's a natural evolution that makes your job easier.
-
-Start with a simple `.github/copilot-instructions.md` file in your next GC project. Add a few WET-BOEW patterns. Watch how much faster you can build compliant government applications.
-
-Let's get to work.
+Canada already has those platforms. We built them over 15 years, one component at a time, one standard at a time. The next step is making this knowledge machine-readable so AI assistants can help developers build compliant government applications faster and with higher quality.
 
 ---
 
