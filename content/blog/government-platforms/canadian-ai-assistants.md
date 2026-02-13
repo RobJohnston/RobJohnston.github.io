@@ -7,6 +7,7 @@ category = "government"
 tags = ["government", "ai", "accessibility", "standards", "web-development", "content-design"]
 image = "/images/canadian-government-platforms.jpg"
 mermaid = true
+toc = true
 +++
 
 Picture this: You just won a contract to build a web application for the Government of Canada. Exciting, right? Then reality hits.
@@ -45,32 +46,13 @@ sequenceDiagram
     Note over Dev,Code: Result: Compliant code from day one,<br/>not after multiple review cycles
 ```
 
-This can be understood as a three-layer abstraction:
+This can be understood as platform knowledge infrastructure:
 
-1. **Cloud infrastructure layer**: The foundational compute, storage, and networking (in Canada, [Shared Services Canada brokers access](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) to commercial cloud providers like AWS, Azure, and Google Cloud)
-2. **Deployment and operations layer**: How applications get deployed, monitored, and maintained
-3. **Platform knowledge layer**: The institutional knowledge about how to build things the "right way"—encoded as AI instruction files
+**Platform knowledge layer**: The institutional knowledge about how to build things the "right way"—encoded as AI instruction files. This includes WET-BOEW components, GC Design System patterns, Content Style Guide conventions, API standards, accessibility requirements, and security patterns for Protected B data.
 
-```mermaid
-graph TB
-    subgraph "Three-Layer Architecture"
-        PK[Platform Knowledge Layer<br/>AI Instruction Files<br/>WET-BOEW, GC Design System,<br/>Content Style Guide, Standards]
-        DO[Deployment & Operations Layer<br/>CI/CD, Monitoring, Maintenance]
-        CI[Cloud Infrastructure Layer<br/>SSC-Brokered Cloud<br/>AWS, Azure, Google Cloud]
-    end
+(The underlying cloud infrastructure and deployment operations are important topics, but they come into play later in the development lifecycle. For now, let's focus on what you need to build compliant government applications.)
 
-    PK --> DO
-    DO --> CI
-
-    DEV[Developer + AI Assistant] --> PK
-
-    style PK fill:#e1f5ff
-    style DO fill:#fff4e1
-    style CI fill:#ffe1e1
-    style DEV fill:#e1ffe1
-```
-
-That third layer is the breakthrough. By encoding platform knowledge as machine-readable instruction files, AI assistants can automatically apply institutional standards and patterns.
+The breakthrough is encoding platform knowledge as machine-readable instruction files that AI assistants can automatically apply.
 
 Here's the insight that changed my perspective: **Canada has been building this ecosystem for over a decade, since WET-BOEW launched in 2010.** We just haven't optimized it for AI consumption yet.
 
@@ -85,13 +67,11 @@ graph TB
         CSG[Content Style Guide<br/>Writing Standards]
         DS[Digital Standards<br/>Design Principles]
         API[Standards on APIs<br/>Technical Specs]
-        GG[GC Cloud Guardrails<br/>Security Baselines]
-        CCCS[CCCS Frameworks<br/>ITSG-33, CMVP]
+        CCCS[CCCS Security Guidance<br/>ITSG-33, CMVP]
     end
 
     subgraph "Platform Providers<br/>(Organizations providing tools & services)"
         CDS[Canadian Digital Service<br/>GC Design System, GC Notify,<br/>GC Forms, GC Sign-in,<br/>GC Issue & Verify, Toolkit]
-        SSC[Shared Services Canada<br/>Cloud Brokering<br/>AWS, Azure, GCP]
         TB[Translation Bureau<br/>TERMIUM Plus<br/>Translation Services]
     end
 
@@ -99,10 +79,8 @@ graph TB
     CSG --> AI
     DS --> AI
     API --> AI
-    GG --> AI
     CCCS --> AI
     CDS --> AI
-    SSC --> AI
     TB --> AI
 
     style AI fill:#90EE90
@@ -110,10 +88,8 @@ graph TB
     style CSG fill:#E8F4F8
     style DS fill:#E8F4F8
     style API fill:#E8F4F8
-    style GG fill:#E8F4F8
     style CCCS fill:#E8F4F8
     style CDS fill:#FFE8E8
-    style SSC fill:#FFE8E8
     style TB fill:#FFE8E8
 ```
 
@@ -173,27 +149,14 @@ The [Standards on APIs](https://www.canada.ca/en/government/system/digital-gover
 
 This is particularly important because many GC web applications have both a frontend (using WET-BOEW) and a backend API (providing data to the frontend or external integrations). The Standards on APIs ensure consistency across all government backend services—making it easier to integrate services, consume open data APIs, and build coherent digital ecosystems.
 
-#### 5. GC Cloud Guardrails
+#### 5. CCCS Security Guidance
 
-[GC Cloud Guardrails](https://canada-ca.github.io/cloud-guardrails/) are mandatory baseline security controls for cloud deployments. Departments must implement these guardrails within 30 business days of getting cloud access. These prescriptive security requirements (available as [open-source on GitHub](https://github.com/canada-ca/cloud-guardrails)) cover:
+The [Canadian Centre for Cyber Security (CCCS)](https://www.cyber.gc.ca/en/government-institutions) provides security frameworks for government IT:
 
-- Identity and access management
-- Network security and segmentation
-- Data protection and encryption
-- Logging and monitoring
-- Incident response procedures
-
-**Why this matters for AI assistants**: These are explicit, documented security controls—perfect candidates for encoding as AI instruction files. Instead of guessing at cloud security requirements, AI assistants can reference the specific guardrails (e.g., "Enable MFA for all accounts" or "Encrypt data at rest using approved algorithms").
-
-#### 6. CCCS Security Frameworks
-
-The [Canadian Centre for Cyber Security (CCCS)](https://www.cyber.gc.ca/en/government-institutions) provides the security frameworks that underpin government IT security:
-
-- **[ITSG-33](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33)**: IT Security Risk Management framework with detailed security controls
-- **[Cloud Security Profile](https://www.cyber.gc.ca/en/guidance/cloud-security-guidance)**: Guidance for assessing cloud service providers
+- **[ITSG-33](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33)**: IT Security Risk Management framework with detailed security controls (e.g., access controls, session management, audit logging)
 - **[Cryptographic Module Validation Program (CMVP)](https://www.cyber.gc.ca/en/cryptographic-module-validation-program)**: Certification for encryption products
 
-**Why this matters for AI assistants**: CCCS guidance provides authoritative security patterns. Instead of developers guessing at encryption requirements, instruction files can encode CCCS-approved approaches (e.g., "Use CMVP-validated encryption for Protected B data" or "Follow ITSG-33 AC-2 access control patterns").
+**Why this matters for AI assistants**: CCCS guidance provides authoritative security patterns for application code. Instead of developers guessing at encryption requirements, instruction files can encode CCCS-approved approaches (e.g., "Use CMVP-validated encryption for Protected B data" or "Follow ITSG-33 AC-2 access control patterns in authentication code").
 
 ### Platform Providers: Organizations Delivering Tools & Services
 
@@ -226,9 +189,7 @@ The [Canadian Digital Service](https://digital.canada.ca/) is an organization wi
 
 #### 2. Shared Services Canada (SSC)
 
-[Shared Services Canada's Cloud Brokering Service](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) (launched 2017) acts as an intermediary between federal departments and commercial cloud providers. Rather than running a single government platform, SSC maintains framework agreements with 8 cloud providers (AWS, Azure, Google Cloud, etc.) and provides standardized procurement, security profiles, and deployment patterns.
-
-**Why this matters for AI-assisted development**: SSC-brokered cloud providers create opportunities for standardized instruction files. Instead of each department creating their own cloud deployment patterns, SSC-published instruction files could provide canonical examples for each approved provider (e.g., "Deploy ASP.NET Core to AWS with Protected B controls following SSC framework agreement"). [AWS is approved for Protected B data](https://aws.amazon.com/blogs/publicsector/aws-now-able-to-host-protected-b-data-for-the-government-of-canada/), and [Microsoft 365 E5 is being standardized](https://www.canada.ca/en/shared-services/corporate/about-us/publications/2025-26/2025-26-departmental-plan.html) across the Government of Canada—both enabling consistent deployment patterns.
+[Shared Services Canada](https://www.canada.ca/en/shared-services.html) manages the cloud infrastructure that government applications are deployed to. For application developers, the more immediate needs are the standards and tools provided by CDS and other platform providers.
 
 #### 3. Translation Bureau
 
@@ -848,7 +809,7 @@ Depending on where you enter, you get a different view:
 **Entry via design.canada.ca:**
 - Focus: Canada.ca website design patterns
 - You learn about: WET-BOEW, Content Style Guide, IA specification
-- You might miss: CDS platform services (GC Notify, GC Forms), Standards on APIs, Cloud Guardrails
+- You might miss: CDS platform services (GC Notify, GC Forms), Standards on APIs, CCCS security guidance
 
 **Entry via digital.canada.ca:**
 - Focus: CDS products and services
@@ -894,7 +855,7 @@ An AI assistant trying to help you build a Government of Canada application face
   - Content Style Guide patterns (found where?)
   - Bilingual requirements (specified where?)
   - Accessibility standards (WCAG 2.1 AA, but which implementation guide?)
-  - Security requirements (Cloud Guardrails? CCCS guidance? Both?)
+  - Security requirements (CCCS guidance? ITSG-33 controls? Protected B patterns?)
 - That's 5+ different documentation sources for a simple form
 
 ### The Real-World Cost
@@ -917,7 +878,7 @@ The Government of Canada has built an impressive digital ecosystem over 15+ year
 - ✅ Accessible component library (WET-BOEW)
 - ✅ Content standards (Content Style Guide)
 - ✅ Design system (GC Design System)
-- ✅ Security frameworks (Cloud Guardrails, CCCS guidance)
+- ✅ Security guidance (CCCS, ITSG-33)
 - ✅ API standards (Standards on APIs)
 - ✅ Platform services (GC Notify, GC Forms, etc.)
 
@@ -1000,11 +961,6 @@ SQL isn't the only example. Common buried standards include:
 - Foreign key naming: `FK_Table1_Table2` or `fk_table1_table2_id` or `table2_id`?
 - Index naming conventions exist but nobody follows them
 
-**Deployment procedures**:
-- A 47-step checklist in a spreadsheet
-- Steps reference tools that were replaced two years ago
-- "Contact John to approve production deployment" (John left in 2022)
-
 **Security review requirements**:
 - Submit threat and risk assessment (TRA) to security team (which form? where?)
 - Include security controls documentation (which template? 2020 version or 2023?)
@@ -1078,21 +1034,14 @@ An AI assistant can technically read the WET-BOEW documentation on GitHub or the
 
 The solution is to encode platform knowledge as structured instruction files that AI assistants can load automatically. An open-source template for this approach is available (MIT licensed, at [github.com/adhocteam/cloud.gov-instructions](https://github.com/adhocteam/cloud.gov-instructions)) and can be adapted for Canadian government development.
 
-**The Canadian Cloud Model:**
-
-Canada's approach through Shared Services Canada provides brokered access to multiple commercial cloud providers (AWS, Azure, Google Cloud) rather than a single unified platform. This makes instruction files **particularly valuable**—departments need clear patterns for each SSC-approved provider.
-
 **Key patterns for effective instruction files:**
 
-1. **Structured instruction files**: Organize platform knowledge into domain-specific instruction files (deployment, security, logging, etc.) that live in `.github/instructions/`
+1. **Structured instruction files**: Organize platform knowledge into domain-specific instruction files (WET-BOEW, accessibility, bilingual, security, etc.) that live in `.github/instructions/`
+2. **Context-aware loading**: Use YAML frontmatter (`applyTo: "**/*.html"`) to automatically load relevant instructions when developers work with specific file types
+3. **Safety guardrails**: Explicitly categorize operations as "always confirm," "confirm in production," or "safe to run"
+4. **Automated compliance documentation**: Scan code annotations (like `/// ITSG-33: AC-2`) to generate security documentation automatically
 
-2. **Context-aware loading**: Use YAML frontmatter (`applyTo: "**/*.yml"`) to automatically load relevant instructions when developers work with specific file types
-
-3. **Safety guardrails**: Explicitly categorize operations as "always confirm," "confirm in production," or "safe to run" so AI assistants know when to ask before executing destructive commands
-
-4. **Automated compliance documentation**: Scan code annotations (like `/// ITSG-33: AC-2`) to generate security documentation automatically, reducing manual compliance burden
-
-For Canadian government development, adapt these patterns by using SSC-brokered cloud providers (AWS, Azure), applying TBS IT Security Framework controls (ITSG-33), and encoding WET-BOEW/GC Design System patterns. The structure and approach remain the same.
+For Canadian government development, adapt these patterns by encoding WET-BOEW component patterns, GC Design System utilities, Content Style Guide conventions, Standards on APIs requirements, and Protected B security controls.
 
 ## The Canadian Adaptation
 
@@ -1102,23 +1051,19 @@ Now let's bring this home. What would this instruction file structure look like 
 
 ```
 .github/
-├── copilot-instructions.md              # Project context (SSC provider, classification)
+├── copilot-instructions.md              # Project context
 ├── instructions/
 │   ├── wet-boew.instructions.md         # WET-BOEW component patterns
 │   ├── gc-design-system.instructions.md # GC Design System utilities and templates
 │   ├── accessibility.instructions.md    # WCAG 2.1 AA compliance patterns
 │   ├── bilingual.instructions.md        # Official Languages Act compliance
 │   ├── api.instructions.md              # Standards on APIs compliance
-│   ├── security-protected-b.instructions.md  # Protected B handling
-│   ├── aws-deployment.instructions.md   # AWS deployment patterns (if using AWS)
-│   └── azure-deployment.instructions.md # Azure deployment patterns (if using Azure)
+│   └── security-protected-b.instructions.md  # Protected B handling
 ├── agents/
 │   └── security-controls.agent.md       # Security controls documentation generation
 └── skills/
     └── wet-boew-troubleshoot.md         # Common WET-BOEW debugging workflows
 ```
-
-**Note**: The cloud provider instruction files (AWS, Azure) would be specific to which SSC-brokered service your department uses. SSC could publish canonical versions for each approved provider.
 
 Let's walk through what each of these files would contain, with concrete examples.
 
@@ -1131,11 +1076,10 @@ This file provides the high-level context for the entire project.
 ```markdown
 # Government of Canada Web Application
 
-This application is deployed via SSC Cloud Brokering Service and serves Canadian citizens via the Canada.ca domain.
+This application serves Canadian citizens via the Canada.ca domain.
 
 ## Classification
 - **Security**: Protected B
-- **Deployment environment**: AWS GovCloud (SSC-brokered)
 - **Accessibility standard**: WCAG 2.1 AA (mandatory)
 - **Language requirements**: Bilingual (English/French) per Official Languages Act
 - **Framework**: WET-BOEW 4.0.x with Canada.ca theme
@@ -1241,7 +1185,7 @@ Information that could cause serious injury to individuals or organizations if c
 
 **Full file**: See [security-protected-b.instructions.md](/gc-ai-instructions/.github/instructions/security-protected-b.instructions.md)
 
-This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required. The patterns follow [Canadian Centre for Cyber Security (CCCS) guidance](https://www.cyber.gc.ca/en/guidance) on cryptography (CMVP-validated encryption modules), access controls (ITSG-33 controls), and secure cloud deployments (Cloud Security Profile requirements for Protected B data).
+This instruction file provides concrete security patterns that the AI assistant can reference when generating code. Every code example includes GC security references, making it easy for developers to understand *why* each pattern is required. The patterns follow [Canadian Centre for Cyber Security (CCCS) guidance](https://www.cyber.gc.ca/en/guidance) on cryptography (CMVP-validated encryption modules) and access controls (ITSG-33 security controls).
 
 ### 5. The Security Controls Documentation Agent
 
@@ -1253,12 +1197,11 @@ This is where automation gets powerful. Here's a Canadian-focused approach to au
 # Security Controls Documentation Agent
 
 ## Purpose
-Generate security controls documentation by scanning the codebase for security implementation patterns. Supports Threat and Risk Assessments (TRA), security architecture reviews, and ITSG-33 compliance documentation.
+Generate security controls documentation by scanning the codebase for security implementation patterns. Supports security reviews and ITSG-33 compliance documentation.
 
 ## Supported Frameworks
 - **ITSG-33**: IT Security Risk Management framework controls
-- **TBS Security Policy**: Treasury Board of Canada Secretariat security requirements
-- **CCCS Cloud Security Profile**: Canadian Centre for Cyber Security cloud-specific controls
+- **TBS Security Policy**: Treasury Board of Canada Secretariat security requirements for application code
 
 ## How It Works
 
@@ -1271,7 +1214,7 @@ Add security control references in XML documentation comments...
 
 **Full file**: See [security-controls.agent.md](/gc-ai-instructions/.github/agents/security-controls.agent.md)
 
-This agent reduces the security documentation burden for government projects. Instead of manually writing security implementation descriptions, developers annotate their code and the AI assistant generates documentation automatically. This documentation supports Threat and Risk Assessments (TRA), security reviews, and any formal security assessment processes your department uses.
+This agent reduces the security documentation burden for government projects. Instead of manually writing security implementation descriptions, developers annotate their code and the AI assistant generates documentation automatically. This documentation supports security reviews and any formal security assessment processes your department uses.
 
 ## Real-World Benefits for Government Contractors
 
@@ -1315,15 +1258,17 @@ Let's get practical. What does all this actually mean for someone bidding on or 
 
 **Time saved**: 1.5 hours/day of senior developer time. Over a 120-day project, that's 180 hours = 22.5 days. At $1,200/day, that's $27,000 saved (plus improved senior developer utilization).
 
-### Benefit #5: Reduced Security Documentation Burden
+### Benefit #5: Security Guidance Built Into Development
 
-**The old way**: Security review is coming up. Team spends 2 weeks creating security documentation, mapping code to ITSG-33 controls, generating evidence, writing implementation descriptions for the TRA. Much of this is tedious copying from code comments into Word documents.
+**The old way**: Developer builds a feature, then realizes they need to handle Protected B data securely. Spends time searching ITSG-33 controls, CCCS guidance, figuring out encryption requirements, session timeouts, logging restrictions. Code gets flagged in security review for missing controls.
 
-**With the security controls agent**: Run `@security-controls scan`. Agent generates 70% of the security documentation automatically by reading code annotations. Team spends 3 days reviewing and adding manual sections (physical security, organizational policies, etc.) instead of 2 weeks creating from scratch.
+**With AI-friendly instructions**: AI assistant generates code with Protected B security patterns built-in from the start. Suggests parameterized queries automatically (SQL injection prevention). Includes structured logging that excludes PII. Applies appropriate session timeouts. References ITSG-33 controls in code annotations.
 
-**Time saved**: 7 days of team effort. On a 3-person team at $800/day, that's $16,800 saved.
+**Result**: Code passes security review with minimal rework. Security controls are documented as you build, not after the fact.
 
-**Better outcome**: Documentation stays in sync with code because it's generated from code, not manually written. Security reviews go faster because evidence trails are clear, and you have documentation ready for TRA or whatever security assessment process your department uses.
+**Time saved**: 1-2 days per security review cycle. On a project with 3 security checkpoints, that's 3-6 days saved. At $800/day, that's $2,400-$4,800.
+
+**Better outcome**: Security is proactive, not reactive. You're building compliant code from day one.
 
 ### Benefit #6: Consistent Code Quality
 
@@ -1345,7 +1290,7 @@ Let's add it up for a typical 6-month Government of Canada web application proje
 | Automatic compliance | 40-60 days | $32,000-$48,000 |
 | Faster iteration | 10 days | $7,500 |
 | Knowledge distribution | 22.5 days | $27,000 (senior dev time) |
-| Reduced security documentation | 7 days | $16,800 |
+| Security guidance built-in | 3-6 days | $2,400-$4,800 |
 | Consistent code quality | 19 days | $15,200 |
 | **Total** | **113-144 days** | **$110,500-$134,500** |
 
@@ -1372,7 +1317,7 @@ Create `.github/copilot-instructions.md` in your project repository:
 ```markdown
 # [Your Project Name] - Government of Canada
 
-This is a Protected B web application for [Department Name], deployed via SSC Cloud Brokering Service to AWS.
+This is a Protected B web application for [Department Name].
 
 ## Framework & Standards
 - WET-BOEW 4.0.x with Canada.ca theme
@@ -1385,13 +1330,12 @@ This is a Protected B web application for [Department Name], deployed via SSC Cl
 - Frontend: WET-BOEW, vanilla JavaScript
 - Backend: [Your stack: ASP.NET Core, Node.js, etc.]
 - Database: [MS SQL Server, Oracle, etc.]
-- Deployment: AWS (SSC-brokered) or Azure Government
 
 ## Important Notes
 - All user-facing text must be bilingual
 - No PII in application logs (see src/Logging/AuditLogger.cs for patterns)
 - 15-minute session timeout for Protected B compliance
-- Security review and TRA required before production deployment
+- Security review checkpoints throughout development
 
 ## Before Committing
 - Run accessibility tests: npm run test:a11y
@@ -1548,14 +1492,13 @@ gc-instructions/
 ├── gc-design-system/
 │   ├── utilities.instructions.md
 │   └── page-templates.instructions.md
-├── cloud/
-│   ├── aws-protected-b.instructions.md     # AWS deployment for Protected B (if team uses AWS)
-│   └── azure-protected-b.instructions.md   # Azure deployment for Protected B (if team uses Azure)
+├── api/
+│   └── standards.instructions.md
 └── agents/
     └── security-controls.agent.md
 ```
 
-This becomes your team's shared knowledge base. The `cloud/` directory contains provider-specific instructions based on which SSC-brokered service your team uses.
+This becomes your team's shared knowledge base for building compliant government applications.
 
 #### Step 2: Adopt in New Projects (30 minutes per project)
 
@@ -1673,14 +1616,12 @@ If you're maintaining team or department-level instruction files, assign someone
 
 ### Government-Specific Challenges
 
-There are real constraints in government that affect AI assistant usage:
+**Security classification**: Many AI coding assistants are cloud-based (GitHub Copilot, ChatGPT, Claude). If you're working with **Protected B or higher data**, you may not be able to use these tools without violating security policy.
 
-**Security classification**: Many AI coding assistants are cloud-based (GitHub Copilot, ChatGPT, Claude). If you're working with **Protected B or higher data**, you may not be able to use these tools at all without violating security policy.
-
-**Options for Protected environments**:
-- Use AI assistants that run locally (like locally-hosted code models)
+**Options**:
 - Use cloud-based assistants in development environment with synthetic data (never paste real PII)
-- Wait for government-approved AI tools (currently in procurement at SSC)
+- Use AI assistants that run locally
+- Check with your department's IT security team about approved tools
 
 **Tool approval**: Not all AI coding assistants are on approved software lists. Check with your department's IT security team before using any AI tool.
 
@@ -1701,6 +1642,22 @@ Using AI assistants in government software development raises ethical questions:
 
 Per Digital Standard #9 (Design Ethical Services), these considerations should be part of your project planning.
 
+## What About Infrastructure and Deployment?
+
+You might be wondering: "What about deploying these applications? What about cloud infrastructure, CI/CD pipelines, monitoring?"
+
+Those are important topics! But they typically come into play later in the development lifecycle, often handled by operations teams or during final deployment phases.
+
+For contractors focused on application development, the immediate needs are:
+- Building accessible, bilingual interfaces (WET-BOEW, GC Design System)
+- Writing compliant content (Content Style Guide)
+- Creating secure APIs (Standards on APIs)
+- Handling Protected B data correctly in code (CCCS guidance, ITSG-33 controls)
+
+Infrastructure and deployment patterns (cloud providers, CI/CD, monitoring, security infrastructure) are worthy of a separate discussion—perhaps a follow-up post for those interested in the full stack from development to production.
+
+For now, let's focus on what you need to build great government applications.
+
 ## Conclusion: Canada Is Ahead of the Curve (We Just Need to Realize It)
 
 Here's the key insight: **Canada didn't build its digital government infrastructure for AI assistants—but it turns out this is exactly what AI assistants need to excel.**
@@ -1713,8 +1670,7 @@ For over 15 years, the Government of Canada has been building a two-layer ecosys
 ✅ **Canada.ca Content Style Guide**: Bounded vocabulary for plain language, citizen-centered content
 ✅ **Digital Standards**: Explicit guardrails for ethical, accessible, secure service design
 ✅ **Standards on APIs**: Technical specifications for consistent API design
-✅ **GC Cloud Guardrails**: Mandatory security baselines for cloud deployments
-✅ **CCCS Security Frameworks**: Authoritative guidance (ITSG-33, CMVP, Cloud Security Profile)
+✅ **CCCS Security Guidance**: Authoritative patterns for secure code (ITSG-33, CMVP)
 
 ### Platform Providers Layer
 
@@ -1726,8 +1682,6 @@ For over 15 years, the Government of Canada has been building a two-layer ecosys
   - **GC Issue and Verify**: Digital credentials service
   - **Service Digital Toolkit**: Practical guidance for implementing Digital Standards
 
-✅ **Shared Services Canada (SSC)**: Cloud brokering with framework agreements for AWS, Azure, Google Cloud
-
 ✅ **Translation Bureau**: TERMIUM Plus® official terminology database and GCtranslate AI-powered translation
 
 Other countries are scrambling to figure out how to make AI coding assistants work in government. Canada already has the pieces—we just need to make them machine-readable.
@@ -1738,7 +1692,7 @@ By adding **machine-readable instruction files** to Canada's mature digital ecos
 
 Imagine:
 - Onboarding to new GC projects in hours instead of weeks
-- Security documentation generating automatically from code annotations, supporting TRA and security reviews
+- Security patterns built into code from day one, not added during security reviews
 - Accessibility compliance is the default, not a struggle
 - Getting GC-standards guidance from AI assistants as you code
 - Delivering Canada.ca services faster with higher quality
