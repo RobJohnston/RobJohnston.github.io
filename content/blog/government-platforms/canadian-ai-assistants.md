@@ -203,7 +203,7 @@ While standards define *what* to build, platform providers deliver reusable tool
 
 The [Canadian Digital Service](https://digital.canada.ca/) is an organization within the Treasury Board of Canada Secretariat that builds and operates modern digital tools for government. CDS plays a central role in Canada's digital ecosystem, providing reusable services that help departments deliver better citizen experiences.
 
-**GC Design System**: The [GC Design System](https://design-system.alpha.canada.ca/) is CDS's design language for government services. It provides:
+**GC Design System**: The [GC Design System](https://design-system.canada.ca/) is CDS's design language for government services. It provides:
 - **Pre-built page templates**: Landing pages, service initiation flows, confirmation pages—all following Canada.ca patterns
 - **Design tokens**: Standardized colors, spacing, typography (not arbitrary values)
 - **Component library**: Breadcrumbs, buttons, cards, forms, navigation—all consistent with the broader Canada.ca experience
@@ -769,9 +769,181 @@ An AI assistant with Standard #9 context will question data collection requireme
 
 This is the AI assistant acting as a guardrail—not just implementing what you asked, but questioning whether it aligns with ethical service design.
 
+## The Discoverability Problem: Even Official Standards Are Hard to Find
+
+Before we talk about buried departmental standards, let's address an uncomfortable truth: **Even the official Government of Canada digital standards are scattered, overlapping, and confusing to navigate.**
+
+Picture this scenario: You just won a contract to build a Government of Canada web application. You want to "do things the right way" and follow official standards. So you start searching.
+
+You find:
+- **https://design.canada.ca/** - "Canada.ca design system"
+- **https://digital.canada.ca/** - "Canadian Digital Service"
+- **https://design-system.canada.ca/** - "GC Design System"
+- **https://wet-boew.github.io/** - "Web Experience Toolkit"
+- **https://design.gccollab.ca/** - "GCcollab Design System"
+
+You open several tabs. You start reading. Questions immediately arise:
+
+### Which Design System Do I Use?
+
+**design.canada.ca** appears to be comprehensive. It includes:
+- Canada.ca Content Style Guide
+- Canada.ca design patterns
+- WET-BOEW templates and components
+- Content and Information Architecture Specification
+- Accessibility guidance
+- Template and design patterns
+
+This looks like the official source. But then you notice **design-system.canada.ca** from the Canadian Digital Service (CDS). It has:
+- A different design token system
+- Different CSS utility classes
+- Different component library
+- Different page templates
+
+**Which one do you use?** Are they compatible? Complementary? Competing?
+
+You ask your tech lead. They're not sure either: "I think design.canada.ca is for the Canada.ca website itself, and the CDS design system is for... other services? Or maybe the CDS one is the new direction? Just use WET-BOEW to be safe."
+
+### The WET-BOEW vs. Design System Confusion
+
+So you focus on WET-BOEW. That's clear, right? It's the standard toolkit since 2010.
+
+But then you notice:
+- **design.canada.ca** hosts WET-BOEW templates and examples
+- **wet-boew.github.io** is the original WET-BOEW documentation
+- Some examples on design.canada.ca look different from wet-boew.github.io examples
+
+Are they the same? Different versions? Which documentation is authoritative?
+
+You check the WET-BOEW GitHub repository. Last stable release: v4.0.87 (June 2024). But the design.canada.ca templates reference "WET-BOEW 4.0.x with Canada.ca theme." Is the Canada.ca theme a separate thing? Where's that documented?
+
+### The GCcollab Design System Nobody Mentions
+
+Then there's **design.gccollab.ca** - a completely separate design system for GCcollab and GCconnex (internal Government of Canada collaboration platforms).
+
+This uses different components, different styling, different patterns. It's not compatible with WET-BOEW or the CDS design system.
+
+**But nobody mentioned this existed.** You only found it because you were doing a comprehensive search. How many contractors have accidentally tried to use GCcollab patterns for Canada.ca sites, or vice versa?
+
+### Scattered API Guidance
+
+You need to build backend APIs for your application. Time to find the API standards.
+
+You search "government of canada api standards" and find:
+- **https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/government-canada-standards-apis.html** - "Standards on APIs" (the official standard)
+- **https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/enabling-interoperability/api-guidance.html** - "API Guidance" (guidance for implementing the standard?)
+- **https://api.canada.ca/** - "Government of Canada API Store" (where you publish APIs)
+- Various department-specific API documentation scattered across different sites
+
+Are these all the same thing? The first two URLs are both under "digital-government-innovations" - why are they separate pages? Does "API Guidance" supplement "Standards on APIs"? Do they contradict each other?
+
+You read both documents. There's significant overlap, but also some differences in recommendations. Which takes precedence?
+
+### Multiple Entry Points, No Clear Map
+
+Here's the fundamental problem: **There's no authoritative map of the Government of Canada digital ecosystem.**
+
+Depending on where you enter, you get a different view:
+
+**Entry via design.canada.ca:**
+- Focus: Canada.ca website design patterns
+- You learn about: WET-BOEW, Content Style Guide, IA specification
+- You might miss: CDS platform services (GC Notify, GC Forms), Standards on APIs, Cloud Guardrails
+
+**Entry via digital.canada.ca:**
+- Focus: CDS products and services
+- You learn about: GC Design System, GC Notify, GC Forms, GC Sign-in
+- You might miss: WET-BOEW details, Content Style Guide, API standards
+
+**Entry via wet-boew.github.io:**
+- Focus: WET-BOEW component library
+- You learn about: Accessible components, JavaScript plugins
+- You might miss: Content Style Guide, CDS services, security frameworks
+
+**Entry via Google search "canada government web development standards":**
+- You get a mix of results from all the above plus outdated blog posts, archived documentation, and provincial government sites
+- Good luck figuring out what's current and authoritative
+
+### Why This Matters for AI Assistants
+
+Here's the critical insight: **If official standards are hard for humans to discover and navigate, they're nearly impossible for AI assistants to understand.**
+
+An AI assistant trying to help you build a Government of Canada application faces these challenges:
+
+**Problem 1: Which source is authoritative?**
+- design.canada.ca has WET-BOEW examples
+- wet-boew.github.io has different WET-BOEW examples
+- design-system.canada.ca has yet another approach
+- The AI assistant can't know which to prioritize
+
+**Problem 2: Are these resources complementary or competing?**
+- Should you use WET-BOEW *and* the CDS Design System, or choose one?
+- Can you use GCcollab design patterns on Canada.ca sites?
+- Should API Guidance supplement or override Standards on APIs?
+- The AI assistant has to guess
+
+**Problem 3: What's current vs. deprecated?**
+- Multiple versions of documentation exist
+- Some content is clearly dated (e.g., "Updated 2018")
+- Other content has no date stamp at all
+- The AI assistant can't distinguish authoritative from outdated
+
+**Problem 4: Context switching is expensive**
+- An AI assistant asked to "build a GC contact form" has to simultaneously consider:
+  - WET-BOEW form components (which site's documentation?)
+  - Content Style Guide patterns (found where?)
+  - Bilingual requirements (specified where?)
+  - Accessibility standards (WCAG 2.1 AA, but which implementation guide?)
+  - Security requirements (Cloud Guardrails? CCCS guidance? Both?)
+- That's 5+ different documentation sources for a simple form
+
+### The Real-World Cost
+
+This isn't just confusing—it's expensive:
+
+**Time wasted searching**: A contractor spends 8 hours over their first week just finding and reading documentation across multiple sites. At $800/day, that's $800 in wasted time per developer.
+
+**Inconsistent implementations**: Team members find different documentation sources and implement different patterns. One developer uses design.canada.ca patterns, another uses wet-boew.github.io examples, a third uses the CDS design system. Code reviews become debates about which source is "correct."
+
+**Accessibility review failures**: Developer follows examples from one documentation source, but accessibility reviewers reference a different source with different requirements. Rework cycle begins.
+
+**AI assistants make educated guesses**: Without clear guidance, AI assistants generate code based on whichever documentation they happened to find first. Sometimes it's correct. Sometimes it's close but wrong. Sometimes it's from the GCcollab design system when you needed WET-BOEW.
+
+**Knowledge fragmentation**: Senior developers each have their own "map" of which resources to use, built through years of trial and error. Junior developers get different advice depending on who they ask.
+
+### What We Actually Need
+
+The Government of Canada has built an impressive digital ecosystem over 15+ years. The pieces are there:
+- ✅ Accessible component library (WET-BOEW)
+- ✅ Content standards (Content Style Guide)
+- ✅ Design system (GC Design System)
+- ✅ Security frameworks (Cloud Guardrails, CCCS guidance)
+- ✅ API standards (Standards on APIs)
+- ✅ Platform services (GC Notify, GC Forms, etc.)
+
+**But the ecosystem lacks a clear information architecture that helps developers navigate it.**
+
+What would help:
+
+1. **A single authoritative entry point**: One URL that serves as the "start here" for all GC digital development
+2. **Clear relationships between resources**: Explicit documentation of how design.canada.ca, digital.canada.ca, and wet-boew.github.io relate to each other
+3. **Context-specific guidance**: "If you're building a Canada.ca website, use this. If you're building a separate service, use that."
+4. **Consolidated standards reference**: A single page listing all relevant standards with clear descriptions and relationships
+5. **Version clarity**: Clear indicators of what's current, what's deprecated, what's experimental (alpha/beta)
+
+Until that exists, developers rely on:
+- Institutional knowledge from experienced contractors
+- Trial and error
+- Hope that they found the right documentation
+- Code review feedback to course-correct
+
+**And this brings us to the next layer of the problem: If the official standards are this hard to find, departmental standards are even worse.**
+
 ## The Problem: Buried Departmental Standards
 
-We've talked about the official, published standards—WET-BOEW, GC Design System, Content Style Guide, Digital Standards. These are well-documented, publicly available, and (relatively) easy to find.
+We've talked about the official, published standards—WET-BOEW, GC Design System, Content Style Guide, Digital Standards. Even though they're scattered across multiple sites and hard to navigate, at least they're publicly documented and findable with enough effort.
+
+But every government developer knows there's another layer: **departmental and project-level standards that live in the shadows.**
 
 But every government developer knows there's another layer: **departmental and project-level standards that live in the shadows.**
 

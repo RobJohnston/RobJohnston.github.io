@@ -24,7 +24,8 @@ This application is deployed via SSC Cloud Brokering Service and serves Canadian
 - Logging: Structured JSON to stdout (captured by AWS CloudWatch or Azure Monitor)
 
 ## Important Paths
-- `static/wet-boew/`: WET-BOEW library files (managed via npm)
+- `wet-boew/`: WET-BOEW library files (kept up-to-date with official releases)
+- `GCWeb/`: The WET-BOEW theme files customized for Canada.ca
 - `Views/`: Razor views (.cshtml) with WET-BOEW structure
 - `src/`: C# application code
 - `tests/`: Automated tests (unit, integration, accessibility via axe-core)
