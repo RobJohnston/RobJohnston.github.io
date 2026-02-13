@@ -28,13 +28,13 @@ Before we dive into Canada's digital ecosystem, let's talk about what AI assista
 
 Think about it: When you ask an AI assistant to "build a contact form," it could generate thousands of different implementations. But when you ask it to "build a WET-BOEW compliant contact form for a Government of Canada website," suddenly there's structure. There's a right way to do it. The assistant can reference actual components, follow established accessibility patterns, and ensure bilingual support—because those constraints are part of the platform.
 
-This can be understood as a three-layer abstraction:
+Ad Hoc describes this as a three-layer abstraction:
 
-1. **Cloud infrastructure layer**: The foundational compute, storage, and networking (in Canada, [Shared Services Canada brokers access](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) to commercial cloud providers like AWS, Azure, and Google Cloud)
+1. **Cloud infrastructure layer**: The foundational compute, storage, and networking (in the US, cloud.gov provides a unified Cloud Foundry platform; in Canada, [Shared Services Canada brokers access](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) to commercial cloud providers like AWS, Azure, and Google Cloud)
 2. **Deployment and operations layer**: How applications get deployed, monitored, and maintained
 3. **Platform knowledge layer**: The institutional knowledge about how to build things the "right way"—encoded as AI instruction files
 
-That third layer is the breakthrough. By encoding platform knowledge as machine-readable instruction files, AI assistants can automatically apply institutional standards and patterns.
+That third layer is the breakthrough. Ad Hoc built an open-source repository called [cloud.gov-instructions](https://github.com/adhocteam/cloud-gov-instructions) that shows exactly how to encode platform knowledge so AI assistants can use it automatically. We'll come back to this repository—it's the practical template that makes everything in this post actionable rather than theoretical.
 
 Here's the insight that changed my perspective: **Canada has been building this ecosystem for over a decade, since WET-BOEW launched in 2010.** We just haven't optimized it for AI consumption yet.
 
@@ -790,15 +790,17 @@ Here's where we get practical. Canada has all the pieces—WET-BOEW provides bou
 
 An AI assistant can technically read the WET-BOEW documentation on GitHub or the GC Design System website. But it's doing this on-demand, every time you ask a question, with no persistence or structure. It's like hiring a contractor who has to re-read the entire building code every time they install a light switch.
 
-### Machine-Readable Instruction Files
+### Enter Ad Hoc's cloud.gov-instructions Repository
 
-The solution is to encode platform knowledge as structured instruction files that AI assistants can load automatically. An open-source template for this approach is available (MIT licensed, at [github.com/adhocteam/cloud.gov-instructions](https://github.com/adhocteam/cloud.gov-instructions)) and can be adapted for Canadian government development.
+This is where Ad Hoc's work becomes crucial for Canada. They built an open-source template (MIT licensed, available at [github.com/adhocteam/cloud.gov-instructions](https://github.com/adhocteam/cloud.gov-instructions)) that shows exactly how to encode platform knowledge for AI assistants.
 
-**The Canadian Cloud Model:**
+**The US vs Canadian Cloud Model:**
+- **US (cloud.gov)**: Single Cloud Foundry platform-as-a-service run by government
+- **Canada (SSC)**: Brokering service providing access to multiple commercial cloud providers (AWS, Azure, Google Cloud)
 
-Canada's approach through Shared Services Canada provides brokered access to multiple commercial cloud providers (AWS, Azure, Google Cloud) rather than a single unified platform. This makes instruction files **particularly valuable**—departments need clear patterns for each SSC-approved provider.
+This difference actually makes instruction files **more valuable** for Canada - without a single platform, departments need clear patterns for each SSC-approved provider.
 
-**Key patterns for effective instruction files:**
+**Key innovations from Ad Hoc's approach:**
 
 1. **Structured instruction files**: Organize platform knowledge into domain-specific instruction files (deployment, security, logging, etc.) that live in `.github/instructions/`
 
@@ -806,13 +808,13 @@ Canada's approach through Shared Services Canada provides brokered access to mul
 
 3. **Safety guardrails**: Explicitly categorize operations as "always confirm," "confirm in production," or "safe to run" so AI assistants know when to ask before executing destructive commands
 
-4. **Automated compliance documentation**: Scan code annotations (like `/// ITSG-33: AC-2`) to generate security documentation automatically, reducing manual compliance burden
+4. **Automated compliance documentation**: Scan code annotations (like `/// NIST 800-53: IA-2`) to generate security documentation automatically, reducing manual compliance burden
 
-For Canadian government development, adapt these patterns by using SSC-brokered cloud providers (AWS, Azure), applying TBS IT Security Framework controls (ITSG-33), and encoding WET-BOEW/GC Design System patterns. The structure and approach remain the same.
+For Canadian government development, these patterns are directly applicable—replace cloud.gov-specific patterns with SSC-brokered cloud providers (AWS, Azure), swap NIST SP 800-53 controls for TBS IT Security Framework controls, and encode WET-BOEW/GC Design System patterns instead of cloud.gov conventions. The structure and approach remain the same.
 
 ## The Canadian Adaptation
 
-Now let's bring this home. What would this instruction file structure look like adapted for Canadian government development?
+Now let's bring this home. What would Ad Hoc's `cloud.gov-instructions` structure look like adapted for Canadian government development?
 
 ### Proposed File Structure
 
@@ -961,7 +963,7 @@ This instruction file provides concrete security patterns that the AI assistant 
 
 ### 5. The Security Controls Documentation Agent
 
-This is where automation gets powerful. Here's a Canadian-focused approach to automated security documentation:
+This is where automation gets powerful. Inspired by Ad Hoc's compliance documentation agent, here's a Canadian adaptation focused on practical security documentation.
 
 **Example snippet** (from `.github/agents/security-controls.agent.md`):
 
@@ -1440,7 +1442,7 @@ Other countries are scrambling to figure out how to make AI coding assistants wo
 
 ### The Opportunity
 
-By adding **machine-readable instruction files** to Canada's mature digital ecosystem, developers can dramatically improve their productivity on government projects.
+By adding **machine-readable instruction files** (following Ad Hoc's cloud.gov-instructions pattern) to Canada's mature digital ecosystem, developers can dramatically improve their productivity on government projects.
 
 Imagine:
 - Onboarding to new GC projects in hours instead of weeks
@@ -1449,7 +1451,7 @@ Imagine:
 - Getting GC-standards guidance from AI assistants as you code
 - Delivering Canada.ca services faster with higher quality
 
-This isn't science fiction. This pattern is already being used successfully and is ready to be adapted for Canadian context.
+This isn't science fiction. Ad Hoc has shown the pattern works for US federal cloud.gov projects. The MIT-licensed repository is available today at github.com/adhocteam/cloud.gov-instructions—ready to be adapted for Canadian context.
 
 ### The Path Forward
 
