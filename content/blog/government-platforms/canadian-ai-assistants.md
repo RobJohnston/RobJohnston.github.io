@@ -30,23 +30,7 @@ Before we dive into Canada's digital ecosystem, let's talk about what AI assista
 
 Think about it: When you ask an AI assistant to "build a contact form," it could generate thousands of different implementations. But when you ask it to "build a WET-BOEW compliant contact form for a Government of Canada website," suddenly there's structure. There's a right way to do it. The assistant can reference actual components, follow established accessibility patterns, and ensure bilingual support—because those constraints are part of the platform.
 
-```mermaid
-sequenceDiagram
-    participant Dev as Developer
-    participant AI as AI Assistant
-    participant Inst as Instruction Files<br/>(WET-BOEW, GC Design,<br/>Content Style, Standards)
-    participant Code as Generated Code
-
-    Dev->>AI: "Create a contact form"
-    AI->>Inst: Load GC standards & patterns
-    Inst-->>AI: WET-BOEW components<br/>WCAG 2.1 AA patterns<br/>Bilingual requirements<br/>Protected B security<br/>API standards
-    AI->>Code: Generate compliant code
-    Code-->>Dev: ✅ Accessible<br/>✅ Bilingual<br/>✅ Secure<br/>✅ Standards-compliant
-
-    Note over Dev,Code: Result: Compliant code from day one,<br/>not after multiple review cycles
-```
-
-This can be understood as platform knowledge infrastructure:
+The key is encoding institutional knowledge as a platform knowledge infrastructure:
 
 **Platform knowledge layer**: The institutional knowledge about how to build things the "right way"—encoded as AI instruction files. This includes WET-BOEW components, GC Design System patterns, Content Style Guide conventions, API standards, accessibility requirements, and security patterns for Protected B data.
 
@@ -208,6 +192,26 @@ The [Canadian Centre for Cyber Security (CCCS)](https://www.cyber.gc.ca/en/gover
 These platform providers work together to create a comprehensive digital ecosystem for government. **design.canada.ca** provides the foundational standards and frameworks. **digital.canada.ca (CDS)** delivers modern platform services and design systems. The **Translation Bureau** ensures consistent bilingual terminology. **CCCS** provides security frameworks for protecting government systems and data.
 
 These organizations weren't built with AI assistants in mind. But they provide exactly the structure AI assistants need: **bounded vocabulary** (WET-BOEW components for UI, Content Style Guide conventions for writing, TERMIUM Plus terminology for bilingual translation), **predictable patterns** (GC Design System tokens and templates for design consistency, Standards on APIs for technical specifications), and **explicit guardrails** (Digital Standards principles, ITSG-33 security controls, WCAG 2.1 AA requirements).
+
+Here's how this ecosystem enables AI-assisted development in practice:
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant AI as AI Assistant
+    participant Inst as Instruction Files<br/>(WET-BOEW, GC Design,<br/>Content Style, Standards)
+    participant Code as Generated Code
+
+    Dev->>AI: "Create a contact form"
+    AI->>Inst: Load GC standards & patterns
+    Inst-->>AI: WET-BOEW components<br/>WCAG 2.1 AA patterns<br/>Bilingual requirements<br/>Protected B security<br/>API standards
+    AI->>Code: Generate compliant code
+    Code-->>Dev: ✅ Accessible<br/>✅ Bilingual<br/>✅ Secure<br/>✅ Standards-compliant
+
+    Note over Dev,Code: Result: Compliant code from day one,<br/>not after multiple review cycles
+```
+
+When a developer asks their AI assistant to build a Government of Canada contact form, the assistant can reference the entire ecosystem—WET-BOEW components for accessible UI, Content Style Guide patterns for plain language labels, TERMIUM Plus for official bilingual terminology, Standards on APIs for backend endpoints, and ITSG-33 controls for Protected B data handling. The result is compliant code from the start, not after multiple review cycles.
 
 **Let's examine how each platform provider contributes to effective AI assistance. Then we'll tackle a critical question: if these resources are so valuable, why do developers struggle to find and use them?**
 
