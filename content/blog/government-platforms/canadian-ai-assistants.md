@@ -219,21 +219,11 @@ When a developer asks their AI assistant to build a Government of Canada contact
 
 Let's talk about the first requirement for effective AI assistance: **bounded vocabulary**.
 
-In software development, "unbounded vocabulary" is when there are infinite ways to solve a problem. Need an accessible date picker? You could build it dozens of different ways—each with its own accessibility considerations, browser compatibility quirks, and keyboard navigation patterns. An AI assistant asked to "create an accessible date picker" has to make countless assumptions.
+In software development, "unbounded vocabulary" means infinite ways to solve a problem. An AI assistant asked to "create an accessible date picker" has to make countless assumptions about accessibility, bilingual support, and keyboard navigation.
 
-**Bounded vocabulary** means there's a limited, well-defined set of solutions. WET-BOEW provides this through its component library.
+**Bounded vocabulary** means a limited, well-defined set of solutions. WET-BOEW provides this through its component library.
 
-### The WET-BOEW Date Picker Example
-
-Here's what happens when you ask an AI assistant to "create an accessible bilingual date picker for a Government of Canada form" without WET-BOEW context:
-
-The assistant generates generic HTML5 `<input type="date">`, maybe adds some ARIA attributes if it's sophisticated, but:
-- It might miss the requirement for bilingual date format labels
-- It probably won't include proper error message patterns for both official languages
-- It may not account for keyboard navigation patterns that match the rest of Canada.ca
-- It likely won't include the correct WET-BOEW classes that tie into the centralized accessibility framework
-
-Now, give that same AI assistant WET-BOEW context—tell it you're building on WET-BOEW 4.0.x, you need the standard Canada.ca theme, and you're following GC form patterns. Watch what happens:
+When you ask an AI assistant to "create an accessible bilingual date picker for a Government of Canada form" with WET-BOEW context, it generates:
 
 ```html
 <div class="form-group">
@@ -254,61 +244,18 @@ Now, give that same AI assistant WET-BOEW context—tell it you're building on W
 </div>
 ```
 
-The AI assistant now:
-- Uses the correct `form-group` wrapper (WET-BOEW convention)
-- Includes bilingual labels using `lang` attributes (Official Languages Act compliance)
-- Applies proper `required` indicator styling (Canada.ca pattern)
-- Adds WET-BOEW's form validation data attributes
-- Provides bilingual error messages following the established convention
+The bounded vocabulary of WET-BOEW components eliminates ambiguity. The AI assistant knows to use `form-group` wrappers, bilingual labels with `lang` attributes, WET-BOEW validation data attributes, and Canada.ca styling patterns.
 
-This isn't magic—it's structure. The bounded vocabulary of WET-BOEW components eliminates ambiguity.
+When you use WET-BOEW components, WCAG 2.1 AA compliance isn't something you achieve—it's something you inherit. Instead of "figure out how to build an accessible modal," it's "use the WET-BOEW lightbox component."
 
-### Accessibility Compliance Built-In
-
-Here's the real power: When you use WET-BOEW components, WCAG 2.1 AA compliance isn't something you achieve—it's something you inherit.
-
-Consider a common scenario: You need a modal dialog for terms and conditions. Building an accessible modal from scratch requires understanding:
-- Focus management (trapping focus within the modal)
-- Keyboard navigation (Escape to close, Tab cycling)
-- ARIA attributes (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`)
-- Screen reader announcements
-- Focus return to trigger element on close
-
-WET-BOEW's [lightbox component](https://wet-boew.github.io/wet-boew/demos/lightbox/lightbox-en.html) handles all of this. An AI assistant with WET-BOEW context can generate:
-
-```html
-<a href="#terms-modal"
-   class="wb-lbx"
-   title="Terms and Conditions">
-    View Terms
-</a>
-
-<section id="terms-modal" class="mfp-hide modal-dialog modal-content overlay-def">
-    <header class="modal-header">
-        <h2 class="modal-title">Terms and Conditions</h2>
-    </header>
-    <div class="modal-body">
-        <!-- Terms content -->
-    </div>
-</section>
-```
-
-All the accessibility complexity—focus trapping, ARIA, keyboard navigation—is handled by WET-BOEW's JavaScript. The AI assistant just needs to know the component pattern.
-
-This is bounded vocabulary in action: Instead of "figure out how to build an accessible modal," it's "use the WET-BOEW lightbox component."
+**See comprehensive examples**: [forms.instructions.md](/gc-ai-instructions/wet-boew/forms.instructions.md), [alerts.instructions.md](/gc-ai-instructions/wet-boew/alerts.instructions.md), [tables.instructions.md](/gc-ai-instructions/wet-boew/tables.instructions.md)
 
 ## How the Content Style Guide Provides "Bounded Vocabulary" for Content
 
-We've talked about bounded vocabulary for code (WET-BOEW components) and design (GC Design System tokens). But what about the actual words on the page?
+The **Canada.ca Content Style Guide** provides structured patterns for writing web content—turning the infinite possibilities of how to phrase something into a well-defined set of conventions.
 
-This is where the **Canada.ca Content Style Guide** becomes powerful for AI assistance. It provides structured patterns for writing web content—turning the infinite possibilities of how to phrase something into a well-defined set of conventions.
-
-### Plain Language Patterns
-
-The Content Style Guide mandates plain language—not as a suggestion, but as a standard. An AI assistant with this context won't generate bureaucratic jargon or complex sentence structures.
-
-**Without Content Style Guide context**, ask an AI to write an eligibility statement:
-> "Individuals who have attained the age of majority in their province or territory of residence and who are currently experiencing involuntary cessation of employment may be eligible to receive financial assistance through the Employment Insurance program, provided they have accumulated the requisite number of insurable hours during the qualifying period."
+**Without Content Style Guide context**, an AI might write:
+> "Individuals who have attained the age of majority in their province or territory of residence and who are currently experiencing involuntary cessation of employment may be eligible to receive financial assistance through the Employment Insurance program..."
 
 **With Content Style Guide context**, the AI knows Canada.ca patterns:
 > "You may be eligible for Employment Insurance (EI) if you:
@@ -316,168 +263,17 @@ The Content Style Guide mandates plain language—not as a suggestion, but as a 
 > - lost your job through no fault of your own
 > - worked enough insurable hours in the past year"
 
-The difference? The Content Style Guide provides clear rules:
-- Use bullet points for eligibility criteria (not paragraph text)
-- Write in second person ("you") to speak directly to citizens
-- Keep sentences short (aim for 20 words or less)
-- Define acronyms on first use
-- Front-load information (most important first)
+The Content Style Guide provides clear rules: bullet points for eligibility criteria, second person ("you"), short sentences, acronym definitions, and front-loaded information. An AI assistant with this context automatically generates plain language, bilingual-ready content following Canada.ca patterns.
 
-### Bilingual Content Patterns
+The Translation Bureau's **TERMIUM Plus®** adds another layer—official government terminology. Instead of inconsistent translations ("Assurance d'emploi" vs "Assurance contre le chômage"), the AI knows the official term is "**assurance-emploi**" and uses it consistently across all bilingual content.
 
-The Content Style Guide also provides patterns for presenting bilingual content. An AI assistant learns standard approaches rather than inventing inconsistent patterns.
-
-**Bilingual page titles** (Content Style Guide pattern):
-```html
-<h1 property="name" id="wb-cont">Apply for Employment Insurance (EI)</h1>
-<p lang="fr"><strong>Français :</strong> <a href="?lang=fr">Demander l'assurance-emploi (AE)</a></p>
-```
-
-**Bilingual contact information** (Content Style Guide pattern):
-```html
-<section>
-    <h2>Contact us</h2>
-    <p>
-        <strong>Telephone:</strong> 1-800-622-6232<br>
-        <strong lang="fr">Téléphone :</strong> 1-800-622-6232
-    </p>
-    <p>
-        <strong>Hours:</strong> Monday to Friday, 8:30 am to 4:30 pm (EST)<br>
-        <strong lang="fr">Heures :</strong> Du lundi au vendredi, de 8 h 30 à 16 h 30 (HNE)
-    </p>
-</section>
-```
-
-These aren't invented patterns—they're documented standards. An AI assistant generates them consistently.
-
-### Structured Content Templates
-
-The Content Style Guide provides templates for common content types:
-
-**Steps in a process**:
-```markdown
-## How to apply
-
-1. **Gather your documents**
-
-   You'll need:
-   - Your Social Insurance Number (SIN)
-   - Your employment details from the past year
-   - Your direct deposit information
-
-2. **Complete the online form**
-
-   The form takes about 45 minutes to complete. You can save and return later.
-
-3. **Submit your application**
-
-   After you submit, you'll get a confirmation number. Keep this for your records.
-
-4. **Wait for a decision**
-
-   We'll contact you within 28 days.
-```
-
-Note the pattern:
-- Numbered steps with bold headings
-- Sub-bullets for details
-- Specific timeframes ("45 minutes", "28 days")
-- "You" language throughout
-- Action-oriented headings ("Gather", "Complete", "Submit", "Wait")
-
-An AI assistant with Content Style Guide context generates this structure automatically.
-
-### The Power for Government Content
-
-Here's the real benefit: Government websites contain a lot of procedural content—how to apply for services, what documents you need, what happens next. This content follows predictable patterns.
-
-With the Content Style Guide encoded as instructions, an AI assistant can:
-- Draft service pages following Canada.ca patterns
-- Convert policy documents into plain language
-- Generate bilingual content structures (English content with French equivalents marked)
-- Suggest appropriate headings and content organization
-- Flag jargon or overly complex sentences
-- **Use official government terminology from TERMIUM Plus®** for consistent bilingual translations
-
-### TERMIUM Plus®: Official Terminology for AI Assistants
-
-The Translation Bureau's [TERMIUM Plus®](https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-eng.html?lang=eng) provides another layer of bounded vocabulary—official government terminology across millions of terms.
-
-**Without TERMIUM Plus** context, an AI assistant might translate "Employment Insurance" inconsistently:
-- "Assurance d'emploi" (literal translation, but incorrect)
-- "Assurance contre le chômage" (old term, no longer used)
-- "Assurance-emploi" (correct official term)
-
-**With TERMIUM Plus** context, the AI assistant knows the official term is "**assurance-emploi**" and uses it consistently.
-
-**Example**: Translating a technical government term like "Protected B" classification:
-
-```
-User: "How do I say 'Protected B information' in French?"
-
-AI Assistant (with TERMIUM Plus):
-The official Government of Canada term is:
-- English: "Protected B"
-- French: "Protégé B"
-
-Note: According to TERMIUM Plus, security classifications (Unclassified,
-Protected A/B/C, Classified, Secret, Top Secret) are not translated in
-official GC usage—they remain in their original language to avoid confusion.
-```
-
-This prevents inconsistencies where some developers write "Protégé B", others write "Protégée B", and others leave it untranslated—TERMIUM Plus provides the authoritative answer.
-
-AI assistants with TERMIUM Plus access could:
-- Suggest official French equivalents when generating bilingual forms
-- Flag incorrect terminology usage in code comments or UI text
-- Ensure consistency with government standards across translations
-- Generate bilingual error messages using approved terminology
-
-**Example prompt to AI assistant**:
-> "Write a service page for renewing a passport. Include eligibility, required documents, processing times, and how to apply."
-
-**AI assistant with Content Style Guide context generates**:
-```markdown
-# Renew your passport
-
-You can renew your passport if it's expired or will expire in the next year.
-
-## Eligibility
-
-You can renew your passport if you:
-- are a Canadian citizen
-- have a passport that expired less than 15 years ago
-- were at least 16 when your passport was issued
-- still have the same name (or can provide legal proof of name change)
-
-[... continues following Content Style Guide patterns ...]
-```
-
-This is bounded vocabulary for content—just like WET-BOEW provides bounded vocabulary for components.
+**See comprehensive examples**: [bilingual.instructions.md](/gc-ai-instructions/wet-boew/bilingual.instructions.md)
 
 ## How CDS's GC Design System Provides "Predictable Patterns"
 
-The second requirement for effective AI assistance is **predictable patterns**—established conventions that eliminate arbitrary decisions. The Canadian Digital Service's GC Design System delivers this through design tokens, templates, and utility classes.
+The second requirement for effective AI assistance is **predictable patterns**—established conventions that eliminate arbitrary decisions. Without standards, questions like "How much spacing between the page title and content?" have no right answer. 20 pixels? 32 pixels? 2 rem?
 
-Here's a question that has no right answer without context: "How much spacing should there be between the page title and the first content section?"
-
-Without standards, a developer (or AI assistant) has to guess. 20 pixels? 32 pixels? 2 rem? The choice is arbitrary, which means it's inconsistent across the application and across government services.
-
-### Design Tokens: The Language of Consistency
-
-The GC Design System solves this with **design tokens**—standardized values for spacing, colors, typography, and other design properties.
-
-For spacing, there's a defined scale:
-- `spacer-0-5`: 0.25 rem (4px)
-- `spacer-1`: 0.5 rem (8px)
-- `spacer-2`: 1 rem (16px)
-- `spacer-3`: 1.5 rem (24px)
-- `spacer-4`: 2 rem (32px)
-- `spacer-5`: 3 rem (48px)
-
-Now the question has an answer: "Use `spacer-4` (2 rem) between the page title and content section—that's the Canada.ca standard for major content breaks."
-
-An AI assistant with GC Design System context can generate:
+The GC Design System solves this with **design tokens**—standardized values for spacing, colors, and typography. Instead of guessing, an AI assistant uses the established scale:
 
 ```html
 <h1 class="gc-h1">Apply for a Social Insurance Number</h1>
@@ -486,263 +282,23 @@ An AI assistant with GC Design System context can generate:
 </div>
 ```
 
-Instead of guessing at margins, the assistant uses the established utility class (`mt-4` for margin-top using the spacer-4 value). Every service built this way looks visually consistent with Canada.ca.
+The GC Design System also provides **pre-built page templates**—complete structural patterns for common service pages (service initiation, confirmation, error pages). An AI assistant with this template context doesn't need to decide "how should a service start page be structured?"—it already knows. The pattern is predictable: 8-column main content, 4-column sidebar, standard information hierarchy (service description → eligibility → requirements → action).
 
-### Pre-built Page Templates
-
-The real power of predictable patterns shows up in the GC Design System's page templates. These aren't just UI mockups—they're complete structural patterns for common government service pages.
-
-**Service Initiation Template**: Starting a new digital service? There's a template for that:
-
-```html
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <h1>Apply for Employment Insurance (EI) benefits</h1>
-
-            <!-- Service description -->
-            <section class="gc-srvinfo">
-                <h2>What this service offers</h2>
-                <p>Employment Insurance (EI) provides temporary financial assistance...</p>
-            </section>
-
-            <!-- Eligibility checker -->
-            <section class="well">
-                <h2>Check your eligibility</h2>
-                <p>Before you start, make sure you meet these requirements:</p>
-                <ul class="list-unstyled">
-                    <li><span class="far fa-check-circle text-success"></span> Lost your job through no fault of your own</li>
-                    <li><span class="far fa-check-circle text-success"></span> Haven't worked for at least 7 consecutive days</li>
-                    <li><span class="far fa-check-circle text-success"></span> Worked the required hours in the last 52 weeks</li>
-                </ul>
-            </section>
-
-            <!-- Before you start -->
-            <section>
-                <h2>What you need before you start</h2>
-                <ul>
-                    <li>Your Social Insurance Number (SIN)</li>
-                    <li>Your banking information for direct deposit</li>
-                    <li>Details about your last employer</li>
-                </ul>
-            </section>
-
-            <!-- Call to action -->
-            <section>
-                <a href="/apply-start" class="btn btn-primary btn-lg">Start your application</a>
-                <p class="mrgn-tp-lg">
-                    <small>Estimated time to complete: 45 minutes</small>
-                </p>
-            </section>
-        </div>
-
-        <div class="col-md-4">
-            <!-- Related links sidebar -->
-            <section class="lnkbx">
-                <h2>Related links</h2>
-                <ul>
-                    <li><a href="/ei-calculator">EI benefit calculator</a></li>
-                    <li><a href="/ei-reporting">Report your income</a></li>
-                    <li><a href="/ei-contact">Contact us about EI</a></li>
-                </ul>
-            </section>
-        </div>
-    </div>
-</div>
-```
-
-This template provides:
-1. **Standard layout**: 8-column main content, 4-column sidebar (responsive breakpoints included)
-2. **Information hierarchy**: Service description → Eligibility → Requirements → Action
-3. **Visual patterns**: Well component for eligibility, icons for checklist items, prominent CTA
-4. **Accessibility built-in**: Proper heading structure, semantic HTML, ARIA landmarks via roles
-5. **Bilingual structure ready**: Content areas designed for both official languages
-
-An AI assistant with this template context doesn't need to decide "how should a service start page be structured?"—it already knows. The pattern is predictable.
-
-### CSS Utility Classes
-
-The GC Design System includes utility classes that create a consistent styling vocabulary:
-
-```html
-<!-- Margin utilities -->
-<div class="mt-3">  <!-- margin-top: 1.5rem -->
-<div class="mb-4">  <!-- margin-bottom: 2rem -->
-<div class="mx-2">  <!-- margin left and right: 1rem -->
-
-<!-- Padding utilities -->
-<div class="p-3">   <!-- padding all sides: 1.5rem -->
-<div class="py-2">  <!-- padding top and bottom: 1rem -->
-
-<!-- Color utilities -->
-<p class="text-danger">Error message</p>
-<div class="bg-light">Light background section</div>
-
-<!-- Display utilities -->
-<div class="d-flex justify-content-between align-items-center">
-    <span>Label</span>
-    <button>Action</button>
-</div>
-```
-
-This is like giving the AI assistant a consistent language to speak. Instead of generating arbitrary inline styles (`style="margin-top: 25px"`), it uses standardized utilities that match the rest of Canada.ca.
+**See comprehensive examples**: [utilities.instructions.md](/gc-ai-instructions/gc-design-system/utilities.instructions.md), [page-templates.instructions.md](/gc-ai-instructions/gc-design-system/page-templates.instructions.md)
 
 ## How Digital Standards Provide "Explicit Guardrails"
 
-The fourth requirement for effective AI assistance is **explicit guardrails**—institutional knowledge about what should and shouldn't be done.
+The third requirement for effective AI assistance is **explicit guardrails**—institutional knowledge about what should and shouldn't be done. The 10 Digital Standards aren't technical specifications—they're principles that guide decisions. But they can be encoded into instruction files that AI assistants automatically apply.
 
-This is where the 10 Digital Standards come in. They're not technical specifications—they're principles that guide decisions. But here's what makes them powerful for AI assistance: **They can be encoded into instruction files that AI assistants automatically apply.**
+**Standard #6: Build in Accessibility from the Start** means accessibility isn't a retrofit. When you ask for a data table, an AI with this guardrail automatically includes `<caption>` elements, `scope` attributes, semantic structure (`<thead>`, `<tbody>`, `<tfoot>`), and proper heading hierarchy—WCAG 2.1 compliance built-in from the first line of code.
 
-### Standard #6: Build in Accessibility from the Start
+**Standard #5: Address Security and Privacy Risks** means the AI won't casually suggest storing Protected B data in browser localStorage or logging PII. Instead, it generates code with structured logging that excludes personal information, parameterized queries to prevent SQL injection, and safe error messages that don't expose internal details.
 
-This standard means accessibility isn't a retrofit—it's a foundational requirement. An AI assistant with this guardrail won't suggest "let's build it first, then add accessibility later." It knows that's unacceptable.
-
-When you ask for a data table, an AI with Digital Standard #6 context generates:
-
-```html
-<table class="table table-striped">
-    <caption>Monthly expenses by category</caption>
-    <thead>
-        <tr>
-            <th scope="col">Category</th>
-            <th scope="col" class="text-right">Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">Housing</th>
-            <td class="text-right">$1,200</td>
-        </tr>
-        <tr>
-            <th scope="row">Transportation</th>
-            <td class="text-right">$450</td>
-        </tr>
-        <tr>
-            <th scope="row">Food</th>
-            <td class="text-right">$600</td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="row">Total</th>
-            <td class="text-right"><strong>$2,250</strong></td>
-        </tr>
-    </tfoot>
-</table>
-```
-
-Note what the AI included automatically:
-- `<caption>` for context (WCAG 2.1 requirement)
-- `scope` attributes on headers (helps screen readers associate data with headers)
-- Semantic structure with `<thead>`, `<tbody>`, `<tfoot>`
-- Right-alignment for numbers (accessibility best practice for readability)
-- Appropriate use of `<th>` vs `<td>`
-
-This isn't the AI being clever—it's the AI following the guardrail: "Build in accessibility from the start."
-
-### Standard #5: Address Security and Privacy Risks
-
-An AI assistant aware of this standard won't casually suggest storing sensitive data in browser localStorage or logging personally identifiable information (PII).
-
-Ask it to build a form that collects personal information, and it might generate:
-
-```csharp
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-namespace GC.BenefitsPortal.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ApplicationController : ControllerBase
-    {
-        private readonly ILogger<ApplicationController> _logger;
-        private readonly IApplicationService _applicationService;
-
-        public ApplicationController(
-            ILogger<ApplicationController> logger,
-            IApplicationService applicationService)
-        {
-            _logger = logger;
-            _applicationService = applicationService;
-        }
-
-        /// <summary>
-        /// Process application submission with Protected B data.
-        ///
-        /// GC Compliance:
-        ///     - Standard #5: Address security and privacy risks
-        ///     - Protected B classification handling
-        ///     - No PII in application logs
-        /// </summary>
-        [HttpPost("submit")]
-        public async Task<IActionResult> SubmitApplication(
-            [FromBody] ApplicationSubmissionDto request)
-        {
-            // Log the event WITHOUT PII
-            _logger.LogInformation(
-                "Application submitted: {ApplicationId}, Service: {ServiceType}, Method: {Method}",
-                request.ApplicationId,
-                request.ServiceType,
-                "web_form");
-
-            try
-            {
-                // Process the application (PII handled in secure processing, not logged)
-                var result = await _applicationService.ProcessApplication(
-                    request.SocialInsuranceNumber,
-                    request.FullName,
-                    request);
-
-                // Return confirmation (no PII in response for browser console exposure)
-                return Ok(new
-                {
-                    Status = "success",
-                    ConfirmationNumber = result.ConfirmationNumber,
-                    NextStepsUrl = "/application/next-steps"
-                });
-            }
-            catch (Exception ex)
-            {
-                // Log error WITHOUT exposing PII
-                _logger.LogError(ex,
-                    "Application processing failed: {ApplicationId}, ErrorType: {ErrorType}",
-                    request.ApplicationId,
-                    ex.GetType().Name);
-
-                return StatusCode(500, new
-                {
-                    Status = "error",
-                    Message = "We could not process your application. Please try again or contact support."
-                });
-            }
-        }
-    }
-}
-```
-
-The guardrail is explicit: Don't log PII, handle Protected B data appropriately, provide safe error messages. The AI assistant encodes this into the generated code.
-
-### Standard #9: Design Ethical Services
-
-This standard asks: "Just because we can collect this data, should we?"
-
-An AI assistant with Standard #9 context will question data collection requirements. Ask it to build a registration form that collects race, gender, and income information, and it might respond:
-
-> "I can build this form, but per Digital Standard #9 (Design Ethical Services), we should first clarify:
->
-> 1. **Necessity**: Is this demographic information required to deliver the service, or is it for analytics?
-> 2. **Consent**: If for analytics, users should be able to opt out of providing this information.
-> 3. **Privacy impact**: Has this data collection been reviewed via a Privacy Impact Assessment (PIA)?
-> 4. **Transparency**: Will users understand why we're collecting this information and how it will be used?
->
-> If this data is genuinely necessary, I'll include:
-> - Clear explanations for why each field is requested
-> - Optional vs. required field distinctions
-> - A privacy notice linking to how data will be used
-> - Option to skip demographic questions if they're for research purposes only"
+**Standard #9: Design Ethical Services** means the AI questions data collection. Ask it to build a form collecting demographic data, and it might respond: "Per Digital Standard #9, we should clarify: Is this information required to deliver the service? Has it been reviewed via a Privacy Impact Assessment? Will users understand why we're collecting it?"
 
 This is the AI assistant acting as a guardrail—not just implementing what you asked, but questioning whether it aligns with ethical service design.
+
+**See comprehensive examples**: [accessibility.instructions.md](/gc-ai-instructions/accessibility/accessibility.instructions.md), [security-protected-b.instructions.md](/gc-ai-instructions/security/security-protected-b.instructions.md)
 
 ## The Discoverability Problem: From Scattered to Buried
 
