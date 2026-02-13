@@ -58,115 +58,100 @@ Here's the insight that changed my perspective: **Canada has been building this 
 
 ## Canada's Digital Government Ecosystem
 
-The Government of Canada's digital infrastructure consists of two complementary layers: **Standards & Frameworks** that define how to build compliant services, and **Platform Providers** that deliver reusable tools and services.
+The Government of Canada's digital infrastructure is delivered by several key **platform providers**—organizations that create and maintain the standards, frameworks, and services that enable compliant digital service delivery.
 
 ```mermaid
 graph TB
-    subgraph "Standards & Frameworks<br/>(What you must follow)"
+    subgraph DC["design.canada.ca<br/><i>(Treasury Board Secretariat)</i>"]
         WET[WET-BOEW<br/>Accessible Components]
         CSG[Content Style Guide<br/>Writing Standards]
         DS[Digital Standards<br/>Design Principles]
         API[Standards on APIs<br/>Technical Specs]
-        CCCS[CCCS Security Guidance<br/>ITSG-33, CMVP]
     end
 
-    subgraph "Platform Providers<br/>(Organizations providing tools & services)"
-        CDS[Canadian Digital Service<br/>GC Design System, GC Notify,<br/>GC Forms, GC Sign-in,<br/>GC Issue & Verify, Toolkit]
-        TB[Translation Bureau<br/>TERMIUM Plus<br/>Translation Services]
+    subgraph CDS["digital.canada.ca<br/><i>(Canadian Digital Service)</i>"]
+        GCDS[GC Design System<br/>Design Tokens & Templates]
+        GCN[GC Notify<br/>GC Forms<br/>GC Sign-in<br/>GC Issue & Verify]
+        SDK[Service Digital Toolkit]
+    end
+
+    subgraph TB["Translation Bureau"]
+        TERM[TERMIUM Plus<br/>Official Terminology]
+        GCT[GCtranslate<br/>AI Translation]
+    end
+
+    subgraph CCCS["Canadian Centre for Cyber Security"]
+        ITSG[ITSG-33<br/>Security Controls]
+        CMVP[CMVP<br/>Cryptographic Validation]
     end
 
     WET --> AI[AI-Assisted Development<br/>Fast, Compliant, Accessible]
     CSG --> AI
     DS --> AI
     API --> AI
-    CCCS --> AI
-    CDS --> AI
-    TB --> AI
+    GCDS --> AI
+    GCN --> AI
+    SDK --> AI
+    TERM --> AI
+    GCT --> AI
+    ITSG --> AI
+    CMVP --> AI
 
     style AI fill:#90EE90
-    style WET fill:#E8F4F8
-    style CSG fill:#E8F4F8
-    style DS fill:#E8F4F8
-    style API fill:#E8F4F8
-    style CCCS fill:#E8F4F8
-    style CDS fill:#FFE8E8
+    style DC fill:#E8F4F8
+    style CDS fill:#E8F4F8
     style TB fill:#FFE8E8
+    style CCCS fill:#FFE8E8
 ```
 
-### Standards & Frameworks: What You Must Follow
+### The Platform Providers
 
-These are the official standards, toolkits, and security frameworks that define how Government of Canada digital services should be built. They provide the bounded vocabulary, predictable patterns, and explicit guardrails that make AI-assisted development effective.
+These organizations provide the standards, frameworks, tools, and services that make building compliant Government of Canada digital services possible. Each contributes essential resources that provide the bounded vocabulary, predictable patterns, and explicit guardrails that make AI-assisted development effective.
 
-#### 1. Web Experience Toolkit (WET-BOEW)
+#### 1. design.canada.ca (Treasury Board Secretariat)
 
-WET-BOEW is an open-source code library for building accessible, usable, interoperable government websites. It's been the standard for federal web presence since 2010, which means there's over 15 years of institutional knowledge embedded in its patterns.
+[design.canada.ca](https://design.canada.ca/) is the official source for Canada.ca design patterns, content standards, and web development guidance. Maintained by the Treasury Board of Canada Secretariat, it provides the foundational standards and frameworks that define how Government of Canada digital services should be built.
 
-What makes WET-BOEW special:
-- **WCAG 2.1 AA compliance is built-in**: You don't guess at accessibility requirements; components are already compliant
+**What design.canada.ca provides:**
+
+**Web Experience Toolkit (WET-BOEW)**: An open-source code library for building accessible, usable, interoperable government websites. It's been the standard for federal web presence since 2010, which means there's over 15 years of institutional knowledge embedded in its patterns.
+- **WCAG 2.1 AA compliance is built-in**: Components are already compliant
 - **Reusable components with clear APIs**: Date pickers, form validation, multimedia players—all documented and tested
-- **WAI-ARIA support**: Screen reader compatibility isn't an afterthought
-- **Open source on GitHub**: The code is public, which means AI assistants can learn from actual implementations
+- **WAI-ARIA support**: Screen reader compatibility built-in
+- **Open source on GitHub**: AI assistants can learn from actual implementations
 
-#### 2. Canada.ca Content Style Guide
-
-The [Canada.ca Content Style Guide](https://design.canada.ca/style-guide/) provides the writing and content standards for all Government of Canada web content. Recently updated to align with ISO plain language standards, it ensures consistency across the entire Canada.ca ecosystem.
-
-What makes the Content Style Guide essential:
+**Canada.ca Content Style Guide**: The [Content Style Guide](https://design.canada.ca/style-guide/) provides writing and content standards for all Government of Canada web content. Recently updated to align with ISO plain language standards.
 - **Plain language principles**: Clear, simple writing that citizens can understand
 - **Structured content patterns**: Standard formats for headings, lists, tables, and links
 - **Tone and voice guidance**: How to write in a consistent, citizen-centered way
 - **Bilingual writing conventions**: Patterns for presenting both official languages
-- **SEO and findability**: Content optimization for search engines
-- **Formatting standards**: Typography, capitalization, punctuation rules
+- **Bounded vocabulary for content creation**: AI assistants can draft Canada.ca-compliant content that's automatically plain language, properly formatted, and bilingual-ready
 
-The Content Style Guide is particularly powerful for AI assistance because it provides **bounded vocabulary for content creation**, not just code. An AI assistant with Content Style Guide context can help draft Canada.ca-compliant web content that's automatically plain language, properly formatted, and bilingual-ready.
-
-#### 3. Digital Standards
-
-The [10 Digital Standards](https://www.canada.ca/en/government/system/digital-government/government-canada-digital-standards.html) are the philosophical foundation—the principles that guide how digital services should be built. Key standards include:
-
+**Digital Standards**: The [10 Digital Standards](https://www.canada.ca/en/government/system/digital-government/government-canada-digital-standards.html) are the philosophical foundation—the principles that guide how digital services should be built:
 - **Design with Users** (#1): Put user needs first
 - **Work in the Open by Default** (#3): Share code, plans, and research
 - **Build in Accessibility from the Start** (#6): Not as a retrofit
 - **Design Ethical Services** (#9): Consider the broader impact
 - **Collaborate Widely** (#10): Work across organizational boundaries
 
-#### 4. Standards on APIs
+**Standards on APIs**: The [Standards on APIs](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/government-canada-standards-apis.html) provide technical requirements for building Government of Canada APIs:
+- **Architecture**: RESTful model by default, JSON message format (UTF-8), resource-oriented URLs
+- **Security**: TLS 1.2+, JWT authentication, API keys in headers (never URLs)
+- **Data Standards**: ISO 8601 datetime format in UTC, JSON responses as objects (not arrays)
+- **Versioning**: Format `v<Major>.<Minor>.<Patch>`, major version in URL (e.g., `/v3/`)
+- **Error Handling**: HTTP status codes, abstract internal details, consistent error format
+- **Performance**: Pagination required, restrict wildcard queries, published benchmarks
+- **Documentation**: OpenAPI specifications, published to API Store
 
-The [Standards on APIs](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/government-canada-standards-apis.html) are the technical requirements for building and consuming Government of Canada APIs. While the 10 Digital Standards provide philosophical guidance, the Standards on APIs provide concrete technical specifications.
+**Why design.canada.ca matters for AI assistants**: These standards provide the bounded vocabulary (WET-BOEW components), predictable patterns (Content Style Guide conventions), and explicit guardrails (Digital Standards principles) that make AI-assisted development effective. An AI assistant with design.canada.ca context generates code that's accessible, bilingual, and compliant from the start.
 
-**Key requirements**:
+#### 2. digital.canada.ca (Canadian Digital Service)
 
-- **Architecture**: RESTful model by default, JSON message format (UTF-8 encoding), resource-oriented URLs (nouns, not verbs)
-- **Security**: TLS 1.2 or higher, JWT (JSON Web Token) for authentication, API keys in headers (never in URLs)
-- **Data Standards**: ISO 8601 datetime format in UTC (yyyy-mm-ddThh:mm:ssZ), JSON responses must be objects (not arrays), consistent casing
-- **Versioning**: Format `v<Major>.<Minor>.<Patch>`, URL reflects major version only (e.g., `/v3/`), support at least one previous major version
-- **Error Handling**: HTTP status codes for REST, abstract internal technical details (no stack traces in responses), consistent error response format
-- **Performance**: Pagination required for large result sets, restrict wildcard queries, load testing and published benchmarks
-- **Documentation**: OpenAPI/Swagger specifications for REST APIs, published to API Store for discovery, include test data and examples
+The [Canadian Digital Service (CDS)](https://digital.canada.ca/) is an organization within the Treasury Board of Canada Secretariat that builds and operates modern digital tools for government. CDS provides reusable platform services and design systems that help departments deliver better citizen experiences.
 
-**Why this matters for AI assistants**: When you're building a Government of Canada application with backend APIs (ASP.NET Core, Node.js, etc.), the Standards on APIs provide the bounded vocabulary for API design. An AI assistant with Standards on APIs context knows that API endpoints should use `/api/v1/applications` (not `/api/getApplications`), that datetime fields must be ISO 8601 in UTC, and that error responses should abstract technical details.
+**What digital.canada.ca provides:**
 
-This is particularly important because many GC web applications have both a frontend (using WET-BOEW) and a backend API (providing data to the frontend or external integrations). The Standards on APIs ensure consistency across all government backend services—making it easier to integrate services, consume open data APIs, and build coherent digital ecosystems.
-
-#### 5. CCCS Security Guidance
-
-The [Canadian Centre for Cyber Security (CCCS)](https://www.cyber.gc.ca/en/government-institutions) provides security frameworks for government IT:
-
-- **[ITSG-33](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33)**: IT Security Risk Management framework with detailed security controls (e.g., access controls, session management, audit logging)
-- **[Cryptographic Module Validation Program (CMVP)](https://www.cyber.gc.ca/en/cryptographic-module-validation-program)**: Certification for encryption products
-
-**Why this matters for AI assistants**: CCCS guidance provides authoritative security patterns for application code. Instead of developers guessing at encryption requirements, instruction files can encode CCCS-approved approaches (e.g., "Use CMVP-validated encryption for Protected B data" or "Follow ITSG-33 AC-2 access control patterns in authentication code").
-
-### Platform Providers: Organizations Delivering Tools & Services
-
-While standards define *what* to build, platform providers deliver reusable tools and services that accelerate development. Three organizations play central roles in Canada's digital ecosystem.
-
-#### 1. Canadian Digital Service (CDS)
-
-The [Canadian Digital Service](https://digital.canada.ca/) is an organization within the Treasury Board of Canada Secretariat that builds and operates modern digital tools for government. CDS plays a central role in Canada's digital ecosystem, providing reusable services that help departments deliver better citizen experiences.
-
-**GC Design System**: The [GC Design System](https://design-system.canada.ca/) is CDS's design language for government services. It provides:
+**GC Design System**: The [GC Design System](https://design-system.canada.ca/) is CDS's design language for government services:
 - **Pre-built page templates**: Landing pages, service initiation flows, confirmation pages—all following Canada.ca patterns
 - **Design tokens**: Standardized colors, spacing, typography (not arbitrary values)
 - **Component library**: Breadcrumbs, buttons, cards, forms, navigation—all consistent with the broader Canada.ca experience
@@ -185,21 +170,44 @@ The [Canadian Digital Service](https://digital.canada.ca/) is an organization wi
 
 **Service Digital Toolkit**: A [collection of practical resources](https://digital.canada.ca/service-digital-toolkit/), templates, and guidance for designing and delivering digital services. This toolkit helps teams translate the high-level Digital Standards into concrete practices and workflows.
 
-**Why CDS matters for AI-assisted development**: CDS provides a bounded vocabulary of reusable services. Instead of building custom notification systems, authentication flows, or form builders, developers integrate standardized services with clear APIs—exactly the kind of structure AI assistants excel at generating integration code for.
-
-#### 2. Shared Services Canada (SSC)
-
-[Shared Services Canada](https://www.canada.ca/en/shared-services.html) manages the cloud infrastructure that government applications are deployed to. For application developers, the more immediate needs are the standards and tools provided by CDS and other platform providers.
+**Why digital.canada.ca matters for AI assistants**: CDS provides a bounded vocabulary of reusable services. Instead of building custom notification systems, authentication flows, or form builders, developers integrate standardized services with clear APIs—exactly the kind of structure AI assistants excel at generating integration code for.
 
 #### 3. Translation Bureau
 
-The [Translation Bureau](https://www.canada.ca/en/translation-bureau.html) provides linguistic services across 101 languages and operates [TERMIUM Plus®](https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-eng.html?lang=eng), one of the world's largest terminology databases with millions of terms in English, French, Spanish, and Portuguese.
+The [Translation Bureau](https://www.canada.ca/en/translation-bureau.html) provides linguistic services across 101 languages, ensuring consistent bilingual communication across government.
 
-**Why this matters for AI assistants**: TERMIUM Plus provides **official government terminology** as a bounded vocabulary for bilingual translation. Instead of AI assistants guessing at French translations or using inconsistent terminology, they can reference the authoritative database that standardizes terms across the federal public service. The Translation Bureau also developed [GCtranslate](https://www.canada.ca/en/public-services-procurement/news/2025/09/gctranslate-using-artificial-intelligence-to-build-a-more-agile-modern-and-bilingual-public-service.html), an AI-powered translation service for government content up to Protected B—demonstrating the government is already successfully using AI for bilingual content creation.
+**What the Translation Bureau provides:**
+
+**TERMIUM Plus®**: [TERMIUM Plus](https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-eng.html?lang=eng) is one of the world's largest terminology databases with millions of terms in English, French, Spanish, and Portuguese. It provides:
+- **Official government terminology**: Authoritative translations for government terms
+- **Standardized vocabulary**: Consistent terminology across the federal public service
+- **Domain-specific terms**: Technical, legal, and administrative terminology
+
+**GCtranslate**: An [AI-powered translation service](https://www.canada.ca/en/public-services-procurement/news/2025/09/gctranslate-using-artificial-intelligence-to-build-a-more-agile-modern-and-bilingual-public-service.html) for government content up to Protected B, demonstrating the government's successful use of AI for bilingual content creation.
+
+**Why the Translation Bureau matters for AI assistants**: TERMIUM Plus provides **official government terminology** as a bounded vocabulary for bilingual translation. Instead of AI assistants guessing at French translations or using inconsistent terminology, they can reference the authoritative database that standardizes terms across the federal public service.
+
+#### 4. Canadian Centre for Cyber Security (CCCS)
+
+The [Canadian Centre for Cyber Security (CCCS)](https://www.cyber.gc.ca/en/government-institutions) provides security frameworks and guidance for government IT systems.
+
+**What CCCS provides:**
+
+**ITSG-33**: The [IT Security Risk Management framework](https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33) provides detailed security controls:
+- Access controls and session management
+- Audit logging requirements
+- Encryption standards
+- Data protection measures
+
+**Cryptographic Module Validation Program (CMVP)**: [Certification program](https://www.cyber.gc.ca/en/cryptographic-module-validation-program) for encryption products used in government systems.
+
+**Why CCCS matters for AI assistants**: CCCS guidance provides authoritative security patterns for application code. Instead of developers guessing at encryption requirements, instruction files can encode CCCS-approved approaches (e.g., "Use CMVP-validated encryption for Protected B data" or "Follow ITSG-33 AC-2 access control patterns in authentication code").
 
 ### The Ecosystem Working Together
 
-This two-layer architecture—**Standards & Frameworks** defining requirements plus **Platform Providers** delivering reusable tools—creates a comprehensive ecosystem. These weren't built with AI assistants in mind. But they provide exactly the structure AI assistants need: bounded vocabulary in each domain, predictable patterns to follow, and explicit guardrails for compliance.
+These platform providers work together to create a comprehensive digital ecosystem for government. **design.canada.ca** provides the foundational standards and frameworks. **digital.canada.ca (CDS)** delivers modern platform services and design systems. The **Translation Bureau** ensures consistent bilingual terminology. **CCCS** provides security frameworks for protecting government systems and data.
+
+These organizations weren't built with AI assistants in mind. But they provide exactly the structure AI assistants need: bounded vocabulary in each domain (WET-BOEW components, TERMIUM Plus terminology, GC Design System tokens), predictable patterns to follow (Content Style Guide conventions, API standards, design templates), and explicit guardrails for compliance (Digital Standards principles, ITSG-33 security controls, WCAG 2.1 AA requirements).
 
 ## How WET-BOEW Provides "Bounded Vocabulary"
 
@@ -1662,19 +1670,17 @@ For now, let's focus on what you need to build great government applications.
 
 Here's the key insight: **Canada didn't build its digital government infrastructure for AI assistants—but it turns out this is exactly what AI assistants need to excel.**
 
-For over 15 years, the Government of Canada has been building a two-layer ecosystem that creates effective AI assistance:
+For over 15 years, the Government of Canada has been building a comprehensive platform provider ecosystem that creates effective AI assistance:
 
-### Standards & Frameworks Layer
+### The Platform Providers
 
-✅ **WET-BOEW**: Bounded vocabulary for accessible, bilingual UI components
-✅ **Canada.ca Content Style Guide**: Bounded vocabulary for plain language, citizen-centered content
-✅ **Digital Standards**: Explicit guardrails for ethical, accessible, secure service design
-✅ **Standards on APIs**: Technical specifications for consistent API design
-✅ **CCCS Security Guidance**: Authoritative patterns for secure code (ITSG-33, CMVP)
+✅ **design.canada.ca (Treasury Board Secretariat)**: The foundational standards and frameworks
+  - **WET-BOEW**: Bounded vocabulary for accessible, bilingual UI components
+  - **Canada.ca Content Style Guide**: Bounded vocabulary for plain language, citizen-centered content
+  - **Digital Standards**: Explicit guardrails for ethical, accessible, secure service design
+  - **Standards on APIs**: Technical specifications for consistent API design
 
-### Platform Providers Layer
-
-✅ **Canadian Digital Service (CDS)**: The central driver of digital modernization
+✅ **digital.canada.ca (Canadian Digital Service)**: Modern platform services and design systems
   - **GC Design System**: Predictable patterns through design tokens, templates, and utilities
   - **GC Notify**: Standardized notification service
   - **GC Forms**: Accessible, bilingual form-building platform
@@ -1682,7 +1688,13 @@ For over 15 years, the Government of Canada has been building a two-layer ecosys
   - **GC Issue and Verify**: Digital credentials service
   - **Service Digital Toolkit**: Practical guidance for implementing Digital Standards
 
-✅ **Translation Bureau**: TERMIUM Plus® official terminology database and GCtranslate AI-powered translation
+✅ **Translation Bureau**: Official terminology and AI-powered translation
+  - **TERMIUM Plus®**: Official terminology database
+  - **GCtranslate**: AI-powered translation service
+
+✅ **Canadian Centre for Cyber Security (CCCS)**: Security frameworks and guidance
+  - **ITSG-33**: IT Security Risk Management framework
+  - **CMVP**: Cryptographic Module Validation Program
 
 Other countries are scrambling to figure out how to make AI coding assistants work in government. Canada already has the pieces—we just need to make them machine-readable.
 
