@@ -207,7 +207,7 @@ The [Canadian Centre for Cyber Security (CCCS)](https://www.cyber.gc.ca/en/gover
 
 These platform providers work together to create a comprehensive digital ecosystem for government. **design.canada.ca** provides the foundational standards and frameworks. **digital.canada.ca (CDS)** delivers modern platform services and design systems. The **Translation Bureau** ensures consistent bilingual terminology. **CCCS** provides security frameworks for protecting government systems and data.
 
-These organizations weren't built with AI assistants in mind. But they provide exactly the structure AI assistants need: bounded vocabulary in each domain (WET-BOEW components, TERMIUM Plus terminology, GC Design System tokens), predictable patterns to follow (Content Style Guide conventions, API standards, design templates), and explicit guardrails for compliance (Digital Standards principles, ITSG-33 security controls, WCAG 2.1 AA requirements).
+These organizations weren't built with AI assistants in mind. But they provide exactly the structure AI assistants need: **bounded vocabulary** (WET-BOEW components for UI, Content Style Guide conventions for writing, TERMIUM Plus terminology for bilingual translation), **predictable patterns** (GC Design System tokens and templates for design consistency, Standards on APIs for technical specifications), and **explicit guardrails** (Digital Standards principles, ITSG-33 security controls, WCAG 2.1 AA requirements).
 
 ## How WET-BOEW Provides "Bounded Vocabulary"
 
