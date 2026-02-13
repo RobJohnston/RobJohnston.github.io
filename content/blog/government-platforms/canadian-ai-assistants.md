@@ -215,7 +215,7 @@ When a developer asks their AI assistant to build a Government of Canada contact
 
 **Let's examine how each platform provider contributes to effective AI assistance. Then we'll tackle a critical question: if these resources are so valuable, why do developers struggle to find and use them?**
 
-## How WET-BOEW Provides "Bounded Vocabulary"
+## How WET-BOEW Provides "Bounded Vocabulary" for Components
 
 Let's talk about the first requirement for effective AI assistance: **bounded vocabulary**.
 
@@ -297,139 +297,7 @@ All the accessibility complexity—focus trapping, ARIA, keyboard navigation—i
 
 This is bounded vocabulary in action: Instead of "figure out how to build an accessible modal," it's "use the WET-BOEW lightbox component."
 
-## How CDS's GC Design System Provides "Predictable Patterns"
-
-The second requirement for effective AI assistance is **predictable patterns**—established conventions that eliminate arbitrary decisions. The Canadian Digital Service's GC Design System delivers this through design tokens, templates, and utility classes.
-
-Here's a question that has no right answer without context: "How much spacing should there be between the page title and the first content section?"
-
-Without standards, a developer (or AI assistant) has to guess. 20 pixels? 32 pixels? 2 rem? The choice is arbitrary, which means it's inconsistent across the application and across government services.
-
-### Design Tokens: The Language of Consistency
-
-The GC Design System solves this with **design tokens**—standardized values for spacing, colors, typography, and other design properties.
-
-For spacing, there's a defined scale:
-- `spacer-0-5`: 0.25 rem (4px)
-- `spacer-1`: 0.5 rem (8px)
-- `spacer-2`: 1 rem (16px)
-- `spacer-3`: 1.5 rem (24px)
-- `spacer-4`: 2 rem (32px)
-- `spacer-5`: 3 rem (48px)
-
-Now the question has an answer: "Use `spacer-4` (2 rem) between the page title and content section—that's the Canada.ca standard for major content breaks."
-
-An AI assistant with GC Design System context can generate:
-
-```html
-<h1 class="gc-h1">Apply for a Social Insurance Number</h1>
-<div class="mt-4">  <!-- margin-top: 2rem via spacer-4 -->
-    <p>A Social Insurance Number (SIN) is a nine-digit number...</p>
-</div>
-```
-
-Instead of guessing at margins, the assistant uses the established utility class (`mt-4` for margin-top using the spacer-4 value). Every service built this way looks visually consistent with Canada.ca.
-
-### Pre-built Page Templates
-
-The real power of predictable patterns shows up in the GC Design System's page templates. These aren't just UI mockups—they're complete structural patterns for common government service pages.
-
-**Service Initiation Template**: Starting a new digital service? There's a template for that:
-
-```html
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <h1>Apply for Employment Insurance (EI) benefits</h1>
-
-            <!-- Service description -->
-            <section class="gc-srvinfo">
-                <h2>What this service offers</h2>
-                <p>Employment Insurance (EI) provides temporary financial assistance...</p>
-            </section>
-
-            <!-- Eligibility checker -->
-            <section class="well">
-                <h2>Check your eligibility</h2>
-                <p>Before you start, make sure you meet these requirements:</p>
-                <ul class="list-unstyled">
-                    <li><span class="far fa-check-circle text-success"></span> Lost your job through no fault of your own</li>
-                    <li><span class="far fa-check-circle text-success"></span> Haven't worked for at least 7 consecutive days</li>
-                    <li><span class="far fa-check-circle text-success"></span> Worked the required hours in the last 52 weeks</li>
-                </ul>
-            </section>
-
-            <!-- Before you start -->
-            <section>
-                <h2>What you need before you start</h2>
-                <ul>
-                    <li>Your Social Insurance Number (SIN)</li>
-                    <li>Your banking information for direct deposit</li>
-                    <li>Details about your last employer</li>
-                </ul>
-            </section>
-
-            <!-- Call to action -->
-            <section>
-                <a href="/apply-start" class="btn btn-primary btn-lg">Start your application</a>
-                <p class="mrgn-tp-lg">
-                    <small>Estimated time to complete: 45 minutes</small>
-                </p>
-            </section>
-        </div>
-
-        <div class="col-md-4">
-            <!-- Related links sidebar -->
-            <section class="lnkbx">
-                <h2>Related links</h2>
-                <ul>
-                    <li><a href="/ei-calculator">EI benefit calculator</a></li>
-                    <li><a href="/ei-reporting">Report your income</a></li>
-                    <li><a href="/ei-contact">Contact us about EI</a></li>
-                </ul>
-            </section>
-        </div>
-    </div>
-</div>
-```
-
-This template provides:
-1. **Standard layout**: 8-column main content, 4-column sidebar (responsive breakpoints included)
-2. **Information hierarchy**: Service description → Eligibility → Requirements → Action
-3. **Visual patterns**: Well component for eligibility, icons for checklist items, prominent CTA
-4. **Accessibility built-in**: Proper heading structure, semantic HTML, ARIA landmarks via roles
-5. **Bilingual structure ready**: Content areas designed for both official languages
-
-An AI assistant with this template context doesn't need to decide "how should a service start page be structured?"—it already knows. The pattern is predictable.
-
-### CSS Utility Classes
-
-The GC Design System includes utility classes that create a consistent styling vocabulary:
-
-```html
-<!-- Margin utilities -->
-<div class="mt-3">  <!-- margin-top: 1.5rem -->
-<div class="mb-4">  <!-- margin-bottom: 2rem -->
-<div class="mx-2">  <!-- margin left and right: 1rem -->
-
-<!-- Padding utilities -->
-<div class="p-3">   <!-- padding all sides: 1.5rem -->
-<div class="py-2">  <!-- padding top and bottom: 1rem -->
-
-<!-- Color utilities -->
-<p class="text-danger">Error message</p>
-<div class="bg-light">Light background section</div>
-
-<!-- Display utilities -->
-<div class="d-flex justify-content-between align-items-center">
-    <span>Label</span>
-    <button>Action</button>
-</div>
-```
-
-This is like giving the AI assistant a consistent language to speak. Instead of generating arbitrary inline styles (`style="margin-top: 25px"`), it uses standardized utilities that match the rest of Canada.ca.
-
-## How the Canada.ca Content Style Guide Provides "Bounded Vocabulary for Content"
+## How the Content Style Guide Provides "Bounded Vocabulary" for Content
 
 We've talked about bounded vocabulary for code (WET-BOEW components) and design (GC Design System tokens). But what about the actual words on the page?
 
@@ -586,6 +454,138 @@ You can renew your passport if you:
 ```
 
 This is bounded vocabulary for content—just like WET-BOEW provides bounded vocabulary for components.
+
+## How CDS's GC Design System Provides "Predictable Patterns"
+
+The second requirement for effective AI assistance is **predictable patterns**—established conventions that eliminate arbitrary decisions. The Canadian Digital Service's GC Design System delivers this through design tokens, templates, and utility classes.
+
+Here's a question that has no right answer without context: "How much spacing should there be between the page title and the first content section?"
+
+Without standards, a developer (or AI assistant) has to guess. 20 pixels? 32 pixels? 2 rem? The choice is arbitrary, which means it's inconsistent across the application and across government services.
+
+### Design Tokens: The Language of Consistency
+
+The GC Design System solves this with **design tokens**—standardized values for spacing, colors, typography, and other design properties.
+
+For spacing, there's a defined scale:
+- `spacer-0-5`: 0.25 rem (4px)
+- `spacer-1`: 0.5 rem (8px)
+- `spacer-2`: 1 rem (16px)
+- `spacer-3`: 1.5 rem (24px)
+- `spacer-4`: 2 rem (32px)
+- `spacer-5`: 3 rem (48px)
+
+Now the question has an answer: "Use `spacer-4` (2 rem) between the page title and content section—that's the Canada.ca standard for major content breaks."
+
+An AI assistant with GC Design System context can generate:
+
+```html
+<h1 class="gc-h1">Apply for a Social Insurance Number</h1>
+<div class="mt-4">  <!-- margin-top: 2rem via spacer-4 -->
+    <p>A Social Insurance Number (SIN) is a nine-digit number...</p>
+</div>
+```
+
+Instead of guessing at margins, the assistant uses the established utility class (`mt-4` for margin-top using the spacer-4 value). Every service built this way looks visually consistent with Canada.ca.
+
+### Pre-built Page Templates
+
+The real power of predictable patterns shows up in the GC Design System's page templates. These aren't just UI mockups—they're complete structural patterns for common government service pages.
+
+**Service Initiation Template**: Starting a new digital service? There's a template for that:
+
+```html
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Apply for Employment Insurance (EI) benefits</h1>
+
+            <!-- Service description -->
+            <section class="gc-srvinfo">
+                <h2>What this service offers</h2>
+                <p>Employment Insurance (EI) provides temporary financial assistance...</p>
+            </section>
+
+            <!-- Eligibility checker -->
+            <section class="well">
+                <h2>Check your eligibility</h2>
+                <p>Before you start, make sure you meet these requirements:</p>
+                <ul class="list-unstyled">
+                    <li><span class="far fa-check-circle text-success"></span> Lost your job through no fault of your own</li>
+                    <li><span class="far fa-check-circle text-success"></span> Haven't worked for at least 7 consecutive days</li>
+                    <li><span class="far fa-check-circle text-success"></span> Worked the required hours in the last 52 weeks</li>
+                </ul>
+            </section>
+
+            <!-- Before you start -->
+            <section>
+                <h2>What you need before you start</h2>
+                <ul>
+                    <li>Your Social Insurance Number (SIN)</li>
+                    <li>Your banking information for direct deposit</li>
+                    <li>Details about your last employer</li>
+                </ul>
+            </section>
+
+            <!-- Call to action -->
+            <section>
+                <a href="/apply-start" class="btn btn-primary btn-lg">Start your application</a>
+                <p class="mrgn-tp-lg">
+                    <small>Estimated time to complete: 45 minutes</small>
+                </p>
+            </section>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Related links sidebar -->
+            <section class="lnkbx">
+                <h2>Related links</h2>
+                <ul>
+                    <li><a href="/ei-calculator">EI benefit calculator</a></li>
+                    <li><a href="/ei-reporting">Report your income</a></li>
+                    <li><a href="/ei-contact">Contact us about EI</a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+```
+
+This template provides:
+1. **Standard layout**: 8-column main content, 4-column sidebar (responsive breakpoints included)
+2. **Information hierarchy**: Service description → Eligibility → Requirements → Action
+3. **Visual patterns**: Well component for eligibility, icons for checklist items, prominent CTA
+4. **Accessibility built-in**: Proper heading structure, semantic HTML, ARIA landmarks via roles
+5. **Bilingual structure ready**: Content areas designed for both official languages
+
+An AI assistant with this template context doesn't need to decide "how should a service start page be structured?"—it already knows. The pattern is predictable.
+
+### CSS Utility Classes
+
+The GC Design System includes utility classes that create a consistent styling vocabulary:
+
+```html
+<!-- Margin utilities -->
+<div class="mt-3">  <!-- margin-top: 1.5rem -->
+<div class="mb-4">  <!-- margin-bottom: 2rem -->
+<div class="mx-2">  <!-- margin left and right: 1rem -->
+
+<!-- Padding utilities -->
+<div class="p-3">   <!-- padding all sides: 1.5rem -->
+<div class="py-2">  <!-- padding top and bottom: 1rem -->
+
+<!-- Color utilities -->
+<p class="text-danger">Error message</p>
+<div class="bg-light">Light background section</div>
+
+<!-- Display utilities -->
+<div class="d-flex justify-content-between align-items-center">
+    <span>Label</span>
+    <button>Action</button>
+</div>
+```
+
+This is like giving the AI assistant a consistent language to speak. Instead of generating arbitrary inline styles (`style="margin-top: 25px"`), it uses standardized utilities that match the rest of Canada.ca.
 
 ## How Digital Standards Provide "Explicit Guardrails"
 
