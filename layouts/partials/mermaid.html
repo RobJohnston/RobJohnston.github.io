@@ -1,0 +1,40 @@
+{{ if .Params.mermaid }}
+<!-- Mermaid Diagram Support -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find all code blocks with language-mermaid class and convert them
+    document.querySelectorAll('code.language-mermaid').forEach(function(codeBlock) {
+      const pre = codeBlock.parentElement;
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = codeBlock.textContent;
+      pre.replaceWith(mermaidDiv);
+    });
+
+    // Initialize mermaid after converting the blocks
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#00ff00',
+        primaryTextColor: '#00ff00',
+        primaryBorderColor: '#00ff00',
+        lineColor: '#00ff00',
+        secondaryColor: '#1a1a1a',
+        tertiaryColor: '#0a0a0a',
+        background: '#0a0a0a',
+        mainBkg: '#1a1a1a',
+        secondBkg: '#0a0a0a',
+        textColor: '#00ff00',
+        border1: '#00ff00',
+        border2: '#00ff00',
+        fontSize: '16px'
+      }
+    });
+
+    // Render all mermaid diagrams
+    mermaid.run();
+  });
+</script>
+{{ end }}

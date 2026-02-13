@@ -1,11 +1,12 @@
 +++
-title = "How Canadian Government Platforms Make AI Coding Assistants More Effective"
+title = "Why Canada's Digital Government Infrastructure Is Perfect for AI-Assisted Development"
 date = "2026-02-11"
 draft = true
 description = "Canada's WET-BOEW toolkit, GC Design System, Content Style Guide, and Digital Standards create the perfect ecosystem for AI-assisted government software development"
 category = "government"
 tags = ["government", "ai", "accessibility", "standards", "web-development", "content-design"]
 image = "/images/canadian-government-platforms.jpg"
+mermaid = true
 +++
 
 Picture this: You just won a contract to build a web application for the Government of Canada. Exciting, right? Then reality hits.
@@ -28,11 +29,46 @@ Before we dive into Canada's digital ecosystem, let's talk about what AI assista
 
 Think about it: When you ask an AI assistant to "build a contact form," it could generate thousands of different implementations. But when you ask it to "build a WET-BOEW compliant contact form for a Government of Canada website," suddenly there's structure. There's a right way to do it. The assistant can reference actual components, follow established accessibility patterns, and ensure bilingual support—because those constraints are part of the platform.
 
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant AI as AI Assistant
+    participant Inst as Instruction Files<br/>(WET-BOEW, GC Design,<br/>Content Style, Standards)
+    participant Code as Generated Code
+
+    Dev->>AI: "Create a contact form"
+    AI->>Inst: Load GC standards & patterns
+    Inst-->>AI: WET-BOEW components<br/>WCAG 2.1 AA patterns<br/>Bilingual requirements<br/>Protected B security<br/>API standards
+    AI->>Code: Generate compliant code
+    Code-->>Dev: ✅ Accessible<br/>✅ Bilingual<br/>✅ Secure<br/>✅ Standards-compliant
+
+    Note over Dev,Code: Result: Compliant code from day one,<br/>not after multiple review cycles
+```
+
 This can be understood as a three-layer abstraction:
 
 1. **Cloud infrastructure layer**: The foundational compute, storage, and networking (in Canada, [Shared Services Canada brokers access](https://www.canada.ca/en/shared-services/corporate/publications/2024-25/evaluation-ssc-cloud-services.html) to commercial cloud providers like AWS, Azure, and Google Cloud)
 2. **Deployment and operations layer**: How applications get deployed, monitored, and maintained
 3. **Platform knowledge layer**: The institutional knowledge about how to build things the "right way"—encoded as AI instruction files
+
+```mermaid
+graph TB
+    subgraph "Three-Layer Architecture"
+        PK[Platform Knowledge Layer<br/>AI Instruction Files<br/>WET-BOEW, GC Design System,<br/>Content Style Guide, Standards]
+        DO[Deployment & Operations Layer<br/>CI/CD, Monitoring, Maintenance]
+        CI[Cloud Infrastructure Layer<br/>SSC-Brokered Cloud<br/>AWS, Azure, Google Cloud]
+    end
+
+    PK --> DO
+    DO --> CI
+
+    DEV[Developer + AI Assistant] --> PK
+
+    style PK fill:#e1f5ff
+    style DO fill:#fff4e1
+    style CI fill:#ffe1e1
+    style DEV fill:#e1ffe1
+```
 
 That third layer is the breakthrough. By encoding platform knowledge as machine-readable instruction files, AI assistants can automatically apply institutional standards and patterns.
 
@@ -41,6 +77,32 @@ Here's the insight that changed my perspective: **Canada has been building this 
 ## Canada's Digital Government Ecosystem
 
 The Government of Canada's digital infrastructure rests on five foundational pillars:
+
+```mermaid
+graph TD
+    subgraph "Canada's Digital Ecosystem"
+        AI[AI-Assisted Development<br/>Fast, Compliant, Accessible]
+    end
+
+    WET[WET-BOEW<br/>Bounded Vocabulary<br/>Accessible Components]
+    GCDS[GC Design System<br/>Predictable Patterns<br/>Design Tokens & Templates]
+    CSG[Content Style Guide<br/>Bounded Content Vocabulary<br/>Plain Language & Bilingual]
+    DS[Digital Standards<br/>Explicit Guardrails<br/>Ethical & Accessible Principles]
+    API[Standards on APIs<br/>Technical Specifications<br/>REST, Security, Versioning]
+
+    WET --> AI
+    GCDS --> AI
+    CSG --> AI
+    DS --> AI
+    API --> AI
+
+    style AI fill:#90EE90
+    style WET fill:#87CEEB
+    style GCDS fill:#DDA0DD
+    style CSG fill:#F0E68C
+    style DS fill:#FFA07A
+    style API fill:#98FB98
+```
 
 ### 1. Web Experience Toolkit (WET-BOEW)
 
@@ -111,6 +173,49 @@ These five pillars—WET-BOEW (the components), the GC Design System (the design
 ### Supporting Infrastructure
 
 Beyond these five pillars, several reusable services extend the ecosystem:
+
+```mermaid
+graph TB
+    subgraph "Core Pillars"
+        PILLARS[WET-BOEW<br/>GC Design System<br/>Content Style Guide<br/>Digital Standards<br/>Standards on APIs]
+    end
+
+    subgraph "Supporting Services"
+        GUARDRAILS[GC Cloud Guardrails<br/>Security Baseline]
+        CCCS[CCCS<br/>Security Frameworks<br/>ITSG-33, CMVP]
+        NOTIFY[GC Notify<br/>Email & SMS]
+        AUTH[GCKey/GC Sign-in<br/>Authentication]
+        FORMS[GC Forms<br/>Accessible Forms]
+        SSC[SSC Cloud Brokering<br/>AWS, Azure, GCP]
+        TERMIUM[TERMIUM Plus®<br/>Official Terminology]
+    end
+
+    PILLARS --> GUARDRAILS
+    PILLARS --> CCCS
+    PILLARS --> NOTIFY
+    PILLARS --> AUTH
+    PILLARS --> FORMS
+    PILLARS --> SSC
+    PILLARS --> TERMIUM
+
+    GUARDRAILS --> APP[GC Application]
+    CCCS --> APP
+    NOTIFY --> APP
+    AUTH --> APP
+    FORMS --> APP
+    SSC --> APP
+    TERMIUM --> APP
+
+    style PILLARS fill:#90EE90
+    style APP fill:#FFD700
+    style GUARDRAILS fill:#E0E0E0
+    style CCCS fill:#E0E0E0
+    style NOTIFY fill:#E0E0E0
+    style AUTH fill:#E0E0E0
+    style FORMS fill:#E0E0E0
+    style SSC fill:#E0E0E0
+    style TERMIUM fill:#E0E0E0
+```
 
 **GC Cloud Guardrails**: [Mandatory baseline security controls](https://canada-ca.github.io/cloud-guardrails/) for cloud deployments. Departments must implement these guardrails within 30 business days of getting cloud access. These prescriptive security requirements (available as [open-source on GitHub](https://github.com/canada-ca/cloud-guardrails)) are perfect candidates for encoding as AI instruction files.
 

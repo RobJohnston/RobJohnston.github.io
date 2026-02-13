@@ -6,6 +6,7 @@ description = "From .NET Framework to .NET 8, from COBOL to Java: Teaching AI as
 category = "government"
 tags = ["government", "ai", "legacy-systems", "modernization", "dotnet", "cobol", "mainframe"]
 image = "/images/legacy-modernization.jpg"
+mermaid = true
 +++
 
 Picture this: You just won a contract to modernize a 15-year-old Employment Insurance application. The system works, processing thousands of claims daily—but it's built on .NET Framework 3.5, uses ASMX web services, connects to Oracle 11g, and the frontend is Web Forms with inline VBScript.
@@ -494,6 +495,49 @@ AI Assistant generates:
 **Risk Level**: Medium (dual-running systems, data synchronization)
 **Rollback Strategy**: Keep legacy system operational until new system proven in production
 
+```mermaid
+gantt
+    title Strangler Fig Migration Timeline (24 Months)
+    dateFormat YYYY-MM
+    section Phase 1: Foundation
+    .NET 8 Setup           :p1a, 2026-01, 2m
+    Cloud Infrastructure   :p1b, 2026-01, 2m
+    Authentication         :p1c, 2026-02, 3m
+    Data Models            :p1d, 2026-03, 5m
+    CI/CD Pipeline         :p1e, 2026-04, 4m
+
+    section Phase 2: API Layer
+    Claim Submission API   :p2a, 2026-05, 4m
+    Document Upload API    :p2b, 2026-06, 4m
+    Notification API       :p2c, 2026-07, 4m
+    External Integrations  :p2d, 2026-08, 8m
+    API Documentation      :p2e, 2026-10, 4m
+
+    section Phase 3: Frontend
+    React Setup            :p3a, 2026-11, 4m
+    Claim Submission UI    :p3b, 2026-12, 8m
+    Claim Status UI        :p3c, 2027-02, 4m
+    Document Upload UI     :p3d, 2027-03, 4m
+    Accessibility Audit    :p3e, 2027-04, 4m
+
+    section Phase 4: Database
+    Stored Procedures      :p4a, 2027-05, 8m
+    Data Migration         :p4b, 2027-07, 4m
+    Cutover Planning       :p4c, 2027-08, 4m
+
+    section Phase 5: Decommission
+    Final Validation       :p5a, 2027-09, 4m
+    Traffic Redirect       :p5b, 2027-10, 4m
+    Archive & Decommission :p5c, 2027-11, 8m
+
+    section Milestones
+    Infrastructure Ready   :milestone, m1, 2026-04, 0d
+    APIs Live              :milestone, m2, 2026-10, 0d
+    Frontend Complete      :milestone, m3, 2027-04, 0d
+    Database Migrated      :milestone, m4, 2027-08, 0d
+    Legacy Retired         :milestone, m5, 2028-01, 0d
+```
+
 ## Phase 1: Foundation (Months 1-4)
 
 **Goal**: Establish modern infrastructure alongside legacy system without impacting production.
@@ -617,6 +661,44 @@ AI Assistant generates:
 - Background job validates data consistency between databases
 - Alerts if sync fails
 
+```mermaid
+sequenceDiagram
+    participant Client as New Client
+    participant API as REST API (.NET 8)
+    participant NewDB as SQL Server (Primary)
+    participant LegacyDB as Oracle (Sync'd)
+    participant Validator as Data Validator
+    participant Legacy as Legacy ASMX
+
+    Client->>API: POST /api/v1/claims
+    activate API
+
+    API->>API: Validate Request
+    API->>NewDB: Write claim data
+    activate NewDB
+    NewDB-->>API: ✓ Success
+    deactivate NewDB
+
+    API->>LegacyDB: Write claim data (sync)
+    activate LegacyDB
+    LegacyDB-->>API: ✓ Success
+    deactivate LegacyDB
+
+    API-->>Client: 201 Created
+    deactivate API
+
+    Note over Validator: Background Process (Every 5 min)
+    Validator->>NewDB: Query recent records
+    Validator->>LegacyDB: Query recent records
+    Validator->>Validator: Compare data
+    alt Data mismatch detected
+        Validator->>Validator: Alert operations team
+    end
+
+    Note over Legacy: Legacy clients continue<br/>using old system
+    Legacy->>LegacyDB: Read/Write operations
+```
+
 **Deliverables**:
 ✅ REST APIs operational and documented
 ✅ External integrations modernized (SOAP→REST)
@@ -717,29 +799,41 @@ function ClaimApplicationForm() {
 
 **Traffic Routing**:
 
-```
-User visits /claims/apply
-        │
-        ▼
-┌───────────────────┐
-│  Feature Flag     │
-│  Service          │
-└────────┬──────────┘
-         │
-    ┌────┴────┐
-    │         │
-    ▼         ▼
-┌─────┐   ┌─────┐
-│ 20% │   │ 80% │
-│ New │   │ Old │
-└──┬──┘   └──┬──┘
-   │         │
-   ▼         ▼
-React      Web Forms
-(New)      (Legacy)
+```mermaid
+flowchart TD
+    User[User visits /claims/apply]
+    FeatureFlag{Feature Flag Service<br/>Percentage Routing}
+
+    User --> FeatureFlag
+
+    FeatureFlag -->|20% traffic| NewFrontend[React Frontend<br/>WET-BOEW 4.0<br/>WCAG 2.1 AA]
+    FeatureFlag -->|80% traffic| LegacyFrontend[Web Forms<br/>Legacy .NET 3.5]
+
+    NewFrontend --> NewAPI[REST API<br/>.NET 8]
+    LegacyFrontend --> LegacyASMX[ASMX Service<br/>.NET Framework]
+
+    NewAPI --> DualWrite[(Dual-Write Pattern)]
+    LegacyASMX --> Oracle[(Oracle DB)]
+
+    DualWrite --> SQLServer[(SQL Server)]
+    DualWrite --> Oracle
+
+    style NewFrontend fill:#90EE90
+    style NewAPI fill:#90EE90
+    style SQLServer fill:#90EE90
+    style LegacyFrontend fill:#FFB6C1
+    style LegacyASMX fill:#FFB6C1
+    style Oracle fill:#FFB6C1
+    style FeatureFlag fill:#87CEEB
+
+    classDef default stroke:#333,stroke-width:2px
 ```
 
-Gradually increase traffic to new frontend: 20% → 50% → 100%
+**Gradual Rollout Strategy**:
+- Week 1-4: 20% new, 80% legacy
+- Week 5-8: 50% new, 50% legacy
+- Week 9-12: 80% new, 20% legacy
+- Week 13+: 100% new (legacy retired)
 
 **Deliverables**:
 ✅ React application with WET-BOEW components
@@ -1974,6 +2068,60 @@ class PensionCalculationServiceTest {
 ### Realistic Modernization Strategy for COBOL Systems
 
 If you absolutely must modernize a COBOL mainframe system, here's the only approach that has a chance of success:
+
+```mermaid
+flowchart TD
+    Start([COBOL Modernization Decision])
+    Start --> Q1{System still works<br/>reliably?}
+
+    Q1 -->|No| MustModernize[Must Modernize]
+    Q1 -->|Yes| Q2{Can hire COBOL<br/>developers?}
+
+    Q2 -->|No| Q3{Mainframe costs<br/>manageable?}
+    Q2 -->|Yes| Q4{Business rules<br/>changing frequently?}
+
+    Q3 -->|No| MustModernize
+    Q3 -->|Yes| Q4
+
+    Q4 -->|Yes| MustModernize
+    Q4 -->|No| Keep[Keep COBOL Running<br/>+Build API Layer]
+
+    Keep --> Mitigate[Mitigation Strategies:<br/>• Train new COBOL devs<br/>• Document business logic<br/>• API wrapper layer<br/>• Modernize frontend only]
+
+    MustModernize --> Budget{Budget > $100M<br/>Timeline > 7 years?}
+
+    Budget -->|No| Reconsider[Reconsider Approach<br/>Scale down scope]
+    Budget -->|Yes| Phase1[Phase 1: Understand<br/>1-2 years]
+
+    Phase1 --> P1Tasks[• Document ALL business rules<br/>• Interview SMEs<br/>• Build test data sets<br/>• Create golden test cases]
+
+    P1Tasks --> Phase2[Phase 2: Strangle<br/>3-5 years]
+
+    Phase2 --> P2Tasks[• Identify smallest component<br/>• Rewrite in Java<br/>• Run COBOL + Java parallel<br/>• Compare outputs 100%<br/>• Switch when proven identical<br/>• Repeat for next component]
+
+    P2Tasks --> Phase3[Phase 3: Migrate<br/>2-3 years]
+
+    Phase3 --> P3Tasks[• Move batch → real-time<br/>• Migrate data<br/>• Keep COBOL for critical jobs<br/>• Rollback plan for YEARS]
+
+    P3Tasks --> Success{All components<br/>migrated successfully?}
+
+    Success -->|Yes| Complete[Legacy Decommissioned<br/>Total: 7-10 years<br/>Success Rate: 40%]
+    Success -->|No| Rollback[Rollback to COBOL<br/>Reassess approach]
+
+    Reconsider --> Keep
+
+    style Start fill:#87CEEB
+    style Keep fill:#90EE90
+    style Mitigate fill:#90EE90
+    style Complete fill:#90EE90
+    style MustModernize fill:#FFD700
+    style Rollback fill:#FFB6C1
+    style Phase1 fill:#E6E6FA
+    style Phase2 fill:#E6E6FA
+    style Phase3 fill:#E6E6FA
+
+    classDef default stroke:#333,stroke-width:2px
+```
 
 **Phase 1: Understand (1-2 years)**
 - Document EVERY business rule in the COBOL
