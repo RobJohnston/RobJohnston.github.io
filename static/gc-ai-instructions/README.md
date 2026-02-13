@@ -22,7 +22,7 @@ These instruction files help AI coding assistants generate code that follows Gov
 │   ├── database.instructions.md      # Database standards and EF Core
 │   └── aws-protected-b.instructions.md      # AWS deployment via SSC
 ├── agents/
-│   └── itsca-compliance.agent.md     # ITSCA documentation generation
+│   └── security-controls.agent.md    # Security controls documentation generation
 └── skills/
     └── (future troubleshooting skills)
 ```

@@ -426,7 +426,7 @@ public class ApplicationService
 
 - **Protected B systems**: Minimum 90 days
 - **Production systems**: Recommended 365 days
-- **Audit logs**: May require longer retention (check with ITSCA)
+- **Audit logs**: May require longer retention (check with security team)
 
 ### Configuration
 
@@ -548,6 +548,6 @@ public void CreateApplication_LogsInformation()
 
 - **Serilog Documentation**: https://serilog.net/
 - **Application Insights**: https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
-- **TBS Logging Requirements**: Internal ITSCA documentation
+- **TBS Logging Requirements**: Internal security team documentation
 
 Last updated: 2025-02-11

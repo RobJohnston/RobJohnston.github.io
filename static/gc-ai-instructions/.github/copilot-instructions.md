@@ -14,7 +14,7 @@ This application is deployed via SSC Cloud Brokering Service and serves Canadian
 - Treasury Board Standard on Web Usability
 - Treasury Board Standard on Web Interoperability
 - Government of Canada Digital Standards (all 10 standards apply)
-- IT Security Certification & Accreditation (ITSCA) process required
+- ITSG-33 security assessment process required
 
 ## Project Stack
 - Frontend: WET-BOEW 4.0.x, GC Design System CSS utilities, vanilla JavaScript
@@ -28,10 +28,10 @@ This application is deployed via SSC Cloud Brokering Service and serves Canadian
 - `Views/`: Razor views (.cshtml) with WET-BOEW structure
 - `src/`: C# application code
 - `tests/`: Automated tests (unit, integration, accessibility via axe-core)
-- `docs/itsca/`: ITSCA documentation (SSP, SAR, etc.)
+- `docs/security/`: Security documentation (TRA, security controls, etc.)
 
 ## Development Workflow
 1. All changes require WCAG 2.1 AA compliance testing (automated via axe-core)
 2. All user-facing text must be bilingual (English in templates, French in `translations/fr.json`)
 3. Protected B data handling requires security review before deployment
-4. Deployment to production requires ITSCA sign-off (contact: itsca-team@example.gc.ca)
+4. Deployment to production requires security team sign-off (contact: security-team@example.gc.ca)

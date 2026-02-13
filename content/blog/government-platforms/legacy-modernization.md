@@ -20,7 +20,7 @@ You need to:
 - Maintain WCAG 2.1 AA accessibility throughout
 - Ensure all bilingual content survives the migration
 - Keep the system running during the transition (can't shut down for 6 months)
-- Pass ITSCA re-certification
+- Pass security re-assessment
 
 **The traditional approach**: 12-18 month project, $2-3M budget, high risk of failure.
 
@@ -406,7 +406,7 @@ Priority: **CRITICAL**
 4. Fix SQL injection vulnerabilities (parameterized queries)
 5. Encrypt connection strings in Web.config
 
-**Risk if not done**: Security incident, ITSCA certification failure, Privacy Commissioner investigation
+**Risk if not done**: Security incident, security certification failure, Privacy Commissioner investigation
 
 ### Phase 2: Integration Modernization (3-6 months)
 
@@ -429,7 +429,7 @@ Priority: **MEDIUM** (but required by 2027 when .NET Framework 3.5 reaches end-o
 4. Migrate Oracle → SQL Server or PostgreSQL
 5. Implement microservices architecture for scalability
 6. Full WCAG 2.1 AA compliance
-7. ITSCA re-certification
+7. Security re-assessment
 
 **Benefit**: Modern platform, maintainable codebase, cloud-ready, security compliance
 
@@ -957,7 +957,7 @@ public class BenefitCalculationService
 ✅ Zero downtime during migration
 ✅ Users complete tasks without retraining
 ✅ Processing times maintained or improved
-✅ ITSCA re-certification passed
+✅ Security re-assessment passed
 ✅ Cost savings achieved (Oracle licenses, maintenance)
 
 ### Compliance Success
@@ -1033,7 +1033,7 @@ public class BenefitCalculationService
 **Mitigation**:
 - Security scanning in CI/CD (OWASP ZAP)
 - Penetration testing before production
-- ITSCA re-certification process
+- Security re-assessment process
 - Protected B controls validated
 - Security code reviews
 
@@ -2145,13 +2145,13 @@ public void LegacyCalculation_WithKnownInputs_ReturnsExpectedOutput()
 }
 ```
 
-## ITSCA Re-Certification
+## Security Re-Assessment
 
 After modernization:
 - Security scan: OWASP ZAP, SonarQube
 - Accessibility audit: Manual + automated (axe-core)
 - Code review: Security controls verified
-- Documentation: Threat model, security controls matrix updated
+- Documentation: Threat model, TRA, security controls matrix updated
 ```
 
 ---

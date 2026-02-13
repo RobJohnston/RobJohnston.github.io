@@ -357,7 +357,7 @@ public void Configure(IApplicationBuilder app)
 
 If a security incident occurs (unauthorized access, data breach, etc.):
 
-1. **Immediately notify**: Contact ITSCA team at itsca-team@example.gc.ca
+1. **Immediately notify**: Contact security team at security-team@example.gc.ca
 2. **Log the incident**: Include timestamp, user ID, IP address (hashed), action attempted
 3. **Preserve evidence**: Do not delete logs or modify system state
 4. **Follow TBS Incident Response Plan**: See `docs/incident-response-plan.md`
