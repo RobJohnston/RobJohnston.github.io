@@ -209,6 +209,8 @@ These platform providers work together to create a comprehensive digital ecosyst
 
 These organizations weren't built with AI assistants in mind. But they provide exactly the structure AI assistants need: **bounded vocabulary** (WET-BOEW components for UI, Content Style Guide conventions for writing, TERMIUM Plus terminology for bilingual translation), **predictable patterns** (GC Design System tokens and templates for design consistency, Standards on APIs for technical specifications), and **explicit guardrails** (Digital Standards principles, ITSG-33 security controls, WCAG 2.1 AA requirements).
 
+**Let's examine how each platform provider contributes to effective AI assistance. Then we'll tackle a critical question: if these resources are so valuable, why do developers struggle to find and use them?**
+
 ## How WET-BOEW Provides "Bounded Vocabulary"
 
 Let's talk about the first requirement for effective AI assistance: **bounded vocabulary**.
@@ -738,9 +740,11 @@ An AI assistant with Standard #9 context will question data collection requireme
 
 This is the AI assistant acting as a guardrail—not just implementing what you asked, but questioning whether it aligns with ethical service design.
 
-## The Discoverability Problem: Even Official Standards Are Hard to Find
+## The Discoverability Problem: From Scattered to Buried
 
-Before we talk about buried departmental standards, let's address an uncomfortable truth: **Even the official Government of Canada digital standards are scattered, overlapping, and confusing to navigate.**
+Canada has built an impressive digital ecosystem for government development—standards, frameworks, design systems, security guidance. But there's a fundamental problem: **developers can't find them.** This isn't just about documentation being incomplete. The official standards are scattered across multiple sites with no clear map, and departmental standards are buried in SharePoint folders that nobody can locate. Let's examine both layers of this crisis.
+
+### Official Standards: Scattered Across Multiple Sites
 
 Picture this scenario: You just won a contract to build a Government of Canada web application. You want to "do things the right way" and follow official standards. So you start searching.
 
@@ -753,7 +757,7 @@ You find:
 
 You open several tabs. You start reading. Questions immediately arise:
 
-### Which Design System Do I Use?
+#### Which Design System Do I Use?
 
 **design.canada.ca** appears to be comprehensive. It includes:
 - Canada.ca Content Style Guide
@@ -773,7 +777,7 @@ This looks like the official source. But then you notice **design-system.canada.
 
 You ask your tech lead. They're not sure either: "I think design.canada.ca is for the Canada.ca website itself, and the CDS design system is for... other services? Or maybe the CDS one is the new direction? Just use WET-BOEW to be safe."
 
-### The WET-BOEW vs. Design System Confusion
+#### The WET-BOEW vs. Design System Confusion
 
 So you focus on WET-BOEW. That's clear, right? It's the standard toolkit since 2010.
 
@@ -786,7 +790,7 @@ Are they the same? Different versions? Which documentation is authoritative?
 
 You check the WET-BOEW GitHub repository. Last stable release: v4.0.87 (June 2024). But the design.canada.ca templates reference "WET-BOEW 4.0.x with Canada.ca theme." Is the Canada.ca theme a separate thing? Where's that documented?
 
-### The GCcollab Design System Nobody Mentions
+#### The GCcollab Design System Nobody Mentions
 
 Then there's **design.gccollab.ca** - a completely separate design system for GCcollab and GCconnex (internal Government of Canada collaboration platforms).
 
@@ -794,7 +798,7 @@ This uses different components, different styling, different patterns. It's not 
 
 **But nobody mentioned this existed.** You only found it because you were doing a comprehensive search. How many contractors have accidentally tried to use GCcollab patterns for Canada.ca sites, or vice versa?
 
-### Scattered API Guidance
+#### Scattered API Guidance
 
 You need to build backend APIs for your application. Time to find the API standards.
 
@@ -808,7 +812,7 @@ Are these all the same thing? The first two URLs are both under "digital-governm
 
 You read both documents. There's significant overlap, but also some differences in recommendations. Which takes precedence?
 
-### Multiple Entry Points, No Clear Map
+#### Multiple Entry Points, No Clear Map
 
 Here's the fundamental problem: **There's no authoritative map of the Government of Canada digital ecosystem.**
 
@@ -833,90 +837,11 @@ Depending on where you enter, you get a different view:
 - You get a mix of results from all the above plus outdated blog posts, archived documentation, and provincial government sites
 - Good luck figuring out what's current and authoritative
 
-### Why This Matters for AI Assistants
+### Departmental Standards: Buried in SharePoint
 
-Here's the critical insight: **If official standards are hard for humans to discover and navigate, they're nearly impossible for AI assistants to understand.**
+If official standards are scattered across multiple sites, departmental standards are even worse—buried in SharePoint folders, outdated Word documents, and tribal knowledge that exists only in people's heads.
 
-An AI assistant trying to help you build a Government of Canada application faces these challenges:
-
-**Problem 1: Which source is authoritative?**
-- design.canada.ca has WET-BOEW examples
-- wet-boew.github.io has different WET-BOEW examples
-- design-system.canada.ca has yet another approach
-- The AI assistant can't know which to prioritize
-
-**Problem 2: Are these resources complementary or competing?**
-- Should you use WET-BOEW *and* the CDS Design System, or choose one?
-- Can you use GCcollab design patterns on Canada.ca sites?
-- Should API Guidance supplement or override Standards on APIs?
-- The AI assistant has to guess
-
-**Problem 3: What's current vs. deprecated?**
-- Multiple versions of documentation exist
-- Some content is clearly dated (e.g., "Updated 2018")
-- Other content has no date stamp at all
-- The AI assistant can't distinguish authoritative from outdated
-
-**Problem 4: Context switching is expensive**
-- An AI assistant asked to "build a GC contact form" has to simultaneously consider:
-  - WET-BOEW form components (which site's documentation?)
-  - Content Style Guide patterns (found where?)
-  - Bilingual requirements (specified where?)
-  - Accessibility standards (WCAG 2.1 AA, but which implementation guide?)
-  - Security requirements (CCCS guidance? ITSG-33 controls? Protected B patterns?)
-- That's 5+ different documentation sources for a simple form
-
-### The Real-World Cost
-
-This isn't just confusing—it's expensive:
-
-**Time wasted searching**: A contractor spends 8 hours over their first week just finding and reading documentation across multiple sites. At $800/day, that's $800 in wasted time per developer.
-
-**Inconsistent implementations**: Team members find different documentation sources and implement different patterns. One developer uses design.canada.ca patterns, another uses wet-boew.github.io examples, a third uses the CDS design system. Code reviews become debates about which source is "correct."
-
-**Accessibility review failures**: Developer follows examples from one documentation source, but accessibility reviewers reference a different source with different requirements. Rework cycle begins.
-
-**AI assistants make educated guesses**: Without clear guidance, AI assistants generate code based on whichever documentation they happened to find first. Sometimes it's correct. Sometimes it's close but wrong. Sometimes it's from the GCcollab design system when you needed WET-BOEW.
-
-**Knowledge fragmentation**: Senior developers each have their own "map" of which resources to use, built through years of trial and error. Junior developers get different advice depending on who they ask.
-
-### What We Actually Need
-
-The Government of Canada has built an impressive digital ecosystem over 15+ years. The pieces are there:
-- ✅ Accessible component library (WET-BOEW)
-- ✅ Content standards (Content Style Guide)
-- ✅ Design system (GC Design System)
-- ✅ Security guidance (CCCS, ITSG-33)
-- ✅ API standards (Standards on APIs)
-- ✅ Platform services (GC Notify, GC Forms, etc.)
-
-**But the ecosystem lacks a clear information architecture that helps developers navigate it.**
-
-What would help:
-
-1. **A single authoritative entry point**: One URL that serves as the "start here" for all GC digital development
-2. **Clear relationships between resources**: Explicit documentation of how design.canada.ca, digital.canada.ca, and wet-boew.github.io relate to each other
-3. **Context-specific guidance**: "If you're building a Canada.ca website, use this. If you're building a separate service, use that."
-4. **Consolidated standards reference**: A single page listing all relevant standards with clear descriptions and relationships
-5. **Version clarity**: Clear indicators of what's current, what's deprecated, what's experimental (alpha/beta)
-
-Until that exists, developers rely on:
-- Institutional knowledge from experienced contractors
-- Trial and error
-- Hope that they found the right documentation
-- Code review feedback to course-correct
-
-**And this brings us to the next layer of the problem: If the official standards are this hard to find, departmental standards are even worse.**
-
-## The Problem: Buried Departmental Standards
-
-We've talked about the official, published standards—WET-BOEW, GC Design System, Content Style Guide, Digital Standards. Even though they're scattered across multiple sites and hard to navigate, at least they're publicly documented and findable with enough effort.
-
-But every government developer knows there's another layer: **departmental and project-level standards that live in the shadows.**
-
-But every government developer knows there's another layer: **departmental and project-level standards that live in the shadows.**
-
-### The SQL Standards Document Nobody Can Find
+#### The SQL Standards Document Nobody Can Find
 
 You start a new contract at a department. On day three, someone mentions in passing: "Oh, we have SQL coding standards. The DBAs wrote them a few years ago."
 
@@ -945,7 +870,7 @@ You open it. It says:
 
 You ask the tech lead. They shrug: "I think we used to follow that, but the last project didn't. Just be consistent, I guess?"
 
-### Other Buried Standards
+#### Other Buried Standards
 
 SQL isn't the only example. Common buried standards include:
 
@@ -974,25 +899,7 @@ SQL isn't the only example. Common buried standards include:
 - Include security controls documentation (which template? 2020 version or 2023?)
 - Threat model required (what format?)
 
-### Why This Matters for AI Assistants
-
-Here's the problem: **AI assistants can't help with standards they can't find.**
-
-An AI assistant can read WET-BOEW documentation on GitHub because it's public, current, and clearly the authoritative source. But it can't:
-- Find your department's SQL standards in SharePoint
-- Know whether that 2019 document is still enforced
-- Understand which coding patterns are actually used vs. officially documented
-- Tell you if Entity Framework is allowed or banned
-
-So you get inconsistent help:
-- AI generates SQL with no `tbl_` prefix (because modern best practices avoid it)
-- You get feedback in code review: "Needs tbl_ prefix per departmental standards"
-- You update the code manually
-- AI doesn't learn because the standard isn't in its context
-
-**Every developer goes through this same cycle.** New contractors waste hours finding, reading, and clarifying buried standards. The AI assistant that could help accelerate their work doesn't know these standards exist.
-
-### The Bigger Problem: Tribal Knowledge
+#### The Bigger Problem: Tribal Knowledge
 
 Worse than buried standards is **tribal knowledge**—the unwritten rules that exist only in people's heads:
 
@@ -1004,29 +911,63 @@ Worse than buried standards is **tribal knowledge**—the unwritten rules that e
 
 An AI assistant has zero access to tribal knowledge. It will confidently suggest things that violate unwritten rules. You'll learn through trial and error and code review feedback—the same painful way everyone before you learned.
 
-### The Cost
+### Why This Matters for AI Assistants
 
-This isn't just frustrating—it's expensive:
+Here's the critical insight: **If standards are hard for humans to discover and navigate, they're nearly impossible for AI assistants to understand.**
 
-**Onboarding time**: New contractors spend their first week figuring out "how things are done here." At $800/day, that's $4,000 per developer in wasted time.
+An AI assistant trying to help you build a Government of Canada application faces these challenges at both levels:
 
-**Inconsistent codebases**: Without clear, enforced standards, every developer follows their own patterns. Code reviews become arguments about style instead of substance.
+**At the official standards level:**
+- **Which source is authoritative?** design.canada.ca has WET-BOEW examples, wet-boew.github.io has different ones, design-system.canada.ca has yet another approach—the AI can't know which to prioritize
+- **Are resources complementary or competing?** Should you use WET-BOEW *and* the CDS Design System? Can you use GCcollab design patterns on Canada.ca sites? The AI has to guess
+- **What's current vs. deprecated?** Multiple versions exist, some dated, some not—the AI can't distinguish authoritative from outdated
+- **Context switching is expensive**: Building a simple GC contact form requires pulling from 5+ different documentation sources (WET-BOEW components, Content Style Guide, bilingual requirements, accessibility standards, security patterns)
 
-**Repeated questions**: Tech leads spend hours answering the same questions: "What's the branching strategy?" "Do we use the tbl_ prefix?" "Is Entity Framework allowed?"
+**At the departmental standards level:**
+- **AI can't find buried standards**: SQL standards in SharePoint, Git branching docs in Word files, security checklists on network drives—none of this is accessible to AI assistants
+- **AI can't distinguish current from outdated**: Is that 2019 SQL standards document still enforced? The AI has no way to know
+- **AI has zero access to tribal knowledge**: "Ignore the tbl_ prefix rule" or "use staging, not test environment"—unwritten rules don't exist for AI
 
-**AI assistants can't help**: The tools that could accelerate development are blind to your actual standards, so they generate code that doesn't match your patterns.
+The result: AI assistants generate code based on whichever documentation they found first, which may be wrong, outdated, or from the wrong design system entirely.
 
-**Knowledge loss**: When the senior DBA who wrote the SQL standards retires, nobody knows if those standards were cargo cult or carefully reasoned requirements.
+### The Real Cost
+
+This discoverability crisis isn't just confusing—it's expensive at both levels:
+
+**Official standards:**
+- **Time wasted searching**: 8 hours over the first week finding and reading scattered documentation = $800/developer wasted
+- **Inconsistent implementations**: Different team members find different docs and implement different patterns—code reviews become debates about which source is "correct"
+- **Accessibility review failures**: Following one doc's examples fails another reviewer's requirements—rework cycles begin
+- **AI makes educated guesses**: Sometimes correct, sometimes close, sometimes completely wrong (GCcollab patterns when you needed WET-BOEW)
+- **Knowledge fragmentation**: Senior developers each have their own mental map built through trial and error—juniors get different advice depending on who they ask
+
+**Departmental standards:**
+- **Onboarding time**: First week figuring out "how things are done here" = $4,000/developer wasted
+- **Inconsistent codebases**: Without clear standards, every developer follows their own patterns—reviews become style arguments
+- **Repeated questions**: Tech leads spend hours answering "What's the branching strategy?" "Do we use tbl_ prefix?" "Is EF allowed?"
+- **AI assistants can't help**: Blind to your actual standards, they generate code that doesn't match your patterns
+- **Knowledge loss**: When the senior DBA who wrote those SQL standards retires, nobody knows if they were essential or cargo cult
 
 ### What We Need
 
-Departmental and project-level standards need to be:
+Standards at both levels need to be:
 
-1. **Findable**: Not buried in SharePoint—in the repository with the code
-2. **Current**: Version-controlled, updated when practices change
-3. **Clear**: Explicit about what's mandatory vs. guideline
-4. **Enforced**: Automated checks where possible, clear code review criteria
-5. **Machine-readable**: Structured so AI assistants can apply them automatically
+1. **Findable**: Not scattered across multiple sites or buried in SharePoint—in the repository with the code
+2. **Authoritative**: Clear which source is official, which resources are complementary vs. competing
+3. **Current**: Version-controlled, updated when practices change, with clear deprecation markers
+4. **Clear**: Explicit about what's mandatory vs. guideline
+5. **Enforced**: Automated checks where possible, clear code review criteria
+6. **Machine-readable**: Structured so AI assistants can apply them automatically
+
+The Government of Canada has built an impressive digital ecosystem over 15+ years:
+- ✅ Accessible component library (WET-BOEW)
+- ✅ Content standards (Content Style Guide)
+- ✅ Design system (GC Design System)
+- ✅ Security guidance (CCCS, ITSG-33)
+- ✅ API standards (Standards on APIs)
+- ✅ Platform services (GC Notify, GC Forms, etc.)
+
+**But the ecosystem lacks the information architecture and discoverability that makes these resources actually usable—for humans or AI assistants.**
 
 This is exactly what the next section addresses.
 
